@@ -492,14 +492,39 @@
     input,
     select,
     textarea {
-      outline: none
+      outline: none !important;
+      border-radius: 14px !important
     }
 
     input:focus,
     select:focus,
     textarea:focus {
-      border-color: #14342B !important;
-      box-shadow: 0 0 0 3px rgba(20, 52, 43, .12)
+      border-color: #6B7772 !important;
+      box-shadow: 0 0 0 3px rgba(107, 119, 114, .15) !important;
+      outline: none !important
+    }
+
+    /* Override Tailwind @forms plugin which targets [type=*] with high specificity */
+    [type='text'], [type='email'], [type='url'], [type='password'],
+    [type='number'], [type='date'], [type='tel'], [type='search'],
+    [type='time'], [type='month'], [type='week'],
+    textarea, select {
+      border-radius: 14px !important;
+      border-color: #E7E0D2 !important;
+      font-size: 13.5px !important;
+      --tw-ring-color: transparent !important;
+      --tw-ring-shadow: none !important
+    }
+
+    [type='text']:focus, [type='email']:focus, [type='url']:focus, [type='password']:focus,
+    [type='number']:focus, [type='date']:focus, [type='tel']:focus, [type='search']:focus,
+    [type='time']:focus, [type='month']:focus, [type='week']:focus,
+    textarea:focus, select:focus {
+      border-color: #6B7772 !important;
+      box-shadow: 0 0 0 3px rgba(107, 119, 114, .15) !important;
+      outline: none !important;
+      --tw-ring-color: transparent !important;
+      --tw-ring-shadow: none !important
     }
 
     .faq-answer {
@@ -699,7 +724,8 @@
       gap: .35rem
     }
 
-    .cs-field label {
+    .cs-field label,
+    .cs-field > span {
       font-size: 11px;
       font-weight: 700;
       letter-spacing: .1em;
@@ -711,7 +737,7 @@
       width: 100%;
       background: #fff;
       border: 1.5px solid #E7E0D2;
-      border-radius: 10px;
+      border-radius: 14px;
       padding: .6rem .85rem;
       font-size: 13.5px;
       color: #1A2420;
@@ -721,8 +747,9 @@
     }
 
     .cs-input:focus {
-      box-shadow: 0 0 0 3px rgba(20, 52, 43, .1);
-      outline: none
+      border-color: #6B7772 !important;
+      box-shadow: 0 0 0 3px rgba(107, 119, 114, .15) !important;
+      outline: none !important
     }
 
     .cs-input::placeholder {
@@ -745,7 +772,7 @@
       padding: .65rem .9rem;
       background: #fff;
       border: 1.5px solid #E7E0D2;
-      border-radius: 10px;
+      border-radius: 14px;
       cursor: pointer;
       transition: border-color .2s
     }
@@ -1142,7 +1169,7 @@
       width: 100%;
       background: #F3EFE6;
       border: 1px solid #E7E0D2;
-      border-radius: .6rem;
+      border-radius: 10px;
       padding: .45rem .8rem;
       font-size: .8rem;
       color: #1A2420;
@@ -1150,7 +1177,9 @@
     }
 
     .csel-search:focus {
-      border-color: #14342B
+      border-color: #6B7772 !important;
+      box-shadow: 0 0 0 3px rgba(107, 119, 114, .15) !important;
+      outline: none !important
     }
 
     .csel-list {
