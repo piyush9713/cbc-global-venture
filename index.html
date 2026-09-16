@@ -277,35 +277,20 @@ tailwind.config = {
         <span class="block text-[10px] tracking-[.22em] uppercase text-muted font-medium">Import • Export • Sourcing</span>
       </span>
     </a>
-    <nav class="hidden lg:flex items-center gap-8 text-[14px] font-medium text-ink/70">
-      <a href="#about" class="nav-link hover:text-pine" data-nav="about">About</a>
-      <a href="#products" class="nav-link hover:text-pine" data-nav="products">Products</a>
-      <a href="#why" class="nav-link hover:text-pine" data-nav="why">Why Us</a>
-      <a href="#process" class="nav-link hover:text-pine" data-nav="process">Process</a>
-      <a href="#markets" class="nav-link hover:text-pine" data-nav="markets">Markets</a>
-      <a href="#contact" class="nav-link hover:text-pine" data-nav="contact">Contact</a>
-    </nav>
+    <nav id="desktopNav" class="hidden lg:flex items-center gap-8 text-[14px] font-medium text-ink/70"></nav>
     <div class="flex items-center gap-3">
-      <button onclick="openDataPanel()" class="hidden md:inline-flex items-center gap-2 text-[13px] font-medium border border-stoneLine rounded-full px-4 py-2 hover:border-pine hover:text-pine transition">
+      <button onclick="openDataPanel()" id="navEditBtn" class="hidden md:inline-flex items-center gap-2 text-[13px] font-medium border border-stoneLine rounded-full px-4 py-2 hover:border-pine hover:text-pine transition">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-        Edit Content
+        <span id="navEditLabel">Edit Content</span>
       </button>
-      <a href="#contact" class="btn-primary hidden sm:inline-flex items-center gap-2 bg-pine text-paper text-[14px] font-medium rounded-full px-6 py-2.5"><span>Get Quote →</span></a>
+      <a id="navQuoteBtn" href="#contact" class="btn-primary hidden sm:inline-flex items-center gap-2 bg-pine text-paper text-[14px] font-medium rounded-full px-6 py-2.5"><span id="navQuoteLabel">Get Quote →</span></a>
       <button id="menuBtn" class="lg:hidden w-10 h-10 grid place-items-center rounded-full border border-stoneLine" aria-label="Menu">
         <svg id="menuIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
     </div>
   </div>
   <div id="mobileMenu" class="lg:hidden hidden border-t border-stoneLine bg-paper px-5 py-4">
-    <div class="grid gap-1 text-[15px] font-medium">
-      <a href="#about" class="py-3 border-b border-stoneLine/70">About Us</a>
-      <a href="#products" class="py-3 border-b border-stoneLine/70">Products</a>
-      <a href="#why" class="py-3 border-b border-stoneLine/70">Why Choose Us</a>
-      <a href="#process" class="py-3 border-b border-stoneLine/70">Process</a>
-      <a href="#markets" class="py-3 border-b border-stoneLine/70">Global Markets</a>
-      <a href="#contact" class="py-3">Contact</a>
-      <a href="#contact" class="mt-2 bg-pine text-paper text-center rounded-full py-3">Get Export Quote</a>
-    </div>
+    <div id="mobileMenuLinks" class="grid gap-1 text-[15px] font-medium"></div>
   </div>
 </header>
 
@@ -316,56 +301,44 @@ tailwind.config = {
 
   <div class="max-w-7xl mx-auto px-5 pt-10 md:pt-16 pb-14 md:pb-20 grid md:grid-cols-[1.05fr_.95fr] gap-12 lg:gap-10 items-center relative">
     <div>
-      <div class="reveal inline-flex items-center gap-2 bg-white border border-stoneLine rounded-full pl-1.5 pr-4 py-1.5 text-[12px] font-medium shadow-card mb-6">
-        <span class="bg-pine text-paper rounded-full px-2.5 py-1 text-[11px] tracking-wide">● SINCE 2016</span>
+      <div id="heroBadgeWrap" class="reveal inline-flex items-center gap-2 bg-white border border-stoneLine rounded-full pl-1.5 pr-4 py-1.5 text-[12px] font-medium shadow-card mb-6">
+        <span id="heroSinceBadge" class="bg-pine text-paper rounded-full px-2.5 py-1 text-[11px] tracking-wide">● SINCE 2016</span>
         <span id="heroBadge" class="text-ink/70">IEC Certified • APEDA Registered Exporter</span>
       </div>
       <h1 class="reveal font-display font-light text-[42px] leading-[1.02] sm:text-[58px] lg:text-[68px] tracking-[-0.02em] text-pine">
         <span id="heroTitleA">Sourcing India.</span><br>
         <em id="heroTitleB" class="font-normal italic text-ink">Supplying the World.</em>
       </h1>
-      <p id="heroSubtitle" class="reveal reveal-d1 mt-6 text-[16px] md:text-[18px] leading-relaxed text-ink/65 max-w-xl font-light">Premium agro commodities, spices & essentials — sourced directly from Indian farms and FPOs, quality-tested and exported reliably to 20+ countries.</p>
-      <div class="reveal reveal-d2 mt-8 flex flex-col sm:flex-row gap-3">
-        <a href="#products" class="btn-primary inline-flex justify-center items-center gap-2 bg-pine text-paper rounded-full px-8 py-4 text-[15px] font-medium shadow-soft"><span>Explore Products →</span></a>
-        <a href="#contact" class="inline-flex justify-center items-center gap-2 bg-white border border-ink/15 rounded-full px-8 py-4 text-[15px] font-medium hover:border-pine hover:text-pine transition">Contact Us</a>
-      </div>
+      <p id="heroSubtitle" class="reveal reveal-d1 mt-6 text-[16px] md:text-[18px] leading-relaxed text-ink/65 max-w-xl font-light"></p>
+      <div id="heroCTAs" class="reveal reveal-d2 mt-8 flex flex-col sm:flex-row gap-3"></div>
       <div class="reveal reveal-d3 mt-8 flex items-center gap-5">
-        <div class="flex -space-x-3">
-          <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=100&auto=format&fit=crop" class="w-10 h-10 rounded-full border-2 border-paper object-cover" alt="buyer">
-          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=100&auto=format&fit=crop" class="w-10 h-10 rounded-full border-2 border-paper object-cover" alt="buyer">
-          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=100&auto=format&fit=crop" class="w-10 h-10 rounded-full border-2 border-paper object-cover" alt="buyer">
-          <span class="w-10 h-10 rounded-full border-2 border-paper bg-pine text-paper text-[11px] font-semibold grid place-items-center">200+</span>
-        </div>
+        <div id="heroBuyerAvatars" class="flex -space-x-3"></div>
         <div class="text-[13px] leading-tight">
-          <div class="flex items-center gap-1 text-clayDark font-semibold">★★★★★ <span class="text-ink ml-1">4.9/5 Buyer Rating</span></div>
-          <p class="text-muted mt-0.5">Trusted by importers, wholesalers & distributors</p>
+          <div class="flex items-center gap-1 text-clayDark font-semibold">★★★★★ <span id="heroBuyerRating" class="text-ink ml-1"></span></div>
+          <p id="heroBuyerLabel" class="text-muted mt-0.5"></p>
         </div>
       </div>
-      <div class="mt-10 grid grid-cols-3 max-w-md gap-6 border-t border-stoneLine pt-6">
-        <div><p class="font-display text-[28px] md:text-[34px] text-pine leading-none"><span data-count="20">0</span>+</p><p class="text-[12px] uppercase tracking-widest text-muted mt-1.5">Countries Served</p></div>
-        <div><p class="font-display text-[28px] md:text-[34px] text-pine leading-none"><span data-count="480">0</span>+</p><p class="text-[12px] uppercase tracking-widest text-muted mt-1.5">Shipments / Year</p></div>
-        <div><p class="font-display text-[28px] md:text-[34px] text-pine leading-none"><span data-count="45">0</span>+</p><p class="text-[12px] uppercase tracking-widest text-muted mt-1.5">Farm Partners</p></div>
-      </div>
+      <div id="heroStats" class="mt-10 grid grid-cols-3 max-w-md gap-6 border-t border-stoneLine pt-6"></div>
     </div>
 
     <div class="relative reveal reveal-d1" id="heroVisual">
       <div class="absolute -inset-4 bg-gradient-to-tr from-moss via-cream to-transparent rounded-[2.5rem] rotate-2"></div>
-      <img id="heroImage" src="https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=1200&auto=format&fit=crop" alt="Container ship export logistics" class="relative rounded-[2rem] w-full h-[420px] md:h-[540px] object-cover shadow-lift" onerror="this.src='https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1200&auto=format&fit=crop'">
-      <div class="absolute top-5 left-5 bg-paper/95 backdrop-blur rounded-2xl px-4 py-3 shadow-card flex items-center gap-3 float-slow">
+      <img id="heroImage" src="" alt="" class="relative rounded-[2rem] w-full h-[420px] md:h-[540px] object-cover shadow-lift">
+      <div id="heroOverlayQC" class="absolute top-5 left-5 bg-paper/95 backdrop-blur rounded-2xl px-4 py-3 shadow-card flex items-center gap-3 float-slow">
         <span class="w-9 h-9 rounded-xl bg-pine text-paper grid place-items-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></span>
-        <div><p class="text-[13px] font-semibold leading-none">QC Passed • SGS Tested</p><p class="text-[12px] text-muted mt-1">Lab report attached</p></div>
+        <div><p id="heroOverlayQCText" class="text-[13px] font-semibold leading-none"></p><p id="heroOverlayQCSub" class="text-[12px] text-muted mt-1"></p></div>
       </div>
       <div class="absolute bottom-6 left-5 right-5 sm:right-auto bg-pine text-paper rounded-2xl p-4 shadow-lift flex items-center gap-4 float-slower">
         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 pulse-dot text-emerald-400 shrink-0 ml-1"></span>
         <div>
-          <p class="text-[12px] uppercase tracking-widest opacity-70">Live Shipment • Nhava Sheva → Jebel Ali</p>
-          <p class="text-[14px] font-medium mt-0.5">25 MT • 1121 Basmati Rice • ETA 6 Days</p>
+          <p id="heroShipRoute" class="text-[12px] uppercase tracking-widest opacity-70"></p>
+          <p id="heroShipText" class="text-[14px] font-medium mt-0.5"></p>
           <div class="mt-2 h-1 w-56 bg-white/20 rounded-full overflow-hidden"><div id="shipProgress" class="h-full w-0 bg-clay rounded-full transition-all duration-1000"></div></div>
         </div>
       </div>
-      <div class="absolute -right-3 md:-right-6 top-1/3 bg-white rounded-2xl shadow-card border border-stoneLine px-4 py-3 hidden sm:block">
-        <p class="eyebrow text-clayDark">Origin</p>
-        <p class="font-display text-[18px] text-pine mt-1">Punjab, India → UAE</p>
+      <div id="heroOriginChip" class="absolute -right-3 md:-right-6 top-1/3 bg-white rounded-2xl shadow-card border border-stoneLine px-4 py-3 hidden sm:block">
+        <p id="heroOriginLabel" class="eyebrow text-clayDark"></p>
+        <p id="heroOriginText" class="font-display text-[18px] text-pine mt-1"></p>
       </div>
     </div>
   </div>
@@ -378,84 +351,43 @@ tailwind.config = {
 <!-- ABOUT -->
 <section id="about" class="max-w-7xl mx-auto px-5 py-20 md:py-28">
   <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-    <div class="relative reveal">
-      <div class="grid grid-cols-[1fr_.85fr] gap-4">
-        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=800&auto=format&fit=crop" alt="CBC warehouse operations" class="rounded-3xl h-[320px] md:h-[440px] w-full object-cover shadow-card parallax-img" data-speed="0.06">
-        <div class="space-y-4 pt-10">
-          <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=600&auto=format&fit=crop" alt="Partner farms India" class="rounded-3xl h-[150px] md:h-[210px] w-full object-cover shadow-card parallax-img" data-speed="0.1">
-          <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?q=80&w=600&auto=format&fit=crop" alt="Quality sourcing" class="rounded-3xl h-[150px] md:h-[210px] w-full object-cover shadow-card">
-        </div>
-      </div>
-      <div class="absolute -bottom-6 left-6 bg-pine text-paper rounded-2xl px-6 py-5 shadow-lift">
-        <p class="font-display text-[36px] leading-none">9<span class="text-clay">+</span></p>
-        <p class="text-[12px] tracking-widest uppercase opacity-70 mt-1">Years of Export<br>Excellence</p>
-      </div>
-    </div>
+    <div id="aboutImages" class="relative reveal"></div>
     <div>
-      <p class="reveal eyebrow text-clayDark flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> 01 — About Us</p>
-      <h2 class="reveal font-display font-light text-[34px] md:text-[46px] leading-[1.08] tracking-tight mt-4 text-pine">A bridge between <em class="italic font-normal text-ink">Indian farms</em> and global buyers.</h2>
-      <p id="aboutText" class="reveal mt-6 text-ink/65 leading-relaxed font-light text-[16px]">CBC Global Venture, based in Indore, India, is a merchant export house specialising in agro commodities, spices, fresh produce and essentials. We work directly with 45+ FPOs and mills across Punjab, Maharashtra, MP and Gujarat — cutting middlemen, ensuring traceability, and delivering consistent export-grade quality with complete documentation.</p>
+      <p id="aboutEyebrow" class="reveal eyebrow text-clayDark flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span></p>
+      <h2 id="aboutHeading" class="reveal font-display font-light text-[34px] md:text-[46px] leading-[1.08] tracking-tight mt-4 text-pine"></h2>
+      <p id="aboutText" class="reveal mt-6 text-ink/65 leading-relaxed font-light text-[16px]"></p>
       <div id="aboutChecks" class="reveal mt-7 grid sm:grid-cols-2 gap-3 text-[14px]"></div>
-      <div class="reveal mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-        <a href="#contact" class="btn-primary bg-pine text-paper rounded-full px-7 py-3.5 text-[14px] font-medium"><span>Work With Us →</span></a>
-        <div class="flex items-center gap-3">
-          <span class="w-11 h-11 rounded-full bg-cream grid place-items-center font-display italic text-pine text-lg">C</span>
-          <div class="text-[13px]"><p class="font-semibold" id="founderName">Chandresh B. Chouhan</p><p class="text-muted">Founder & Managing Partner</p></div>
-        </div>
-      </div>
+      <div id="aboutCTA" class="reveal mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-5"></div>
     </div>
   </div>
 </section>
 
-<!-- ============ PRODUCTS (product cards, like deepseek2) ============ -->
+<!-- ============ PRODUCTS ============ -->
 <section id="products" class="bg-white border-y border-stoneLine">
   <div class="max-w-7xl mx-auto px-5 py-20 md:py-28">
-    <div class="max-w-3xl mx-auto text-center">
-      <p class="reveal eyebrow text-clayDark flex items-center justify-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> 02 — Our Products <span class="w-8 h-px bg-clay inline-block"></span></p>
-      <h2 class="reveal font-display font-light text-[34px] md:text-[46px] leading-tight mt-4 text-pine">Export-ready product <em class="italic text-ink">portfolio.</em></h2>
-      <p class="reveal mt-4 text-ink/60 font-light text-[16px]">Carefully sourced, quality-checked and packed to international standards. Custom specifications, private labelling and mixed-container loads available on request.</p>
-    </div>
-
+    <div id="productsHeader" class="max-w-3xl mx-auto text-center"></div>
     <div id="productChips" class="reveal mt-8 flex flex-wrap justify-center items-center gap-2"></div>
     <div id="productGrid" class="mt-8 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
-
-    <div class="mt-10 bg-cream/70 border border-stoneLine rounded-2xl p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-      <p class="text-[14px] text-ink/70"><strong class="text-pine">Need private labelling or custom specs?</strong> We offer buyer-brand packaging, mesh / jute / PP bags, and mixed-container loading across categories.</p>
-      <a href="#contact" class="shrink-0 bg-pine text-paper text-[13px] font-medium rounded-full px-6 py-3 hover:bg-pineLight transition">Request Custom Quote</a>
-    </div>
+    <div id="productsBanner" class="mt-10 bg-cream/70 border border-stoneLine rounded-2xl p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4"></div>
   </div>
 </section>
 
 <!-- QUALITY STRIP -->
 <section class="bg-pine text-paper relative overflow-hidden">
   <div class="absolute inset-0 opacity-[.07]" style="background-image:radial-gradient(#fff 1px,transparent 1px);background-size:26px 26px"></div>
-  <div class="max-w-7xl mx-auto px-5 py-14 md:py-16 grid md:grid-cols-4 gap-8 relative">
-    <div class="reveal"><p class="eyebrow text-clay">Certified Quality</p><p class="font-display text-[26px] mt-2 font-light">Tested. Certified.<br><em class="italic">Trusted.</em></p></div>
-    <div class="reveal reveal-d1 flex gap-4"><span class="w-11 h-11 shrink-0 rounded-xl bg-white/10 grid place-items-center text-clay"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><div><p class="font-semibold text-[15px]">SGS / Geo-Chem Lab Test</p><p class="text-[13px] text-paper/60 mt-1">Moisture, aflatoxin, pesticide & micro reports with every shipment.</p></div></div>
-    <div class="reveal reveal-d2 flex gap-4"><span class="w-11 h-11 shrink-0 rounded-xl bg-white/10 grid place-items-center text-clay"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h10M7 17h6"/></svg></span><div><p class="font-semibold text-[15px]">APEDA • IEC • FSSAI • Phytosanitary</p><p class="text-[13px] text-paper/60 mt-1">Complete export documentation, fumigation & COO handled.</p></div></div>
-    <div class="reveal reveal-d3 flex gap-4"><span class="w-11 h-11 shrink-0 rounded-xl bg-white/10 grid place-items-center text-clay"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8 12 3 3 8v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></span><div><p class="font-semibold text-[15px]">AQL 2.5 Inspection</p><p class="text-[13px] text-paper/60 mt-1">Pre-shipment container stuffing supervision & photo reports.</p></div></div>
-  </div>
+  <div id="qualityStrip" class="max-w-7xl mx-auto px-5 py-14 md:py-16 grid md:grid-cols-4 gap-8 relative"></div>
 </section>
 
 <!-- WHY CHOOSE US -->
 <section id="why" class="max-w-7xl mx-auto px-5 py-20 md:py-28">
-  <div class="text-center max-w-2xl mx-auto">
-    <p class="reveal eyebrow text-clayDark justify-center flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> 03 — Why Choose Us <span class="w-8 h-px bg-clay inline-block"></span></p>
-    <h2 class="reveal font-display font-light text-[34px] md:text-[46px] mt-4 text-pine">The partner buyers <em class="italic text-ink">reorder from.</em></h2>
-  </div>
+  <div id="whyHeader" class="text-center max-w-2xl mx-auto"></div>
   <div id="whyGrid" class="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
 </section>
 
 <!-- PROCESS -->
 <section id="process" class="bg-cream/60 border-y border-stoneLine">
   <div class="max-w-7xl mx-auto px-5 py-20 md:py-28">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-      <div>
-        <p class="reveal eyebrow text-clayDark flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> 04 — Import & Export Process</p>
-        <h2 class="reveal font-display font-light text-[34px] md:text-[46px] mt-4 text-pine">From enquiry to delivery <em class="italic text-ink">in 5 steps.</em></h2>
-      </div>
-      <p class="reveal text-[14px] text-muted max-w-sm">Average first shipment in 18–22 days. Dedicated manager + WhatsApp updates at every milestone.</p>
-    </div>
+    <div id="processHeader" class="flex flex-col md:flex-row md:items-end justify-between gap-4"></div>
     <div class="relative mt-14">
       <div class="timeline-line hidden lg:block"></div>
       <div id="timelineProgress" class="hidden lg:block"></div>
@@ -463,31 +395,20 @@ tailwind.config = {
       <div id="timelineProgressM" class="lg:hidden" style="position:absolute;left:23px;top:0;width:2px;background:#14342B;height:0"></div>
       <div id="processGrid" class="grid lg:grid-cols-5 gap-10 lg:gap-5"></div>
     </div>
-    <div class="reveal mt-12 bg-pine text-paper rounded-3xl p-7 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-      <div><p class="font-display text-[24px] md:text-[30px] font-light">Get your CIF quote <em class="italic text-clay">within 24 hours.</em></p><p class="text-paper/60 text-[14px] mt-2">Share product, quantity & destination port — we handle the rest.</p></div>
-      <div class="flex flex-col sm:flex-row gap-3 shrink-0">
-        <a href="#contact" class="bg-paper text-pine rounded-full px-7 py-3.5 text-[14px] font-semibold text-center hover:bg-white transition">Start Enquiry</a>
-        <a id="processWhatsapp" href="#" target="_blank" class="border border-paper/30 rounded-full px-7 py-3.5 text-[14px] font-medium text-center hover:bg-white/10 transition">WhatsApp Us</a>
-      </div>
-    </div>
+    <div id="processCTA" class="reveal mt-12 bg-pine text-paper rounded-3xl p-7 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"></div>
   </div>
 </section>
 
-<!-- ============ MARKETS (region-grouped, no search) ============ -->
+<!-- ============ MARKETS ============ -->
 <section id="markets" class="max-w-7xl mx-auto px-5 py-20 md:py-28">
   <div class="grid lg:grid-cols-[.9fr_1.1fr] gap-12">
     <div>
-      <p class="reveal eyebrow text-clayDark flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> 05 — Global Markets</p>
-      <h2 class="reveal font-display font-light text-[34px] md:text-[46px] mt-4 text-pine leading-tight">Serving buyers <em class="italic text-ink">across 4 continents.</em></h2>
-      <p class="reveal mt-4 text-ink/60 font-light">Regular sailings from Nhava Sheva, Mundra & Tuticorin. FOB, CIF, CFR & DDP terms available.</p>
+      <div id="marketsHeader"></div>
       <div class="reveal mt-8 relative bg-pine rounded-3xl overflow-hidden h-[300px] md:h-[340px]">
         <div class="absolute inset-0 opacity-20" style="background-image:radial-gradient(rgba(255,255,255,.7) 1px,transparent 1px);background-size:22px 22px"></div>
         <svg viewBox="0 0 800 360" class="absolute inset-0 w-full h-full opacity-25" fill="none" stroke="#FAF8F4" stroke-width="1"><ellipse cx="400" cy="180" rx="360" ry="150"/><ellipse cx="400" cy="180" rx="270" ry="110"/><ellipse cx="400" cy="180" rx="180" ry="70"/><line x1="40" y1="180" x2="760" y2="180"/><line x1="400" y1="30" x2="400" y2="330"/></svg>
         <div class="map-dot" style="left:62%;top:52%"></div><div class="map-dot" style="left:68%;top:48%"></div><div class="map-dot" style="left:74%;top:58%"></div><div class="map-dot" style="left:55%;top:60%"></div><div class="map-dot" style="left:48%;top:38%"></div><div class="map-dot" style="left:22%;top:42%"></div><div class="map-dot" style="left:80%;top:40%"></div>
-        <div class="absolute bottom-5 left-5 right-5 flex items-center justify-between text-paper">
-          <div><p class="font-display text-[28px] leading-none">20+ Countries</p><p class="text-[12px] uppercase tracking-widest opacity-60 mt-1">Active trade lanes</p></div>
-          <div class="text-right text-[12px] opacity-80 leading-relaxed">Nhava Sheva • Mundra<br>Tuticorin • Chennai</div>
-        </div>
+        <div id="marketsMapStats" class="absolute bottom-5 left-5 right-5 flex items-center justify-between text-paper"></div>
       </div>
     </div>
     <div id="regionGrid" class="grid sm:grid-cols-2 gap-4 content-start"></div>
@@ -497,7 +418,7 @@ tailwind.config = {
   <div class="mt-20 bg-white border border-stoneLine rounded-[2rem] p-7 md:p-12 relative overflow-hidden">
     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pine via-clay to-pine"></div>
     <div class="flex items-center justify-between">
-      <p class="eyebrow text-clayDark">Buyer Stories</p>
+      <p id="testiEyebrow" class="eyebrow text-clayDark"></p>
       <div class="flex gap-2">
         <button onclick="moveTesti(-1)" class="w-10 h-10 rounded-full border border-stoneLine grid place-items-center hover:bg-pine hover:text-paper transition" aria-label="Previous">←</button>
         <button onclick="moveTesti(1)" class="w-10 h-10 rounded-full border border-stoneLine grid place-items-center hover:bg-pine hover:text-paper transition" aria-label="Next">→</button>
@@ -509,15 +430,7 @@ tailwind.config = {
 
   <!-- FAQ -->
   <div class="mt-14 grid lg:grid-cols-[.8fr_1.2fr] gap-10">
-    <div>
-      <p class="reveal eyebrow text-clayDark">Common Questions</p>
-      <h3 class="reveal font-display font-light text-[30px] md:text-[36px] mt-3 text-pine">Everything importers <em class="italic text-ink">ask us.</em></h3>
-      <p class="reveal text-ink/60 text-[14px] mt-3">Still unsure? Message us — we reply within a few business hours.</p>
-      <a id="faqWhatsapp" href="#" target="_blank" class="reveal mt-5 inline-flex items-center gap-2 bg-[#1FA855] text-white rounded-full px-6 py-3 text-[14px] font-medium shadow-card hover:brightness-105 transition">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5s.8 1.9.8 2c.1.1.1.3 0 .5l-.4.5c-.2.2-.3.4-.1.7.2.3.9 1.5 2 2.4 1.4 1.2 2.5 1.6 2.9 1.8.3.2.5.1.7-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4 0 .1 0 .7-.4 1.6z"/></svg>
-        Chat on WhatsApp
-      </a>
-    </div>
+    <div id="faqSidebar"></div>
     <div id="faqList" class="space-y-3"></div>
   </div>
 </section>
@@ -526,31 +439,27 @@ tailwind.config = {
 <section id="contact" class="bg-pine text-paper relative overflow-hidden">
   <div class="absolute -top-40 left-1/3 w-[600px] h-[600px] bg-white/[.04] rounded-full blur-3xl"></div>
   <div class="max-w-7xl mx-auto px-5 py-20 md:py-28 relative">
-    <p class="reveal eyebrow text-clay flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> 06 — Contact & Enquiry</p>
+    <p id="contactEyebrow" class="reveal eyebrow text-clay flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span></p>
     <div class="grid lg:grid-cols-[1fr_1.15fr] gap-12 mt-6">
       <div>
-        <h2 class="reveal font-display font-light text-[36px] md:text-[52px] leading-[1.05]">Let's discuss <em class="italic text-clay">your requirement.</em></h2>
-        <p class="reveal mt-4 text-paper/60 font-light max-w-md">Share your target product, specs and destination port. Our export desk will revert with pricing, samples & timelines within 24 hours.</p>
-
+        <h2 id="contactHeading" class="reveal font-display font-light text-[36px] md:text-[52px] leading-[1.05]"></h2>
+        <p id="contactSubtitle" class="reveal mt-4 text-paper/60 font-light max-w-md"></p>
         <div class="reveal mt-8 grid sm:grid-cols-1 gap-3 text-[14px]" id="contactCards"></div>
-
-        <!-- WhatsApp CTA replacing product-jump chips -->
         <a id="contactWhatsapp" href="#" target="_blank" class="reveal mt-5 flex items-center gap-4 bg-gradient-to-br from-[#1B6B4F] to-[#0D3527] rounded-3xl p-5 md:p-6 shadow-lift hover:-translate-y-1 transition-transform duration-300">
           <span class="w-12 h-12 rounded-2xl bg-white/15 border border-white/20 grid place-items-center text-white shrink-0">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5s.8 1.9.8 2c.1.1.1.3 0 .5l-.4.5c-.2.2-.3.4-.1.7.2.3.9 1.5 2 2.4 1.4 1.2 2.5 1.6 2.9 1.8.3.2.5.1.7-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4 0 .1 0 .7-.4 1.6z"/></svg>
           </span>
           <div class="flex-1 min-w-0">
-            <p class="font-display text-[19px] md:text-[21px] text-white leading-tight">Chat on WhatsApp</p>
-            <p class="text-[13px] text-paper/70 mt-1">Fastest way to get pricing &amp; availability</p>
+            <p id="contactWAHeading" class="font-display text-[19px] md:text-[21px] text-white leading-tight"></p>
+            <p id="contactWASub" class="text-[13px] text-paper/70 mt-1"></p>
           </div>
           <span class="text-clay text-xl opacity-70 shrink-0">→</span>
         </a>
       </div>
-
       <div class="reveal bg-paper text-ink rounded-[1.8rem] p-6 md:p-9 shadow-lift">
         <div class="flex items-center justify-between">
-          <h3 class="font-display text-[24px] text-pine">Request Export Quote</h3>
-          <span class="text-[11px] font-semibold bg-moss text-pine rounded-full px-3 py-1.5">24H RESPONSE</span>
+          <h3 id="formTitle" class="font-display text-[24px] text-pine"></h3>
+          <span id="formBadge" class="text-[11px] font-semibold bg-moss text-pine rounded-full px-3 py-1.5"></span>
         </div>
         <form id="enquiryForm" class="mt-6 grid sm:grid-cols-2 gap-4" novalidate>
           <div><label class="text-[12px] font-semibold uppercase tracking-widest text-muted">Full Name *</label><input required name="name" type="text" placeholder="Ahmed Al Farsi" class="mt-1.5 w-full bg-white border border-stoneLine rounded-xl px-4 py-3 text-[14px]"></div>
@@ -563,10 +472,10 @@ tailwind.config = {
           <div class="relative"><label class="text-[12px] font-semibold uppercase tracking-widest text-muted">Incoterms</label><div id="formIncoterms" class="csel mt-1.5" data-placeholder="Select Incoterm…"></div></div>
           <div class="sm:col-span-2"><label class="text-[12px] font-semibold uppercase tracking-widest text-muted">Requirement Details *</label><textarea required name="message" rows="4" placeholder="Specs, packaging, target price, destination port…" class="mt-1.5 w-full bg-white border border-stoneLine rounded-xl px-4 py-3 text-[14px] resize-none"></textarea></div>
           <div class="sm:col-span-2 flex flex-col sm:flex-row gap-3 mt-1">
-            <button type="submit" class="flex-1 bg-pine text-paper rounded-full py-4 text-[15px] font-semibold hover:bg-pineLight transition">Send Enquiry →</button>
-            <button type="button" onclick="sendViaWhatsApp()" class="flex-1 bg-[#1FA855] text-white rounded-full py-4 text-[15px] font-semibold hover:brightness-105 transition">Send via WhatsApp</button>
+            <button id="formSubmitBtn" type="submit" class="flex-1 bg-pine text-paper rounded-full py-4 text-[15px] font-semibold hover:bg-pineLight transition"></button>
+            <button id="formWABtn" type="button" onclick="sendViaWhatsApp()" class="flex-1 bg-[#1FA855] text-white rounded-full py-4 text-[15px] font-semibold hover:brightness-105 transition"></button>
           </div>
-          <p class="sm:col-span-2 text-[12px] text-muted text-center">By submitting, you agree to be contacted about your enquiry. We never share buyer data.</p>
+          <p id="formPrivacy" class="sm:col-span-2 text-[12px] text-muted text-center"></p>
         </form>
       </div>
     </div>
@@ -590,11 +499,11 @@ tailwind.config = {
         <div class="flex items-center gap-3 mb-5">
           <span class="w-11 h-11 rounded-xl bg-paper text-pine grid place-items-center font-display text-lg relative overflow-hidden shrink-0">C<span class="absolute -bottom-1 -right-1 w-4 h-4 bg-clay/90 rounded-tl-xl"></span></span>
           <div>
-            <p class="font-display text-paper text-[18px] leading-tight">CBC Global Venture</p>
-            <p class="text-[10px] tracking-[.2em] uppercase opacity-50 mt-0.5">Import • Export • Sourcing</p>
+            <p id="footerBrandName" class="font-display text-paper text-[18px] leading-tight"></p>
+            <p id="footerBrandTagline" class="text-[10px] tracking-[.2em] uppercase opacity-50 mt-0.5"></p>
           </div>
         </div>
-        <p class="text-[13.5px] leading-relaxed font-light">Merchant export house from Indore, India — supplying agro commodities, spices, fresh produce &amp; essentials to buyers in 20+ countries with full documentation &amp; QC.</p>
+        <p id="footerAbout" class="text-[13.5px] leading-relaxed font-light"></p>
         <div class="flex gap-2 mt-5" id="socialRow"></div>
       </div>
 
@@ -700,23 +609,22 @@ tailwind.config = {
             <path d="M94,227 Q118,225 130,227 Q142,229 166,227" fill="none" stroke="rgba(255,255,255,.07)" stroke-width=".8" stroke-linecap="round"/>
           </g>
 
-          <!-- ── Floating stat chips ── -->
-          <!-- "20+ Countries" chip top-right -->
-          <g style="animation:ftr-float1 5s ease-in-out infinite">
+          <!-- ── Floating stat chips (rendered by JS) ── -->
+          <g id="globeChip1" style="animation:ftr-float1 5s ease-in-out infinite">
             <rect x="162" y="52" width="100" height="28" rx="8" fill="rgba(14,30,24,.85)" stroke="rgba(185,151,91,.4)" stroke-width="1"/>
             <circle cx="176" cy="66" r="4.5" fill="#B9975B" opacity=".9"/>
-            <text x="185" y="70" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#FAF8F4" opacity=".9">20+ Countries</text>
+            <text id="globeChip1Text" x="185" y="70" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#FAF8F4" opacity=".9">20+ Countries</text>
           </g>
-          <!-- "IEC Certified" chip bottom-left -->
-          <g style="animation:ftr-float2 6s ease-in-out infinite">
+          <!-- chip bottom-left -->
+          <g id="globeChip2" style="animation:ftr-float2 6s ease-in-out infinite">
             <rect x="16" y="158" width="100" height="26" rx="8" fill="rgba(14,30,24,.85)" stroke="rgba(185,151,91,.3)" stroke-width="1"/>
             <text x="30" y="175" font-size="9" font-family="Inter,sans-serif" font-weight="700" fill="#B9975B">✓</text>
-            <text x="41" y="175" font-size="9.5" font-family="Inter,sans-serif" font-weight="600" fill="#FAF8F4" opacity=".85">IEC Certified</text>
+            <text id="globeChip2Text" x="41" y="175" font-size="9.5" font-family="Inter,sans-serif" font-weight="600" fill="#FAF8F4" opacity=".85">IEC Certified</text>
           </g>
-          <!-- "480+ Shipments" chip bottom-right -->
-          <g style="animation:ftr-float1 7s ease-in-out infinite -2s">
+          <!-- chip bottom-right -->
+          <g id="globeChip3" style="animation:ftr-float1 7s ease-in-out infinite -2s">
             <rect x="162" y="166" width="90" height="26" rx="8" fill="rgba(14,30,24,.85)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-            <text x="173" y="183" font-size="9.5" font-family="Inter,sans-serif" font-weight="600" fill="#E9C767" opacity=".9">🚢 480+ / Year</text>
+            <text id="globeChip3Text" x="173" y="183" font-size="9.5" font-family="Inter,sans-serif" font-weight="600" fill="#E9C767" opacity=".9">🚢 480+ / Year</text>
           </g>
         </svg>
 
@@ -734,7 +642,7 @@ tailwind.config = {
 
       <!-- Contact -->
       <div>
-        <p class="text-[11px] font-bold uppercase tracking-widest text-clay mb-4">Get In Touch</p>
+        <p id="footContactLabel" class="text-[11px] font-bold uppercase tracking-widest text-clay mb-4"></p>
         <ul class="grid gap-3 text-[13.5px]" id="footContact"></ul>
         <!-- Quick CTA -->
         <a id="footWa" href="#" target="_blank"
@@ -746,7 +654,7 @@ tailwind.config = {
 
       <!-- Certifications compact grid -->
       <div>
-        <p class="text-[11px] font-bold uppercase tracking-widest text-clay mb-4">Certifications &amp; Compliance</p>
+        <p id="footCertsLabel" class="text-[11px] font-bold uppercase tracking-widest text-clay mb-4"></p>
         <div id="footCerts"></div>
         <!-- IEC + GST prominent badges -->
         <div class="mt-4 flex flex-wrap gap-2" id="footBadges"></div>
@@ -755,10 +663,10 @@ tailwind.config = {
 
     <!-- ── BOTTOM BAR ── -->
     <div class="mt-12 pt-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] text-paper/40">
-      <p>© <span id="year"></span> CBC Global Venture. All rights reserved. Made in India 🇮🇳</p>
+      <p>© <span id="year"></span> <span id="footerCopyright"></span></p>
       <p class="flex gap-5">
-        <a href="#" class="hover:text-paper/70 transition">Privacy Policy</a>
-        <a href="#" class="hover:text-paper/70 transition">Terms of Use</a>
+        <a id="footerPrivacyLink" href="#" class="hover:text-paper/70 transition"></a>
+        <a id="footerTermsLink" href="#" class="hover:text-paper/70 transition"></a>
         <a href="#home" class="hover:text-paper/70 transition">↑ Back to top</a>
       </p>
     </div>
@@ -779,7 +687,7 @@ tailwind.config = {
 
 <!-- DATA STUDIO PANEL -->
 <div id="dataOverlay" onclick="closeDataPanel()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] hidden"></div>
-<aside id="dataPanel" class="fixed top-0 right-0 h-full w-[min(940px,100vw)] bg-paper z-[61] shadow-lift translate-x-full flex flex-col">
+<aside id="dataPanel" class="fixed top-0 right-0 h-full w-[min(1000px,100vw)] bg-paper z-[61] shadow-lift translate-x-full flex flex-col">
   <div class="px-5 sm:px-6 py-5 border-b border-stoneLine flex items-start justify-between gap-4 bg-white">
     <div>
       <p class="eyebrow text-clayDark">CMS • Visual Editor</p>
@@ -815,8 +723,42 @@ tailwind.config = {
    and the Content Studio keep working.
 ============================================================ */
 const DEFAULT_DATA = {
+  /* ── SEO / Meta ── */
+  seo: {
+    title:       "CBC Global Venture — Sourcing India. Supplying the World. | Import Export Company India",
+    description: "CBC Global Venture is a premium import-export company from India supplying Basmati Rice, Spices, Grains, Fresh Produce & Agro Commodities to 20+ countries. IEC Certified. Get export quote in 24 hours.",
+    keywords:    "import export India, basmati rice exporter, spice exporter India, agro commodities, CBC Global Venture, IEC certified exporter, APEDA registered",
+    canonical:   "https://www.cbcglobalventure.com/",
+    ogImage:     "https://www.cbcglobalventure.com/og-image.jpg",
+    twitterHandle: "@cbcglobalventure"
+  },
+
+  /* ── Navigation ── */
+  nav: {
+    editBtnLabel: "Edit Content",
+    quoteBtnLabel: "Get Quote →",
+    links: [
+      { label:"About",    href:"#about",    id:"about" },
+      { label:"Products", href:"#products", id:"products" },
+      { label:"Why Us",   href:"#why",      id:"why" },
+      { label:"Process",  href:"#process",  id:"process" },
+      { label:"Markets",  href:"#markets",  id:"markets" },
+      { label:"Contact",  href:"#contact",  id:"contact" }
+    ],
+    mobileLinks: [
+      { label:"About Us",      href:"#about" },
+      { label:"Products",      href:"#products" },
+      { label:"Why Choose Us", href:"#why" },
+      { label:"Process",       href:"#process" },
+      { label:"Global Markets",href:"#markets" },
+      { label:"Contact",       href:"#contact" }
+    ],
+    mobileCTA: { label:"Get Export Quote", href:"#contact" }
+  },
+
   company: {
     name: "CBC Global Venture",
+    tagline: "Import • Export • Sourcing",
     established: 2016,
     city: "Indore, Madhya Pradesh, India",
     address: "2nd Floor, Trade House, AB Road, Indore, MP 452001, India",
@@ -825,14 +767,156 @@ const DEFAULT_DATA = {
     whatsapp: "919826012345",
     hours: "Mon–Sat · 9:30–19:00 IST",
     founder: "Chandresh B. Chouhan",
+    founderRole: "Founder & Managing Partner",
     heroBadge: "IEC Certified • APEDA Registered Exporter",
+    heroSinceBadge: "● SINCE 2016",
     heroTitleA: "Sourcing India.",
     heroTitleB: "Supplying the World.",
     heroSubtitle: "Premium agro commodities, spices & essentials — sourced directly from Indian farms and FPOs, quality-tested and exported reliably to 20+ countries.",
     heroImage: "https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=1200&auto=format&fit=crop",
+    heroImageAlt: "Container ship export logistics",
+    heroCTA1Label: "Explore Products →",
+    heroCTA1Href: "#products",
+    heroCTA2Label: "Contact Us",
+    heroCTA2Href: "#contact",
     aboutText: "CBC Global Venture, based in Indore, India, is a merchant export house specialising in agro commodities, spices, fresh produce and essentials. We work directly with 45+ FPOs and mills across Punjab, Maharashtra, MP and Gujarat — cutting middlemen, ensuring traceability, and delivering consistent export-grade quality with complete documentation.",
-    socials: { linkedin:"#", instagram:"#", facebook:"#", x:"#", youtube:"#" }
+    aboutHeading: "A bridge between",
+    aboutHeadingEm: "Indian farms",
+    aboutHeadingEnd: "and global buyers.",
+    aboutCTALabel: "Work With Us →",
+    aboutYears: "9",
+    aboutYearsLabel: "Years of Export Excellence",
+    socials: { linkedin:"#", instagram:"#", facebook:"#", x:"#", youtube:"#" },
+    footerAbout: "Merchant export house from Indore, India — supplying agro commodities, spices, fresh produce & essentials to buyers in 20+ countries with full documentation & QC.",
+    footerCopyright: "CBC Global Venture. All rights reserved. Made in India 🇮🇳",
+    footerPrivacyLabel: "Privacy Policy",
+    footerPrivacyHref: "#",
+    footerTermsLabel: "Terms of Use",
+    footerTermsHref: "#"
   },
+
+  /* ── Hero buyer social proof ── */
+  heroBuyerImages: [
+    "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=100&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=100&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=100&auto=format&fit=crop"
+  ],
+  heroBuyerCount: "200+",
+  heroBuyerRating: "4.9/5 Buyer Rating",
+  heroBuyerLabel: "Trusted by importers, wholesalers & distributors",
+
+  /* ── Hero stats ── */
+  heroStats: [
+    { count:20,  suffix:"+", label:"Countries Served" },
+    { count:480, suffix:"+", label:"Shipments / Year" },
+    { count:45,  suffix:"+", label:"Farm Partners" }
+  ],
+
+  /* ── Hero image overlays ── */
+  heroOverlayQC:       "QC Passed • SGS Tested",
+  heroOverlayQCSub:    "Lab report attached",
+  heroOverlayShipRoute:"Live Shipment • Nhava Sheva → Jebel Ali",
+  heroOverlayShipText: "25 MT • 1121 Basmati Rice • ETA 6 Days",
+  heroOverlayOriginLabel: "Origin",
+  heroOverlayOriginText:  "Punjab, India → UAE",
+
+  /* ── About section images ── */
+  aboutImages: [
+    { src:"https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=800&auto=format&fit=crop", alt:"CBC warehouse operations", speed:"0.06" },
+    { src:"https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=600&auto=format&fit=crop", alt:"Partner farms India",      speed:"0.1" },
+    { src:"https://images.unsplash.com/photo-1605000797499-95a51c5269ae?q=80&w=600&auto=format&fit=crop", alt:"Quality sourcing",          speed:"" }
+  ],
+
+  /* ── Section headings ── */
+  sections: {
+    about: {
+      eyebrow: "01 — About Us"
+    },
+    products: {
+      eyebrow:   "02 — Our Products",
+      heading:   "Export-ready product",
+      headingEm: "portfolio.",
+      subtitle:  "Carefully sourced, quality-checked and packed to international standards. Custom specifications, private labelling and mixed-container loads available on request.",
+      bannerText:  "Need private labelling or custom specs? We offer buyer-brand packaging, mesh / jute / PP bags, and mixed-container loading across categories.",
+      bannerCTA:   "Request Custom Quote",
+      bannerCTAHref: "#contact"
+    },
+    qualityStrip: {
+      eyebrow: "Certified Quality",
+      heading: "Tested. Certified.",
+      headingEm: "Trusted.",
+      items: [
+        { title:"SGS / Geo-Chem Lab Test",           text:"Moisture, aflatoxin, pesticide & micro reports with every shipment." },
+        { title:"APEDA • IEC • FSSAI • Phytosanitary",text:"Complete export documentation, fumigation & COO handled." },
+        { title:"AQL 2.5 Inspection",                 text:"Pre-shipment container stuffing supervision & photo reports." }
+      ]
+    },
+    why: {
+      eyebrow:   "03 — Why Choose Us",
+      heading:   "The partner buyers",
+      headingEm: "reorder from."
+    },
+    process: {
+      eyebrow:   "04 — Import & Export Process",
+      heading:   "From enquiry to delivery",
+      headingEm: "in 5 steps.",
+      subtitle:  "Average first shipment in 18–22 days. Dedicated manager + WhatsApp updates at every milestone.",
+      ctaHeading:   "Get your CIF quote",
+      ctaHeadingEm: "within 24 hours.",
+      ctaSub:    "Share product, quantity & destination port — we handle the rest.",
+      ctaBtn1:   "Start Enquiry",
+      ctaBtn2:   "WhatsApp Us"
+    },
+    markets: {
+      eyebrow:   "05 — Global Markets",
+      heading:   "Serving buyers",
+      headingEm: "across 4 continents.",
+      subtitle:  "Regular sailings from Nhava Sheva, Mundra & Tuticorin. FOB, CIF, CFR & DDP terms available.",
+      mapCountLabel:  "20+ Countries",
+      mapCountSub:    "Active trade lanes",
+      mapPortsRight:  "Nhava Sheva • Mundra\nTuticorin • Chennai",
+      testiEyebrow:   "Buyer Stories",
+      faqEyebrow:     "Common Questions",
+      faqHeading:     "Everything importers",
+      faqHeadingEm:   "ask us.",
+      faqSubtext:     "Still unsure? Message us — we reply within a few business hours.",
+      faqWALabel:     "Chat on WhatsApp"
+    },
+    contact: {
+      eyebrow:    "06 — Contact & Enquiry",
+      heading:    "Let's discuss",
+      headingEm:  "your requirement.",
+      subtitle:   "Share your target product, specs and destination port. Our export desk will revert with pricing, samples & timelines within 24 hours.",
+      waHeading:  "Chat on WhatsApp",
+      waSub:      "Fastest way to get pricing & availability",
+      formTitle:  "Request Export Quote",
+      formBadge:  "24H RESPONSE",
+      formPrivacy:"By submitting, you agree to be contacted about your enquiry. We never share buyer data.",
+      submitLabel:"Send Enquiry →",
+      waLabel:    "Send via WhatsApp"
+    },
+    footer: {
+      contactLabel: "Get In Touch",
+      certsLabel:   "Certifications & Compliance",
+      waQuickLabel: "WhatsApp a quick enquiry",
+      certifications: [
+        { label:"APEDA Registered",  desc:"Agri & Processed Food Exports",         icon:"🌾" },
+        { label:"FSSAI Licensed",    desc:"Food Safety & Standards Authority",      icon:"🥗" },
+        { label:"ISO Partner Units", desc:"Production at ISO-certified facilities", icon:"✅" },
+        { label:"Phytosanitary",     desc:"Plant quarantine cert per shipment",     icon:"🌿" }
+      ],
+      iecBadgeTitle: "IEC Certified",
+      iecBadgeSub:   "Import Export Code · DGFT",
+      gstBadgeTitle: "GST Compliant",
+      gstBadgeSub:   "Registered Tax Entity · India"
+    },
+    globeChips: [
+      { text:"20+ Countries", color:"clay",   delay:"5s",  offsetY:"52", offsetX:"162" },
+      { text:"IEC Certified", color:"check",  delay:"6s",  offsetY:"158",offsetX:"16"  },
+      { text:"480+ / Year",   color:"gold",   delay:"7s",  offsetY:"166",offsetX:"162" }
+    ]
+  },
+
   marquee: ["IEC 1109004521 Certified","APEDA Registered","SGS Lab Tested","20+ Countries Served","FOB • CIF • DDP","Private Labelling Available","Response in 24 Hours"],
   aboutChecks: ["Direct farm & mill sourcing — no middlemen","In-house QC + third-party SGS inspection","Export docs: Phytosanitary, COO, Fumigation","Flexible MOQs & mixed-container loading","Private labelling in buyer brand","Payment: LC, TT, DP — 100% secure"],
 
@@ -1137,10 +1221,29 @@ function clockIcon(){ return '<svg width="20" height="20" viewBox="0 0 24 24" fi
 
 /* ---------- RENDER ---------- */
 function renderAll(){
-  const c = SITE_DATA.company;
-  document.title = `${c.name} — Sourcing India. Supplying the World. | Import Export Company India`;
+  const c  = SITE_DATA.company;
+  const s  = SITE_DATA.sections;
+  const n  = SITE_DATA.nav;
 
-  /* Top bar */
+  /* ── SEO / meta ── */
+  const seo = SITE_DATA.seo || {};
+  document.title = seo.title || `${c.name} — Import Export Company India`;
+  const setMeta = (sel, val) => { const el = document.querySelector(sel); if(el && val) el.setAttribute('content', val); };
+  setMeta('meta[name="description"]',       seo.description);
+  setMeta('meta[name="keywords"]',          seo.keywords);
+  setMeta('meta[name="author"]',            c.name);
+  setMeta('meta[property="og:title"]',      seo.title);
+  setMeta('meta[property="og:description"]',seo.description);
+  setMeta('meta[property="og:image"]',      seo.ogImage);
+  setMeta('meta[property="og:url"]',        seo.canonical);
+  setMeta('meta[property="og:site_name"]',  c.name);
+  setMeta('meta[name="twitter:title"]',     seo.title);
+  setMeta('meta[name="twitter:description"]',seo.description);
+  setMeta('meta[name="twitter:image"]',     seo.ogImage);
+  setMeta('meta[name="twitter:site"]',      seo.twitterHandle);
+  const canon = document.querySelector('link[rel="canonical"]'); if(canon && seo.canonical) canon.href = seo.canonical;
+
+  /* ── Top bar ── */
   $('#topbarText').textContent = `IEC Certified Exporter • Since ${c.established} • Serving 20+ Countries`;
   $('#topEmail').textContent = c.email; $('#topEmail').href = `mailto:${c.email}`;
   $('#topPhone').textContent = c.phone; $('#topPhone').href = `tel:${c.phone.replace(/\s/g,'')}`;
@@ -1148,30 +1251,198 @@ function renderAll(){
   const one = topItems.map(t=>`<span class="px-5 flex items-center gap-5 whitespace-nowrap">${esc(t)}<span class="text-clay">✦</span></span>`).join('');
   $('#topMarquee').innerHTML = one + one;
 
-  $('#heroBadge').textContent = c.heroBadge;
-  $('#heroTitleA').textContent = c.heroTitleA;
-  $('#heroTitleB').textContent = c.heroTitleB;
-  $('#heroSubtitle').textContent = c.heroSubtitle;
-  $('#heroImage').src = c.heroImage;
-  $('#aboutText').textContent = c.aboutText;
-  $('#founderName').textContent = c.founder;
+  /* ── Nav ── */
+  $('#desktopNav').innerHTML = (n.links||[]).map(l=>
+    `<a href="${esc(l.href)}" class="nav-link hover:text-pine" data-nav="${esc(l.id)}">${esc(l.label)}</a>`
+  ).join('');
+  $('#navEditLabel').textContent  = n.editBtnLabel  || 'Edit Content';
+  $('#navQuoteLabel').textContent = n.quoteBtnLabel || 'Get Quote →';
+  $('#navQuoteBtn').href = '#contact';
+  const lastMobile = (n.mobileLinks||[]).length - 1;
+  $('#mobileMenuLinks').innerHTML = (n.mobileLinks||[]).map((l,i)=>
+    `<a href="${esc(l.href)}" class="py-3 ${i<lastMobile?'border-b border-stoneLine/70':''}">${esc(l.label)}</a>`
+  ).join('') + (n.mobileCTA ? `<a href="${esc(n.mobileCTA.href)}" class="mt-2 bg-pine text-paper text-center rounded-full py-3">${esc(n.mobileCTA.label)}</a>` : '');
 
+  /* ── Hero ── */
+  $('#heroSinceBadge').textContent = c.heroSinceBadge || '● SINCE 2016';
+  $('#heroBadge').textContent      = c.heroBadge;
+  $('#heroTitleA').textContent     = c.heroTitleA;
+  $('#heroTitleB').textContent     = c.heroTitleB;
+  $('#heroSubtitle').textContent   = c.heroSubtitle;
+  // CTAs
+  $('#heroCTAs').innerHTML = `
+    <a href="${esc(c.heroCTA1Href||'#products')}" class="btn-primary inline-flex justify-center items-center gap-2 bg-pine text-paper rounded-full px-8 py-4 text-[15px] font-medium shadow-soft"><span>${esc(c.heroCTA1Label||'Explore Products →')}</span></a>
+    <a href="${esc(c.heroCTA2Href||'#contact')}" class="inline-flex justify-center items-center gap-2 bg-white border border-ink/15 rounded-full px-8 py-4 text-[15px] font-medium hover:border-pine hover:text-pine transition">${esc(c.heroCTA2Label||'Contact Us')}</a>`;
+  // Buyer avatars
+  const imgs = SITE_DATA.heroBuyerImages || [];
+  $('#heroBuyerAvatars').innerHTML = imgs.map(src=>`<img src="${esc(src)}" class="w-10 h-10 rounded-full border-2 border-paper object-cover" alt="buyer" loading="lazy">`).join('') +
+    `<span class="w-10 h-10 rounded-full border-2 border-paper bg-pine text-paper text-[11px] font-semibold grid place-items-center">${esc(SITE_DATA.heroBuyerCount||'200+')}</span>`;
+  $('#heroBuyerRating').textContent = SITE_DATA.heroBuyerRating || '4.9/5 Buyer Rating';
+  $('#heroBuyerLabel').textContent  = SITE_DATA.heroBuyerLabel  || 'Trusted by importers, wholesalers & distributors';
+  // Stats
+  $('#heroStats').innerHTML = (SITE_DATA.heroStats||[]).map(st=>`
+    <div>
+      <p class="font-display text-[28px] md:text-[34px] text-pine leading-none"><span data-count="${st.count}">0</span>${esc(st.suffix||'+')}</p>
+      <p class="text-[12px] uppercase tracking-widest text-muted mt-1.5">${esc(st.label)}</p>
+    </div>`).join('');
+  // Image + overlays
+  $('#heroImage').src = c.heroImage; $('#heroImage').alt = c.heroImageAlt||'';
+  $('#heroOverlayQCText').textContent = c.heroOverlayQC    || 'QC Passed • SGS Tested';
+  $('#heroOverlayQCSub').textContent  = c.heroOverlayQCSub || 'Lab report attached';
+  $('#heroShipRoute').textContent     = c.heroOverlayShipRoute || '';
+  $('#heroShipText').textContent      = c.heroOverlayShipText  || '';
+  $('#heroOriginLabel').textContent   = c.heroOverlayOriginLabel || 'Origin';
+  $('#heroOriginText').textContent    = c.heroOverlayOriginText  || '';
+
+  /* ── Marquee ── */
   $('#marquee').innerHTML = [...SITE_DATA.marquee, ...SITE_DATA.marquee].map(t=>`<span class="px-8 flex items-center gap-8 whitespace-nowrap">${esc(t)} <span class="text-clay">✦</span></span>`).join('');
-  $('#aboutChecks').innerHTML = SITE_DATA.aboutChecks.map(t=>`<div class="flex items-start gap-2.5 bg-white border border-stoneLine rounded-xl px-3.5 py-3"><span class="w-5 h-5 rounded-full bg-pine text-paper grid place-items-center text-[11px] shrink-0 mt-0.5">✓</span><span class="text-ink/75">${esc(t)}</span></div>`).join('');
 
-  $('#processWhatsapp').href = waLink(`Hello ${c.name}, I want a CIF quote for agro commodities.`);
-  $('#faqWhatsapp').href = waLink(`Hello ${c.name}, I have a question about your export process.`);
-  $('#waFloat').href = waLink(`Hello ${c.name}, I'm interested in your export products. Please share price list.`);
-  $('#contactWhatsapp').href = waLink(`Hello ${c.name}, I'm interested in your export products. Please share price list.`);
+  /* ── About ── */
+  const ai = SITE_DATA.aboutImages || [];
+  $('#aboutImages').innerHTML = `
+    <div class="grid grid-cols-[1fr_.85fr] gap-4">
+      ${ai[0]?`<img src="${esc(ai[0].src)}" alt="${esc(ai[0].alt)}" class="rounded-3xl h-[320px] md:h-[440px] w-full object-cover shadow-card parallax-img" data-speed="${esc(ai[0].speed||'0.06')}" loading="lazy">`:''}
+      <div class="space-y-4 pt-10">
+        ${ai[1]?`<img src="${esc(ai[1].src)}" alt="${esc(ai[1].alt)}" class="rounded-3xl h-[150px] md:h-[210px] w-full object-cover shadow-card parallax-img" data-speed="${esc(ai[1].speed||'0.1')}" loading="lazy">`:''}
+        ${ai[2]?`<img src="${esc(ai[2].src)}" alt="${esc(ai[2].alt)}" class="rounded-3xl h-[150px] md:h-[210px] w-full object-cover shadow-card" loading="lazy">`:''}
+      </div>
+    </div>
+    <div class="absolute -bottom-6 left-6 bg-pine text-paper rounded-2xl px-6 py-5 shadow-lift">
+      <p class="font-display text-[36px] leading-none">${esc(c.aboutYears||'9')}<span class="text-clay">+</span></p>
+      <p class="text-[12px] tracking-widest uppercase opacity-70 mt-1">${esc(c.aboutYearsLabel||'Years of Export Excellence').replace('\n','<br>')}</p>
+    </div>`;
+  $('#aboutEyebrow').innerHTML = `<span class="w-8 h-px bg-clay inline-block"></span> ${esc((s.about||{}).eyebrow||'01 — About Us')}`;
+  const ah = c.aboutHeading||'A bridge between';
+  const ahe= c.aboutHeadingEm||'Indian farms';
+  const ahend= c.aboutHeadingEnd||'and global buyers.';
+  $('#aboutHeading').innerHTML = `${esc(ah)} <em class="italic font-normal text-ink">${esc(ahe)}</em> ${esc(ahend)}`;
+  $('#aboutText').textContent  = c.aboutText;
+  $('#aboutChecks').innerHTML  = SITE_DATA.aboutChecks.map(t=>`<div class="flex items-start gap-2.5 bg-white border border-stoneLine rounded-xl px-3.5 py-3"><span class="w-5 h-5 rounded-full bg-pine text-paper grid place-items-center text-[11px] shrink-0 mt-0.5">✓</span><span class="text-ink/75">${esc(t)}</span></div>`).join('');
+  $('#aboutCTA').innerHTML = `
+    <a href="#contact" class="btn-primary bg-pine text-paper rounded-full px-7 py-3.5 text-[14px] font-medium"><span>${esc(c.aboutCTALabel||'Work With Us →')}</span></a>
+    <div class="flex items-center gap-3">
+      <span class="w-11 h-11 rounded-full bg-cream grid place-items-center font-display italic text-pine text-lg">${esc((c.founder||'C')[0])}</span>
+      <div class="text-[13px]"><p class="font-semibold">${esc(c.founder)}</p><p class="text-muted">${esc(c.founderRole||'Founder & Managing Partner')}</p></div>
+    </div>`;
+
+  /* ── Products section header + banner ── */
+  const sp = s.products || {};
+  $('#productsHeader').innerHTML = `
+    <p class="reveal eyebrow text-clayDark flex items-center justify-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> ${esc(sp.eyebrow||'02 — Our Products')} <span class="w-8 h-px bg-clay inline-block"></span></p>
+    <h2 class="reveal font-display font-light text-[34px] md:text-[46px] leading-tight mt-4 text-pine">${esc(sp.heading||'Export-ready product')} <em class="italic text-ink">${esc(sp.headingEm||'portfolio.')}</em></h2>
+    <p class="reveal mt-4 text-ink/60 font-light text-[16px]">${esc(sp.subtitle||'')}</p>`;
+  $('#productsBanner').innerHTML = `
+    <p class="text-[14px] text-ink/70">${esc(sp.bannerText||'')}</p>
+    <a href="${esc(sp.bannerCTAHref||'#contact')}" class="shrink-0 bg-pine text-paper text-[13px] font-medium rounded-full px-6 py-3 hover:bg-pineLight transition">${esc(sp.bannerCTA||'Request Custom Quote')}</a>`;
+
+  /* ── Quality strip ── */
+  const qs = s.qualityStrip || {};
+  const qIcons = [
+    '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h10M7 17h6"/>',
+    '<path d="M21 8 12 3 3 8v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/>'
+  ];
+  const qItems = (qs.items||[]);
+  $('#qualityStrip').innerHTML =
+    `<div class="reveal"><p class="eyebrow text-clay">${esc(qs.eyebrow||'Certified Quality')}</p><p class="font-display text-[26px] mt-2 font-light">${esc(qs.heading||'Tested. Certified.')}<br><em class="italic">${esc(qs.headingEm||'Trusted.')}</em></p></div>` +
+    qItems.map((item,i)=>`
+      <div class="reveal reveal-d${i+1} flex gap-4">
+        <span class="w-11 h-11 shrink-0 rounded-xl bg-white/10 grid place-items-center text-clay"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${qIcons[i]||qIcons[0]}</svg></span>
+        <div><p class="font-semibold text-[15px]">${esc(item.title)}</p><p class="text-[13px] text-paper/60 mt-1">${esc(item.text)}</p></div>
+      </div>`).join('');
+
+  /* ── Why header ── */
+  const sw = s.why || {};
+  $('#whyHeader').innerHTML = `
+    <p class="reveal eyebrow text-clayDark justify-center flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> ${esc(sw.eyebrow||'03 — Why Choose Us')} <span class="w-8 h-px bg-clay inline-block"></span></p>
+    <h2 class="reveal font-display font-light text-[34px] md:text-[46px] mt-4 text-pine">${esc(sw.heading||'The partner buyers')} <em class="italic text-ink">${esc(sw.headingEm||'reorder from.')}</em></h2>`;
+
+  /* ── Process header + CTA ── */
+  const sc = s.process || {};
+  $('#processHeader').innerHTML = `
+    <div>
+      <p class="reveal eyebrow text-clayDark flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> ${esc(sc.eyebrow||'04 — Import & Export Process')}</p>
+      <h2 class="reveal font-display font-light text-[34px] md:text-[46px] mt-4 text-pine">${esc(sc.heading||'From enquiry to delivery')} <em class="italic text-ink">${esc(sc.headingEm||'in 5 steps.')}</em></h2>
+    </div>
+    <p class="reveal text-[14px] text-muted max-w-sm">${esc(sc.subtitle||'')}</p>`;
+  $('#processCTA').innerHTML = `
+    <div>
+      <p class="font-display text-[24px] md:text-[30px] font-light">${esc(sc.ctaHeading||'Get your CIF quote')} <em class="italic text-clay">${esc(sc.ctaHeadingEm||'within 24 hours.')}</em></p>
+      <p class="text-paper/60 text-[14px] mt-2">${esc(sc.ctaSub||'')}</p>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-3 shrink-0">
+      <a href="#contact" class="bg-paper text-pine rounded-full px-7 py-3.5 text-[14px] font-semibold text-center hover:bg-white transition">${esc(sc.ctaBtn1||'Start Enquiry')}</a>
+      <a id="processWhatsapp" href="#" target="_blank" class="border border-paper/30 rounded-full px-7 py-3.5 text-[14px] font-medium text-center hover:bg-white/10 transition">${esc(sc.ctaBtn2||'WhatsApp Us')}</a>
+    </div>`;
+
+  /* ── Markets header + map stats ── */
+  const sm = s.markets || {};
+  $('#marketsHeader').innerHTML = `
+    <p class="reveal eyebrow text-clayDark flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> ${esc(sm.eyebrow||'05 — Global Markets')}</p>
+    <h2 class="reveal font-display font-light text-[34px] md:text-[46px] mt-4 text-pine leading-tight">${esc(sm.heading||'Serving buyers')} <em class="italic text-ink">${esc(sm.headingEm||'across 4 continents.')}</em></h2>
+    <p class="reveal mt-4 text-ink/60 font-light">${esc(sm.subtitle||'')}</p>`;
+  const ports = (sm.mapPortsRight||'Nhava Sheva • Mundra\nTuticorin • Chennai').split('\n');
+  $('#marketsMapStats').innerHTML = `
+    <div><p class="font-display text-[28px] leading-none">${esc(sm.mapCountLabel||'20+ Countries')}</p><p class="text-[12px] uppercase tracking-widest opacity-60 mt-1">${esc(sm.mapCountSub||'Active trade lanes')}</p></div>
+    <div class="text-right text-[12px] opacity-80 leading-relaxed">${ports.map(l=>esc(l)).join('<br>')}</div>`;
+  $('#testiEyebrow').textContent = sm.testiEyebrow || 'Buyer Stories';
+
+  /* ── FAQ sidebar ── */
+  $('#faqSidebar').innerHTML = `
+    <p class="reveal eyebrow text-clayDark">${esc(sm.faqEyebrow||'Common Questions')}</p>
+    <h3 class="reveal font-display font-light text-[30px] md:text-[36px] mt-3 text-pine">${esc(sm.faqHeading||'Everything importers')} <em class="italic text-ink">${esc(sm.faqHeadingEm||'ask us.')}</em></h3>
+    <p class="reveal text-ink/60 text-[14px] mt-3">${esc(sm.faqSubtext||'')}</p>
+    <a id="faqWhatsapp" href="${waLink(`Hello ${c.name}, I have a question about your export process.`)}" target="_blank"
+       class="reveal mt-5 inline-flex items-center gap-2 bg-[#1FA855] text-white rounded-full px-6 py-3 text-[14px] font-medium shadow-card hover:brightness-105 transition">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5s.8 1.9.8 2c.1.1.1.3 0 .5l-.4.5c-.2.2-.3.4-.1.7.2.3.9 1.5 2 2.4 1.4 1.2 2.5 1.6 2.9 1.8.3.2.5.1.7-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4 0 .1 0 .7-.4 1.6z"/></svg>
+      ${esc(sm.faqWALabel||'Chat on WhatsApp')}
+    </a>`;
+
+  /* ── Contact section ── */
+  const sct = s.contact || {};
+  $('#contactEyebrow').innerHTML    = `<span class="w-8 h-px bg-clay inline-block"></span> ${esc(sct.eyebrow||'06 — Contact & Enquiry')}`;
+  $('#contactHeading').innerHTML    = `${esc(sct.heading||'Let\'s discuss')} <em class="italic text-clay">${esc(sct.headingEm||'your requirement.')}</em>`;
+  $('#contactSubtitle').textContent = sct.subtitle || '';
+  $('#contactWAHeading').textContent= sct.waHeading || 'Chat on WhatsApp';
+  $('#contactWASub').textContent    = sct.waSub     || 'Fastest way to get pricing & availability';
+  $('#formTitle').textContent       = sct.formTitle || 'Request Export Quote';
+  $('#formBadge').textContent       = sct.formBadge || '24H RESPONSE';
+  $('#formSubmitBtn').textContent   = sct.submitLabel|| 'Send Enquiry →';
+  $('#formWABtn').textContent       = sct.waLabel   || 'Send via WhatsApp';
+  $('#formPrivacy').textContent     = sct.formPrivacy|| 'By submitting, you agree to be contacted about your enquiry. We never share buyer data.';
+
+  /* ── WhatsApp links ── */
+  $('#processWhatsapp') && ($('#processWhatsapp').href = waLink(`Hello ${c.name}, I want a CIF quote for agro commodities.`));
+  $('#waFloat').href           = waLink(`Hello ${c.name}, I'm interested in your export products. Please share price list.`);
+  $('#contactWhatsapp').href   = waLink(`Hello ${c.name}, I'm interested in your export products. Please share price list.`);
+
+  /* ── Footer brand ── */
+  $('#footerBrandName').textContent    = c.name;
+  $('#footerBrandTagline').textContent = c.tagline || 'Import • Export • Sourcing';
+  $('#footerAbout').textContent        = c.footerAbout || '';
+
+  /* ── Footer labels + globe chips ── */
+  const sf = s.footer || {};
+  $('#footContactLabel').textContent = sf.contactLabel || 'Get In Touch';
+  $('#footCertsLabel').textContent   = sf.certsLabel   || 'Certifications & Compliance';
+  const chips = s.globeChips || [];
+  if(chips[0]) { const el=$('#globeChip1Text'); if(el) el.textContent=chips[0].text||'20+ Countries'; }
+  if(chips[1]) { const el=$('#globeChip2Text'); if(el) el.textContent=chips[1].text||'IEC Certified'; }
+  if(chips[2]) { const el=$('#globeChip3Text'); if(el) el.textContent=chips[2].text||'480+ / Year'; }
+
+  /* ── Footer bottom bar ── */
   $('#year').textContent = new Date().getFullYear();
+  $('#footerCopyright').textContent  = c.footerCopyright || `${c.name}. All rights reserved.`;
+  const fpLink = $('#footerPrivacyLink'); if(fpLink){ fpLink.textContent=c.footerPrivacyLabel||'Privacy Policy'; fpLink.href=c.footerPrivacyHref||'#'; }
+  const ftLink = $('#footerTermsLink');   if(ftLink){ ftLink.textContent=c.footerTermsLabel||'Terms of Use';   ftLink.href=c.footerTermsHref||'#'; }
 
-  /* Contact cards with icons */
   renderContactCards();
-
   renderProductChips(); renderProducts(); renderWhy(); renderProcess();
   renderMarketRegions(); renderTesti(); renderFaqs();
   renderForms(); renderFooter(); renderSchema();
   observeReveals();
+  /* re-init counter observer after stats are injected */
+  $$('[data-count]').forEach(el=>cio.observe(el));
 }
 
 function renderContactCards(){
@@ -1452,7 +1723,8 @@ function catEmoji(cat){
 }
 
 function renderFooter(){
-  const c = SITE_DATA.company;
+  const c  = SITE_DATA.company;
+  const sf = SITE_DATA.sections?.footer || {};
 
   /* ── Socials ── */
   $('#socialRow').innerHTML = [
@@ -1488,19 +1760,14 @@ function renderFooter(){
   $('#footWa').href = waLink(`Hello ${c.name}, I'd like to make a trade enquiry.`);
 
   /* ── Certifications — compact 2-col grid ── */
-  const CERTS = [
-    { label:'APEDA Registered',  desc:'Agri & Processed Food Exports',          icon:'🌾' },
-    { label:'FSSAI Licensed',    desc:'Food Safety & Standards Authority',       icon:'🥗' },
-    { label:'ISO Partner Units', desc:'Production at ISO-certified facilities',  icon:'✅' },
-    { label:'Phytosanitary',     desc:'Plant quarantine cert per shipment',      icon:'🌿' }
-  ];
+  const certList = (sf.certifications || []);
   $('#footCerts').innerHTML = `<div class="grid grid-cols-2 gap-2">` +
-    CERTS.map(cert => `
-      <div class="flex items-start gap-2 bg-white/5 border border-white/8 rounded-xl p-3 hover:bg-white/8 transition group">
+    certList.map(cert => `
+      <div class="flex items-start gap-2 bg-white/5 border border-white/8 rounded-xl p-3 hover:bg-white/8 transition">
         <span class="text-[16px] leading-none shrink-0 mt-0.5">${cert.icon}</span>
         <div class="min-w-0">
-          <p class="text-paper/85 text-[12px] font-semibold leading-tight">${cert.label}</p>
-          <p class="text-paper/40 text-[10.5px] mt-0.5 leading-tight">${cert.desc}</p>
+          <p class="text-paper/85 text-[12px] font-semibold leading-tight">${esc(cert.label)}</p>
+          <p class="text-paper/40 text-[10.5px] mt-0.5 leading-tight">${esc(cert.desc)}</p>
         </div>
       </div>`).join('') + `</div>`;
 
@@ -1508,19 +1775,22 @@ function renderFooter(){
   $('#footBadges').innerHTML = `
     <div class="flex items-center gap-2.5 bg-gradient-to-r from-clay/20 to-clay/10 border border-clay/30 rounded-xl px-3.5 py-2.5">
       <span class="text-clay shrink-0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
-      <div><p class="text-[10px] font-bold uppercase tracking-widest text-clay/80 leading-none">IEC Certified</p><p class="text-paper/50 text-[11px] mt-0.5">Import Export Code · DGFT</p></div>
+      <div><p class="text-[10px] font-bold uppercase tracking-widest text-clay/80 leading-none">${esc(sf.iecBadgeTitle||'IEC Certified')}</p><p class="text-paper/50 text-[11px] mt-0.5">${esc(sf.iecBadgeSub||'Import Export Code · DGFT')}</p></div>
     </div>
     <div class="flex items-center gap-2.5 bg-gradient-to-r from-emerald-500/15 to-emerald-500/8 border border-emerald-500/25 rounded-xl px-3.5 py-2.5">
       <span class="text-emerald-400 shrink-0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
-      <div><p class="text-[10px] font-bold uppercase tracking-widest text-emerald-400/80 leading-none">GST Compliant</p><p class="text-paper/50 text-[11px] mt-0.5">Registered Tax Entity · India</p></div>
+      <div><p class="text-[10px] font-bold uppercase tracking-widest text-emerald-400/80 leading-none">${esc(sf.gstBadgeTitle||'GST Compliant')}</p><p class="text-paper/50 text-[11px] mt-0.5">${esc(sf.gstBadgeSub||'Registered Tax Entity · India')}</p></div>
     </div>`;
 }
 function renderSchema(){
+  const c = SITE_DATA.company;
+  const seo = SITE_DATA.seo || {};
   $('#seo-schema').textContent = JSON.stringify({
     "@context":"https://schema.org","@type":"Organization",
-    "name":SITE_DATA.company.name,"email":SITE_DATA.company.email,
-    "telephone":SITE_DATA.company.phone,"address":SITE_DATA.company.address,
-    "foundingDate":SITE_DATA.company.established
+    "name":c.name, "email":c.email, "telephone":c.phone,
+    "address":c.address, "foundingDate":c.established,
+    "url": seo.canonical || '', "logo": seo.ogImage || '',
+    "description": seo.description || ''
   });
 }
 
@@ -1564,6 +1834,7 @@ let activeStudioTab = 'company';
 
 const TABS = [
   { id:'company',      label:'Company',    icon:'🏢' },
+  { id:'sections',     label:'Sections',   icon:'📝' },
   { id:'products',     label:'Products',   icon:'📦' },
   { id:'markets',      label:'Markets',    icon:'🌍' },
   { id:'process',      label:'Process',    icon:'⚙️' },
@@ -1766,8 +2037,188 @@ document.addEventListener('input', e=>{
   }
 });
 
+function renderSectionsTab(){
+  const s = draft.sections || {};
+  const sp = s.products || {}, sq = s.qualityStrip || {}, sw = s.why || {};
+  const sc = s.process || {}, sm = s.markets || {}, sct = s.contact || {};
+  const sf = s.footer  || {}, sa = s.about || {};
+  const n  = draft.nav || {};
+  const c  = draft.company || {};
+  return `<div class="space-y-6">
+
+    <div class="bg-white border border-stoneLine rounded-2xl p-4">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Hero Overlays</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${fld('Since Badge','company.heroSinceBadge',c.heroSinceBadge||'● SINCE 2016')}
+        ${fld('CTA Button 1 Label','company.heroCTA1Label',c.heroCTA1Label||'Explore Products →')}
+        ${fld('CTA Button 1 Link','company.heroCTA1Href',c.heroCTA1Href||'#products')}
+        ${fld('CTA Button 2 Label','company.heroCTA2Label',c.heroCTA2Label||'Contact Us')}
+        ${fld('QC Overlay Text','company.heroOverlayQC',c.heroOverlayQC||'')}
+        ${fld('QC Overlay Sub','company.heroOverlayQCSub',c.heroOverlayQCSub||'')}
+        ${fld('Live Shipment Route','company.heroOverlayShipRoute',c.heroOverlayShipRoute||'')}
+        ${fld('Live Shipment Text','company.heroOverlayShipText',c.heroOverlayShipText||'')}
+        ${fld('Origin Label','company.heroOverlayOriginLabel',c.heroOverlayOriginLabel||'Origin')}
+        ${fld('Origin Text','company.heroOverlayOriginText',c.heroOverlayOriginText||'')}
+        ${fld('Buyer Count Badge','company.heroBuyerCount',c.heroBuyerCount||'200+')}
+        ${fld('Buyer Rating','company.heroBuyerRating',c.heroBuyerRating||'4.9/5 Buyer Rating')}
+        ${fld('Buyer Label','company.heroBuyerLabel',c.heroBuyerLabel||'Trusted by importers','text',{wide:true})}
+      </div>
+    </div>
+
+    <div class="bg-white border border-stoneLine rounded-2xl p-4">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Hero Stats</p>
+      ${fld('Stats (JSON array — [{count,suffix,label}])','heroStats',JSON.stringify(draft.heroStats||[]),'textarea',{wide:true,rows:4})}
+      <span class="text-[10.5px] text-muted mt-1 block">Format: <code>[{"count":20,"suffix":"+","label":"Countries Served"},…]</code></span>
+    </div>
+
+    <div class="bg-white border border-stoneLine rounded-2xl p-4">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">About Section</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${fld('Eyebrow','sections.about.eyebrow',(sa).eyebrow||'')}
+        ${fld('About Years Badge','company.aboutYears',c.aboutYears||'9')}
+        ${fld('About Years Label','company.aboutYearsLabel',c.aboutYearsLabel||'Years of Export Excellence')}
+        ${fld('Heading','company.aboutHeading',c.aboutHeading||'')}
+        ${fld('Heading Italic','company.aboutHeadingEm',c.aboutHeadingEm||'')}
+        ${fld('Heading End','company.aboutHeadingEnd',c.aboutHeadingEnd||'')}
+        ${fld('CTA Button Label','company.aboutCTALabel',c.aboutCTALabel||'Work With Us →')}
+        ${fld('Founder Role','company.founderRole',c.founderRole||'Founder & Managing Partner')}
+      </div>
+    </div>
+
+    <div class="bg-white border border-stoneLine rounded-2xl p-4">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Products Section</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${fld('Eyebrow','sections.products.eyebrow',sp.eyebrow||'')}
+        ${fld('Heading','sections.products.heading',sp.heading||'')}
+        ${fld('Heading Italic','sections.products.headingEm',sp.headingEm||'')}
+        ${fld('Subtitle','sections.products.subtitle',sp.subtitle||'','textarea',{wide:true,rows:2})}
+        ${fld('Banner Text','sections.products.bannerText',sp.bannerText||'','textarea',{wide:true,rows:2})}
+        ${fld('Banner CTA Label','sections.products.bannerCTA',sp.bannerCTA||'')}
+      </div>
+    </div>
+
+    <div class="bg-white border border-stoneLine rounded-2xl p-4">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Quality Strip</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${fld('Eyebrow','sections.qualityStrip.eyebrow',sq.eyebrow||'')}
+        ${fld('Heading','sections.qualityStrip.heading',sq.heading||'')}
+        ${fld('Heading Italic','sections.qualityStrip.headingEm',sq.headingEm||'')}
+      </div>
+      ${(sq.items||[]).map((item,i)=>`
+        <div class="mt-3 grid sm:grid-cols-2 gap-3 pt-3 border-t border-stoneLine/60">
+          <p class="sm:col-span-2 text-[10.5px] font-semibold text-muted uppercase tracking-widest">Item ${i+1}</p>
+          ${fld('Title',`sections.qualityStrip.items.${i}.title`,item.title||'')}
+          ${fld('Text', `sections.qualityStrip.items.${i}.text`, item.text||'','textarea',{wide:true,rows:2})}
+        </div>`).join('')}
+    </div>
+
+    <div class="bg-white border border-stoneLine rounded-2xl p-4">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Why Choose Us Section</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${fld('Eyebrow','sections.why.eyebrow',sw.eyebrow||'')}
+        ${fld('Heading','sections.why.heading',sw.heading||'')}
+        ${fld('Heading Italic','sections.why.headingEm',sw.headingEm||'')}
+      </div>
+    </div>
+
+    <div class="bg-white border border-stoneLine rounded-2xl p-4">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Process Section</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${fld('Eyebrow','sections.process.eyebrow',sc.eyebrow||'')}
+        ${fld('Heading','sections.process.heading',sc.heading||'')}
+        ${fld('Heading Italic','sections.process.headingEm',sc.headingEm||'')}
+        ${fld('Subtitle','sections.process.subtitle',sc.subtitle||'','text',{wide:true})}
+        ${fld('CTA Heading','sections.process.ctaHeading',sc.ctaHeading||'')}
+        ${fld('CTA Italic','sections.process.ctaHeadingEm',sc.ctaHeadingEm||'')}
+        ${fld('CTA Sub','sections.process.ctaSub',sc.ctaSub||'')}
+        ${fld('CTA Btn 1','sections.process.ctaBtn1',sc.ctaBtn1||'')}
+        ${fld('CTA Btn 2 (WA)','sections.process.ctaBtn2',sc.ctaBtn2||'')}
+      </div>
+    </div>
+
+    <div class="bg-white border border-stoneLine rounded-2xl p-4">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Markets Section</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${fld('Eyebrow','sections.markets.eyebrow',sm.eyebrow||'')}
+        ${fld('Heading','sections.markets.heading',sm.heading||'')}
+        ${fld('Heading Italic','sections.markets.headingEm',sm.headingEm||'')}
+        ${fld('Subtitle','sections.markets.subtitle',sm.subtitle||'','text',{wide:true})}
+        ${fld('Map: Count Label','sections.markets.mapCountLabel',sm.mapCountLabel||'')}
+        ${fld('Map: Count Sub','sections.markets.mapCountSub',sm.mapCountSub||'')}
+        ${fld('Map: Ports (right)','sections.markets.mapPortsRight',sm.mapPortsRight||'')}
+        ${fld('Testimonials Eyebrow','sections.markets.testiEyebrow',sm.testiEyebrow||'')}
+        ${fld('FAQ Eyebrow','sections.markets.faqEyebrow',sm.faqEyebrow||'')}
+        ${fld('FAQ Heading','sections.markets.faqHeading',sm.faqHeading||'')}
+        ${fld('FAQ Heading Italic','sections.markets.faqHeadingEm',sm.faqHeadingEm||'')}
+        ${fld('FAQ Subtext','sections.markets.faqSubtext',sm.faqSubtext||'')}
+        ${fld('FAQ WA Button','sections.markets.faqWALabel',sm.faqWALabel||'')}
+      </div>
+    </div>
+
+    <div class="bg-white border border-stoneLine rounded-2xl p-4">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Contact Section</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${fld('Eyebrow','sections.contact.eyebrow',sct.eyebrow||'')}
+        ${fld('Heading','sections.contact.heading',sct.heading||'')}
+        ${fld('Heading Italic','sections.contact.headingEm',sct.headingEm||'')}
+        ${fld('Subtitle','sections.contact.subtitle',sct.subtitle||'','textarea',{wide:true,rows:2})}
+        ${fld('WA Heading','sections.contact.waHeading',sct.waHeading||'')}
+        ${fld('WA Sub','sections.contact.waSub',sct.waSub||'')}
+        ${fld('Form Title','sections.contact.formTitle',sct.formTitle||'')}
+        ${fld('Form Badge','sections.contact.formBadge',sct.formBadge||'')}
+        ${fld('Submit Btn','sections.contact.submitLabel',sct.submitLabel||'')}
+        ${fld('WA Btn','sections.contact.waLabel',sct.waLabel||'')}
+        ${fld('Privacy Note','sections.contact.formPrivacy',sct.formPrivacy||'','textarea',{wide:true,rows:2})}
+      </div>
+    </div>
+
+    <div class="bg-white border border-stoneLine rounded-2xl p-4">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Footer</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${fld('Contact Label','sections.footer.contactLabel',sf.contactLabel||'')}
+        ${fld('Certs Label','sections.footer.certsLabel',sf.certsLabel||'')}
+        ${fld('WA Quick Label','sections.footer.waQuickLabel',sf.waQuickLabel||'')}
+        ${fld('IEC Badge Title','sections.footer.iecBadgeTitle',sf.iecBadgeTitle||'')}
+        ${fld('IEC Badge Sub','sections.footer.iecBadgeSub',sf.iecBadgeSub||'')}
+        ${fld('GST Badge Title','sections.footer.gstBadgeTitle',sf.gstBadgeTitle||'')}
+        ${fld('GST Badge Sub','sections.footer.gstBadgeSub',sf.gstBadgeSub||'')}
+        ${fld('Globe Chip 1','sections.globeChips.0.text',(s.globeChips||[])[0]?.text||'20+ Countries')}
+        ${fld('Globe Chip 2','sections.globeChips.1.text',(s.globeChips||[])[1]?.text||'IEC Certified')}
+        ${fld('Globe Chip 3','sections.globeChips.2.text',(s.globeChips||[])[2]?.text||'480+ / Year')}
+        ${fld('Footer About','company.footerAbout',c.footerAbout||'','textarea',{wide:true,rows:3})}
+        ${fld('Copyright Text','company.footerCopyright',c.footerCopyright||'')}
+        ${fld('Privacy Label','company.footerPrivacyLabel',c.footerPrivacyLabel||'')}
+        ${fld('Privacy URL','company.footerPrivacyHref',c.footerPrivacyHref||'')}
+        ${fld('Terms Label','company.footerTermsLabel',c.footerTermsLabel||'')}
+        ${fld('Terms URL','company.footerTermsHref',c.footerTermsHref||'')}
+      </div>
+    </div>
+
+    <div class="bg-white border border-stoneLine rounded-2xl p-4">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Navigation</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${fld('Edit Content Button','nav.editBtnLabel',n.editBtnLabel||'Edit Content')}
+        ${fld('Get Quote Button','nav.quoteBtnLabel',n.quoteBtnLabel||'Get Quote →')}
+      </div>
+    </div>
+
+    <div class="bg-white border border-stoneLine rounded-2xl p-4">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">SEO & Meta Tags</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${fld('Page Title','seo.title',(draft.seo||{}).title||'','text',{wide:true})}
+        ${fld('Meta Description','seo.description',(draft.seo||{}).description||'','textarea',{wide:true,rows:3})}
+        ${fld('Keywords','seo.keywords',(draft.seo||{}).keywords||'','text',{wide:true})}
+        ${fld('Canonical URL','seo.canonical',(draft.seo||{}).canonical||'')}
+        ${fld('OG / Twitter Image URL','seo.ogImage',(draft.seo||{}).ogImage||'')}
+        ${fld('Twitter Handle','seo.twitterHandle',(draft.seo||{}).twitterHandle||'')}
+      </div>
+    </div>
+  </div>`;
+}
+
 function renderTabBody(id){
   if(id==='raw-json')     return renderRawJsonTab();
+  if(id==='sections')     return renderSectionsTab();
   if(id==='company')      return renderCompanyTab();
   if(id==='products')     return renderArrayTab('products');
   if(id==='markets')      return renderArrayTab('marketRegions');
@@ -1826,6 +2277,9 @@ $('#studioBody').addEventListener('input', e=>{
   if(!path) return;
   let v;
   if(t.type==='checkbox') v = t.checked;
+  else if(path==='heroStats'){
+    try{ v = JSON.parse(t.value); } catch(e){ return; } // skip bad JSON silently
+  }
   else if(t.dataset.list==='1') v = t.value.split('\n').map(s=>s.trim()).filter(Boolean);
   else if(t.dataset.kv==='1'){
     const arr = [];
@@ -1953,13 +2407,12 @@ window.addEventListener('scroll', ()=>{
   const sp=$('#shipProgress'); if(sp){ const r=sp.getBoundingClientRect(); if(r.top<window.innerHeight) sp.style.width='72%'; }
 },{passive:true});
 
-/* counters */
+/* counters — re-run via renderAll() after stats are injected */
 const cio = new IntersectionObserver(es=>es.forEach(e=>{
   if(!e.isIntersecting) return; cio.unobserve(e.target);
   const el=e.target, end=+el.dataset.count; let cur=0; const step=Math.max(1,Math.round(end/60));
   const t=setInterval(()=>{ cur+=step; if(cur>=end){cur=end;clearInterval(t);} el.textContent=cur; },30);
 }),{threshold:.5});
-$$('[data-count]').forEach(el=>cio.observe(el));
 
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDataPanel(); });
 
