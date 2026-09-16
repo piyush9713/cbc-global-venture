@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -169,13 +169,69 @@ tailwind.config = {
   .number-outline{-webkit-text-stroke:1px #CFC6B4;color:transparent}
 
   /* ---------- Content Studio ---------- */
-  .studio-tab{display:inline-flex;align-items:center;gap:.4rem;font-size:12.5px;font-weight:600;padding:.55rem .9rem;border-radius:999px;border:1px solid #E7E0D2;background:#fff;color:#1A2420;white-space:nowrap;transition:all .2s;cursor:pointer}
-  .studio-tab.active{background:#14342B;color:#FAF8F4;border-color:#14342B}
-  .studio-tab:hover:not(.active){border-color:#14342B;color:#14342B}
-  .arr-btn{width:26px;height:26px;border-radius:8px;border:1px solid #E7E0D2;background:#fff;font-size:11px;display:grid;place-items:center;transition:all .2s;color:#6B7772;cursor:pointer;line-height:1}
-  .arr-btn:hover:not(:disabled){border-color:#14342B;color:#14342B}
-  .arr-btn:disabled{opacity:.35;cursor:not-allowed}
-  .arr-btn-del:hover:not(:disabled){border-color:#dc2626!important;color:#dc2626!important}
+  /* Panel shell */
+  #dataPanel{transition:transform .5s cubic-bezier(.22,1,.36,1)}
+
+  /* Sidebar nav tabs */
+  .cs-nav{display:flex;flex-direction:column;gap:2px}
+  .cs-nav-item{display:flex;align-items:center;gap:.65rem;padding:.6rem .85rem;border-radius:10px;font-size:13px;font-weight:500;color:#6B7772;cursor:pointer;transition:all .18s;white-space:nowrap;border:none;background:transparent;text-align:left;width:100%}
+  .cs-nav-item:hover{background:#F3EFE6;color:#1A2420}
+  .cs-nav-item.active{background:#14342B;color:#FAF8F4;font-weight:600}
+  .cs-nav-item .cs-icon{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:14px;flex-shrink:0;background:rgba(107,119,114,.12);transition:background .18s}
+  .cs-nav-item.active .cs-icon{background:rgba(255,255,255,.15)}
+  .cs-nav-item:hover:not(.active) .cs-icon{background:rgba(20,52,43,.1)}
+  .cs-nav-group-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#B9975B;padding:.5rem .85rem .25rem;margin-top:.5rem}
+
+  /* Field styles */
+  .cs-field{display:flex;flex-direction:column;gap:.35rem}
+  .cs-field label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6B7772}
+  .cs-input{width:100%;background:#fff;border:1.5px solid #E7E0D2;border-radius:10px;padding:.6rem .85rem;font-size:13.5px;color:#1A2420;transition:border-color .2s,box-shadow .2s;font-family:inherit;line-height:1.4}
+  .cs-input:focus{border-color:#14342B;box-shadow:0 0 0 3px rgba(20,52,43,.1);outline:none}
+  .cs-input::placeholder{color:#9CA8A3}
+  textarea.cs-input{resize:vertical;min-height:72px}
+  select.cs-input{cursor:pointer}
+  .cs-checkbox-wrap{display:flex;align-items:center;gap:.6rem;padding:.65rem .9rem;background:#fff;border:1.5px solid #E7E0D2;border-radius:10px;cursor:pointer;transition:border-color .2s}
+  .cs-checkbox-wrap:hover{border-color:#14342B}
+  .cs-checkbox-wrap input{width:15px;height:15px;accent-color:#14342B;cursor:pointer;flex-shrink:0}
+  .cs-checkbox-wrap span{font-size:13px;font-weight:500;color:#1A2420}
+
+  /* Section cards inside tabs */
+  .cs-section{background:#fff;border:1.5px solid #E7E0D2;border-radius:16px;overflow:hidden}
+  .cs-section-head{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.75rem 1rem;background:linear-gradient(90deg,#F9F7F4,#fff);border-bottom:1px solid #E7E0D2;cursor:pointer;user-select:none}
+  .cs-section-head-left{display:flex;align-items:center;gap:.6rem}
+  .cs-section-icon{width:28px;height:28px;border-radius:7px;background:#EDF1EC;color:#14342B;display:grid;place-items:center;font-size:13px;flex-shrink:0}
+  .cs-section-title{font-size:13px;font-weight:600;color:#14342B}
+  .cs-section-chevron{color:#6B7772;font-size:11px;transition:transform .25s}
+  .cs-section.open .cs-section-chevron{transform:rotate(180deg)}
+  .cs-section-body{padding:1rem;display:none;grid-gap:.75rem}
+  .cs-section.open .cs-section-body{display:grid}
+  .cs-hint{font-size:11px;color:#9CA8A3;margin-top:.2rem}
+  .cs-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:.25rem .6rem;border-radius:999px}
+  .cs-badge-green{background:#EDF1EC;color:#14342B}
+  .cs-badge-amber{background:#FEF3C7;color:#92400E}
+
+  /* Array item cards */
+  .arr-card{background:#fff;border:1.5px solid #E7E0D2;border-radius:14px;overflow:hidden;transition:box-shadow .2s}
+  .arr-card:hover{box-shadow:0 4px 20px -4px rgba(20,52,43,.12)}
+  .arr-card-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.6rem .9rem;background:#F9F7F4;border-bottom:1px solid #E7E0D2}
+  .arr-card-num{width:22px;height:22px;border-radius:6px;background:#14342B;color:#FAF8F4;font-size:10.5px;font-weight:700;display:grid;place-items:center;flex-shrink:0}
+  .arr-card-title{font-size:12.5px;font-weight:600;color:#14342B;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .arr-card-body{padding:.9rem;display:grid;gap:.75rem}
+  .arr-btn{width:28px;height:28px;border-radius:8px;border:1.5px solid #E7E0D2;background:#fff;font-size:12px;display:grid;place-items:center;transition:all .18s;color:#6B7772;cursor:pointer;line-height:1;flex-shrink:0}
+  .arr-btn:hover:not(:disabled){border-color:#14342B;color:#14342B;background:#EDF1EC}
+  .arr-btn:disabled{opacity:.3;cursor:not-allowed}
+  .arr-btn-del:hover:not(:disabled){border-color:#dc2626!important;color:#dc2626!important;background:#FEF2F2!important}
+  .arr-add-btn{width:100%;border:2px dashed #E7E0D2;border-radius:12px;padding:.9rem;font-size:13px;font-weight:600;color:#9CA8A3;background:transparent;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.4rem}
+  .arr-add-btn:hover{border-color:#14342B;color:#14342B;background:#F9F7F4}
+
+  /* Raw JSON tab */
+  .cs-json-editor{width:100%;background:#0E1E18;color:#6EE7B7;font-family:'Fira Code','Cascadia Code',monospace;font-size:12.5px;line-height:1.7;border-radius:14px;border:1.5px solid #1E4D3F;padding:1.1rem 1.2rem;resize:none;outline:none;tab-size:2}
+  .cs-json-editor:focus{border-color:#14342B;box-shadow:0 0 0 3px rgba(20,52,43,.2)}
+  .cs-json-status{font-size:12px;font-weight:600;height:20px}
+  .cs-json-status.ok{color:#059669}
+  .cs-json-status.err{color:#dc2626}
+
+  /* Misc */
   .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .line-clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
@@ -619,22 +675,65 @@ tailwind.config = {
 
 <!-- DATA STUDIO PANEL -->
 <div id="dataOverlay" onclick="closeDataPanel()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] hidden"></div>
-<aside id="dataPanel" class="fixed top-0 right-0 h-full w-[min(1000px,100vw)] bg-paper z-[61] shadow-lift translate-x-full flex flex-col">
-  <div class="px-5 sm:px-6 py-5 border-b border-stoneLine flex items-start justify-between gap-4 bg-white">
-    <div>
-      <p class="eyebrow text-clayDark">CMS • Visual Editor</p>
-      <h3 class="font-display text-[24px] text-pine mt-1">Content Studio</h3>
-      <p class="text-[12.5px] text-muted mt-1">Edit any content below. <strong class="text-pine">Save &amp; Apply</strong> bakes changes into a new <code>index.html</code> — replace your deployed file to publish globally.</p>
+<aside id="dataPanel" class="fixed top-0 right-0 h-full w-[min(1080px,100vw)] bg-[#F9F7F4] z-[61] shadow-lift translate-x-full flex flex-col" style="box-shadow:-8px 0 40px rgba(0,0,0,.18)">
+
+  <!-- ── Header ── -->
+  <div class="flex items-center justify-between gap-4 px-5 py-4 bg-[#0E241E] flex-shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-white/10 grid place-items-center">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B9975B" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      </div>
+      <div>
+        <p class="text-white font-semibold text-[15px] leading-tight">Content Studio</p>
+        <p class="text-white/50 text-[11px] mt-0.5">CBC Global Venture CMS</p>
+      </div>
     </div>
-    <button onclick="closeDataPanel()" class="w-9 h-9 rounded-full border border-stoneLine grid place-items-center hover:bg-pine hover:text-paper transition shrink-0">✕</button>
+    <div class="flex items-center gap-2">
+      <span class="cs-badge cs-badge-amber" id="studioUnsavedBadge" style="display:none">● Unsaved</span>
+      <button onclick="closeDataPanel()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 grid place-items-center transition text-white/70 hover:text-white" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
   </div>
-  <div class="px-4 sm:px-6 py-3 border-b border-stoneLine bg-white">
-    <div id="studioTabs" class="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1"></div>
+
+  <!-- ── Body: sidebar + content ── -->
+  <div class="flex flex-1 min-h-0">
+
+    <!-- Sidebar nav -->
+    <div class="w-[200px] flex-shrink-0 bg-white border-r border-stoneLine flex flex-col overflow-y-auto py-3 px-2.5">
+      <nav id="studioSidebar" class="cs-nav flex-1"></nav>
+      <div class="mt-auto pt-3 px-1 pb-1 border-t border-stoneLine space-y-1.5">
+        <button onclick="downloadJSON()" class="cs-nav-item w-full text-left">
+          <span class="cs-icon">⬇</span> Export JSON
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab content -->
+    <div class="flex-1 min-w-0 flex flex-col">
+      <!-- Active tab title bar -->
+      <div class="px-5 py-3 bg-white border-b border-stoneLine flex items-center justify-between gap-3 flex-shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span id="studioActiveIcon" class="text-[18px]">🏢</span>
+          <div>
+            <p id="studioActiveTitle" class="font-semibold text-[14px] text-pine leading-tight">Company</p>
+            <p id="studioActiveDesc"  class="text-[11px] text-muted mt-0.5">Core business information</p>
+          </div>
+        </div>
+        <span class="cs-badge cs-badge-green" id="studioTabBadge"></span>
+      </div>
+      <!-- Scrollable body -->
+      <div id="studioBody" class="flex-1 overflow-y-auto p-5 bg-[#F9F7F4]"></div>
+    </div>
   </div>
-  <div id="studioBody" class="flex-1 overflow-y-auto p-4 sm:p-6 bg-paper"></div>
-  <div class="p-4 border-t border-stoneLine bg-white flex gap-2.5">
-    <button onclick="downloadJSON()" class="flex-1 border border-stoneLine rounded-full py-3 text-[13px] font-medium hover:border-pine hover:text-pine transition">⬇ Export JSON</button>
-    <button onclick="applyJSON()" class="flex-[2] bg-pine text-paper rounded-full py-3 text-[14px] font-semibold hover:bg-pineLight transition">Save &amp; Apply ✓</button>
+
+  <!-- ── Footer actions ── -->
+  <div class="flex items-center gap-3 px-5 py-3.5 bg-white border-t border-stoneLine flex-shrink-0">
+    <p class="text-[11.5px] text-muted flex-1 leading-tight hidden sm:block">Save &amp; Apply bakes data into <code class="bg-cream px-1 rounded">index.html</code> — upload to publish globally.</p>
+    <button onclick="applyJSON()" class="inline-flex items-center gap-2 bg-[#0E241E] hover:bg-pine text-white rounded-xl px-6 py-2.5 text-[13.5px] font-semibold transition flex-shrink-0">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+      Save &amp; Apply
+    </button>
   </div>
 </aside>
 
@@ -1782,15 +1881,15 @@ let draft = null;
 let activeStudioTab = 'company';
 
 const TABS = [
-  { id:'company',      label:'Company',    icon:'🏢' },
-  { id:'sections',     label:'Sections',   icon:'📝' },
-  { id:'products',     label:'Products',   icon:'📦' },
-  { id:'markets',      label:'Markets',    icon:'🌍' },
-  { id:'process',      label:'Process',    icon:'⚙️' },
-  { id:'why',          label:'Why Us',     icon:'⭐' },
-  { id:'testimonials', label:'Reviews',    icon:'💬' },
-  { id:'faqs',         label:'FAQs',       icon:'❓' },
-  { id:'raw-json',     label:'Raw JSON',   icon:'{ }' }
+  { id:'company',      label:'Company',      icon:'🏢', desc:'Core business info & hero',   group:'Content' },
+  { id:'sections',     label:'Sections',     icon:'📝', desc:'All section headings & copy', group:'Content' },
+  { id:'products',     label:'Products',     icon:'📦', desc:'Product catalogue',            group:'Content' },
+  { id:'markets',      label:'Markets',      icon:'🌍', desc:'Global regions & countries',  group:'Content' },
+  { id:'process',      label:'Process',      icon:'⚙️', desc:'Export process steps',         group:'Content' },
+  { id:'why',          label:'Why Us',       icon:'⭐', desc:'Advantages & differentiators', group:'Content' },
+  { id:'testimonials', label:'Reviews',      icon:'💬', desc:'Buyer testimonials',           group:'Content' },
+  { id:'faqs',         label:'FAQs',         icon:'❓', desc:'Frequently asked questions',  group:'Content' },
+  { id:'raw-json',     label:'Raw JSON',     icon:'{ }',desc:'Full data as JSON',            group:'Advanced' }
 ];
 
 const ARRAY_FIELDS = {
@@ -1841,37 +1940,48 @@ const ARRAY_LABEL = {
 };
 
 function fld(label, path, val, type='text', extra={}){
-  const base = 'w-full bg-white border border-stoneLine rounded-xl px-3.5 py-2.5 text-[13.5px] text-ink focus:border-pine transition';
-  const wrap = extra.wide ? 'sm:col-span-2' : '';
-  const lbl = `<span class="block text-[10.5px] font-bold uppercase tracking-widest text-muted mb-1.5">${esc(label)}</span>`;
+  const base = 'cs-input';
+  const wide  = extra.wide ? 'sm:col-span-2' : '';
+  const hint  = extra.hint ? `<p class="cs-hint">${extra.hint}</p>` : '';
 
-  if(type==='textarea') return `<label class="block ${wrap}">${lbl}<textarea data-path="${path}" rows="${extra.rows||3}" class="${base} resize-y">${esc(val)}</textarea></label>`;
-  if(type==='list') return `<label class="block ${wrap}">${lbl}<textarea data-path="${path}" data-list="1" rows="${extra.rows||4}" class="${base} resize-y">${esc((val||[]).join('\n'))}</textarea><span class="text-[10.5px] text-muted mt-1 block">One item per line</span></label>`;
+  if(type==='textarea') return `<label class="cs-field ${wide}"><span>${label}</span><textarea data-path="${path}" rows="${extra.rows||3}" class="${base}">${esc(val)}</textarea>${hint}</label>`;
+  if(type==='list')     return `<label class="cs-field ${wide}"><span>${label}</span><textarea data-path="${path}" data-list="1" rows="${extra.rows||4}" class="${base}">${esc((val||[]).join('\n'))}</textarea>${hint||'<p class="cs-hint">One item per line</p>'}</label>`;
   if(type==='kv'){
-    const t = Array.isArray(val)
-      ? val.map(o=>`${o.label}: ${o.value}`).join('\n')
-      : Object.entries(val||{}).map(([k,v])=>`${k}: ${v}`).join('\n');
-    return `<label class="block ${wrap}">${lbl}<textarea data-path="${path}" data-kv="1" rows="${extra.rows||4}" class="${base} resize-y">${esc(t)}</textarea><span class="text-[10.5px] text-muted mt-1 block">Format: <code>Label: Value</code> — one per line</span></label>`;
+    const t = Array.isArray(val) ? val.map(o=>`${o.label}: ${o.value}`).join('\n') : Object.entries(val||{}).map(([k,v])=>`${k}: ${v}`).join('\n');
+    return `<label class="cs-field ${wide}"><span>${label}</span><textarea data-path="${path}" data-kv="1" rows="${extra.rows||4}" class="${base}">${esc(t)}</textarea>${hint||'<p class="cs-hint">Format: <code>Label: Value</code> — one per line</p>'}</label>`;
   }
   if(type==='kvlist'){
-    const t = Array.isArray(val)
-      ? val.map(o=>`${o.flag||''} ${o.name||''}`.trim()).join('\n')
-      : '';
-    return `<label class="block ${wrap}">${lbl}<textarea data-path="${path}" data-kvlist="1" rows="${extra.rows||6}" class="${base} resize-y">${esc(t)}</textarea><span class="text-[10.5px] text-muted mt-1 block">One country per line — e.g. <code>🇦🇪 United Arab Emirates</code></span></label>`;
+    const t = Array.isArray(val) ? val.map(o=>`${o.flag||o.iso||''} ${o.name||''}`.trim()).join('\n') : '';
+    return `<label class="cs-field ${wide}"><span>${label}</span><textarea data-path="${path}" data-kvlist="1" rows="${extra.rows||6}" class="${base}">${esc(t)}</textarea>${hint||'<p class="cs-hint">One per line — e.g. <code>ae United Arab Emirates</code></p>'}</label>`;
   }
-  if(type==='checkbox') return `<label class="flex items-center gap-2.5 bg-white border border-stoneLine rounded-xl px-3.5 py-2.5 cursor-pointer ${wrap}"><input type="checkbox" data-path="${path}" ${val?'checked':''} class="w-4 h-4 accent-[#14342B]"><span class="text-[13px] font-medium">${esc(label)}</span></label>`;
+  if(type==='checkbox') return `<label class="cs-checkbox-wrap ${wide}"><input type="checkbox" data-path="${path}" ${val?'checked':''} class="w-4 h-4 accent-[#14342B]"><span>${label}</span></label>`;
   if(type==='select'){
     const opts = (extra.options||[]).map(o=>`<option ${o===val?'selected':''}>${esc(o)}</option>`).join('');
-    return `<label class="block ${wrap}">${lbl}<select data-path="${path}" class="${base}">${opts}</select></label>`;
+    return `<label class="cs-field ${wide}"><span>${label}</span><select data-path="${path}" class="${base} cursor-pointer">${opts}</select>${hint}</label>`;
   }
-  if(type==='number') return `<label class="block ${wrap}">${lbl}<input type="number" data-path="${path}" value="${esc(val)}" class="${base}"></label>`;
-  return `<label class="block ${wrap}">${lbl}<input type="text" data-path="${path}" value="${esc(val)}" class="${base}"></label>`;
+  if(type==='number') return `<label class="cs-field ${wide}"><span>${label}</span><input type="number" data-path="${path}" value="${esc(val)}" class="${base}"></label>`;
+  return `<label class="cs-field ${wide}"><span>${label}</span><input type="text" data-path="${path}" value="${esc(val)}" class="${base}">${hint}</label>`;
+}
+
+/* Collapsible section card helper */
+function csSection(icon, title, fieldsHTML, openByDefault=false){
+  const id = 'css-' + title.replace(/\W+/g,'').toLowerCase();
+  return `<div class="cs-section ${openByDefault?'open':''}" id="${id}">
+    <div class="cs-section-head" onclick="this.closest('.cs-section').classList.toggle('open')">
+      <div class="cs-section-head-left">
+        <span class="cs-section-icon">${icon}</span>
+        <span class="cs-section-title">${title}</span>
+      </div>
+      <svg class="cs-section-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+    <div class="cs-section-body" style="grid-template-columns:1fr 1fr">${fieldsHTML}</div>
+  </div>`;
 }
 
 function renderArrayTab(key){
   const fields = ARRAY_FIELDS[key];
-  const items = draft[key] || [];
-  const lbls = ARRAY_LABEL[key] || { add:'+ Add Item', empty:'No items.' };
+  const items  = draft[key] || [];
+  const lbls   = ARRAY_LABEL[key] || { add:'+ Add Item', empty:'No items yet.' };
 
   const cards = items.map((item,i)=>{
     const head = item.name || item.title || item.region || item.q || `Item ${i+1}`;
@@ -1881,88 +1991,118 @@ function renderArrayTab(key){
       return fld(f.label, `${key}.${i}.${f.key}`, item[f.key], f.type||'text', { options:opts, wide:f.wide, rows:f.rows });
     }).join('');
 
-    return `
-      <div class="arr-card bg-white border border-stoneLine rounded-2xl overflow-hidden">
-        <div class="flex items-center justify-between gap-2 px-4 py-2.5 bg-cream/60 border-b border-stoneLine">
-          <span class="text-[12.5px] font-semibold text-pine truncate">${esc(head)}</span>
-          <div class="flex gap-1 shrink-0">
-            <button type="button" data-move="${key}" data-idx="${i}" data-dir="-1" ${i===0?'disabled':''} class="arr-btn" title="Move up">↑</button>
-            <button type="button" data-move="${key}" data-idx="${i}" data-dir="1" ${i===items.length-1?'disabled':''} class="arr-btn" title="Move down">↓</button>
-            <button type="button" data-del="${key}" data-idx="${i}" class="arr-btn arr-btn-del" title="Delete">✕</button>
-          </div>
+    return `<div class="arr-card">
+      <div class="arr-card-head">
+        <span class="arr-card-num">${i+1}</span>
+        <span class="arr-card-title">${esc(head)}</span>
+        <div class="flex gap-1.5 shrink-0">
+          <button type="button" data-move="${key}" data-idx="${i}" data-dir="-1" ${i===0?'disabled':''} class="arr-btn" title="Move up">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </button>
+          <button type="button" data-move="${key}" data-idx="${i}" data-dir="1" ${i===items.length-1?'disabled':''} class="arr-btn" title="Move down">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          </button>
+          <button type="button" data-del="${key}" data-idx="${i}" class="arr-btn arr-btn-del" title="Delete">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
         </div>
-        <div class="p-4 grid sm:grid-cols-2 gap-3">${fieldsHTML}</div>
-      </div>`;
+      </div>
+      <div class="arr-card-body" style="grid-template-columns:1fr 1fr">${fieldsHTML}</div>
+    </div>`;
   }).join('');
 
-  return `<div class="space-y-4">
-    ${cards || `<p class="text-center text-muted text-[13.5px] py-10 bg-white border border-dashed border-stoneLine rounded-2xl">${lbls.empty}</p>`}
-    <button type="button" data-add="${key}" class="w-full border-2 border-dashed border-stoneLine rounded-2xl py-4 text-[13.5px] font-semibold text-muted hover:border-pine hover:text-pine transition bg-white/40">${lbls.add}</button>
+  return `<div class="space-y-3">
+    ${cards || `<div class="text-center py-12 text-muted text-[13.5px] bg-white rounded-2xl border-2 border-dashed border-stoneLine">${lbls.empty}</div>`}
+    <button type="button" data-add="${key}" class="arr-add-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+      ${lbls.add}
+    </button>
   </div>`;
 }
 
 function renderCompanyTab(){
-  const c = draft.company;
-  const cats = (draft.productCategories||[]).filter(x=>x!=='All');
-  return `<div class="space-y-5">
-    <div class="grid sm:grid-cols-2 gap-4">
-      ${fld('Company Name','company.name',c.name)}
-      ${fld('Established Year','company.established',c.established,'number')}
-      ${fld('Email','company.email',c.email)}
-      ${fld('Phone','company.phone',c.phone)}
-      ${fld('WhatsApp (digits only, with country code)','company.whatsapp',c.whatsapp)}
-      ${fld('Working Hours','company.hours',c.hours)}
-      ${fld('Founder Name','company.founder',c.founder)}
+  const c = draft.company || {};
+  return `<div class="space-y-3">
+    ${csSection('🏢','Business Info',`
+      ${fld('Company Name','company.name',c.name,      'text',{wide:true})}
+      ${fld('Founded Year','company.established',c.established,'number')}
       ${fld('City','company.city',c.city)}
       ${fld('Full Address','company.address',c.address,'textarea',{wide:true,rows:2})}
-      ${fld('Hero Badge','company.heroBadge',c.heroBadge,'text',{wide:true})}
-      ${fld('Hero Title — Line 1','company.heroTitleA',c.heroTitleA)}
-      ${fld('Hero Title — Line 2','company.heroTitleB',c.heroTitleB)}
-      ${fld('Hero Subtitle','company.heroSubtitle',c.heroSubtitle,'textarea',{wide:true,rows:2})}
+      ${fld('Founder Name','company.founder',c.founder)}
+      ${fld('Founder Role','company.founderRole',c.founderRole||'')}
+      ${fld('Tagline','company.tagline',c.tagline||'')}
+      ${fld('Working Hours','company.hours',c.hours)}
+    `,true)}
+    ${csSection('📞','Contact Details',`
+      ${fld('Email','company.email',c.email,  'text',{wide:true})}
+      ${fld('Phone','company.phone',c.phone)}
+      ${fld('WhatsApp (with country code, digits only)','company.whatsapp',c.whatsapp)}
+    `)}
+    ${csSection('🦸','Hero Section',`
+      ${fld('Since Badge','company.heroSinceBadge',c.heroSinceBadge||'● SINCE 2016',  'text',{wide:true})}
+      ${fld('Hero Badge (below since)','company.heroBadge',c.heroBadge,               'text',{wide:true})}
+      ${fld('Title Line 1','company.heroTitleA',c.heroTitleA)}
+      ${fld('Title Line 2 (italic)','company.heroTitleB',c.heroTitleB)}
+      ${fld('Subtitle','company.heroSubtitle',c.heroSubtitle,'textarea',{wide:true,rows:2})}
       ${fld('Hero Image URL','company.heroImage',c.heroImage,'text',{wide:true})}
+      ${fld('CTA Button 1 Label','company.heroCTA1Label',c.heroCTA1Label||'')}
+      ${fld('CTA Button 1 Link','company.heroCTA1Href', c.heroCTA1Href||'')}
+      ${fld('CTA Button 2 Label','company.heroCTA2Label',c.heroCTA2Label||'')}
+      ${fld('Shipment Route Overlay','company.heroOverlayShipRoute',c.heroOverlayShipRoute||'')}
+      ${fld('Shipment Text Overlay','company.heroOverlayShipText',c.heroOverlayShipText||'')}
+      ${fld('Origin Chip Text','company.heroOverlayOriginText',c.heroOverlayOriginText||'')}
+    `)}
+    ${csSection('👤','About Section',`
       ${fld('About Paragraph','company.aboutText',c.aboutText,'textarea',{wide:true,rows:5})}
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Product Categories (used as filter chips — first should be "All")</p>
-      <textarea data-path="productCategories" data-list="1" rows="4" class="w-full bg-white border border-stoneLine rounded-xl px-3.5 py-2.5 text-[13.5px] resize-y">${esc((draft.productCategories||[]).join('\n'))}</textarea>
-      <span class="text-[10.5px] text-muted mt-1 block">One category per line. First line is normally "All".</span>
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Social Links</p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        ${['linkedin','instagram','facebook','x','youtube'].map(k=>fld(k[0].toUpperCase()+k.slice(1), 'company.socials.'+k, c.socials[k])).join('')}
-      </div>
-    </div>
-
-    <div class="grid sm:grid-cols-2 gap-4">
-      ${fld('Top Bar / Trust Marquee Items','marquee',draft.marquee,'list',{wide:true,rows:4})}
-      ${fld('About Bullet Points','aboutChecks',draft.aboutChecks,'list',{wide:true,rows:6})}
-    </div>
+      ${fld('Heading','company.aboutHeading',c.aboutHeading||'')}
+      ${fld('Heading Italic Part','company.aboutHeadingEm',c.aboutHeadingEm||'')}
+      ${fld('Years Badge Number','company.aboutYears',c.aboutYears||'9')}
+      ${fld('Years Badge Label','company.aboutYearsLabel',c.aboutYearsLabel||'')}
+      ${fld('CTA Label','company.aboutCTALabel',c.aboutCTALabel||'')}
+    `)}
+    ${csSection('🔗','Social Links',`
+      ${['linkedin','instagram','facebook','x','youtube'].map(k=>fld(k[0].toUpperCase()+k.slice(1),'company.socials.'+k,(c.socials||{})[k]||'')).join('')}
+    `)}
+    ${csSection('🦶','Footer',`
+      ${fld('Footer About Text','company.footerAbout',c.footerAbout||'','textarea',{wide:true,rows:3})}
+      ${fld('Copyright Text','company.footerCopyright',c.footerCopyright||''  ,'text',{wide:true})}
+      ${fld('Privacy Label','company.footerPrivacyLabel',c.footerPrivacyLabel||'')}
+      ${fld('Privacy URL','company.footerPrivacyHref',  c.footerPrivacyHref ||'')}
+      ${fld('Terms Label','company.footerTermsLabel',   c.footerTermsLabel  ||'')}
+      ${fld('Terms URL','company.footerTermsHref',      c.footerTermsHref   ||'')}
+    `)}
+    ${csSection('📢','Marquee & Bullets',`
+      ${fld('Trust Bar Marquee Items','marquee',draft.marquee,'list',{wide:true,rows:5,hint:'One item per line — shown scrolling in the top trust bar'})}
+      ${fld('About Bullet Points','aboutChecks',draft.aboutChecks,'list',{wide:true,rows:7,hint:'One bullet per line — shown as checkmarks in About section'})}
+    `)}
+    ${csSection('📂','Product Categories',`
+      <label class="cs-field sm:col-span-2">
+        <span>Categories (filter chips on Products section)</span>
+        <textarea data-path="productCategories" data-list="1" rows="5" class="cs-input">${esc((draft.productCategories||[]).join('\n'))}</textarea>
+        <p class="cs-hint">One per line. First entry should be "All".</p>
+      </label>
+    `)}
   </div>`;
 }
 
 function renderRawJsonTab(){
   const json = JSON.stringify(draft, null, 2);
-  return `<div class="flex flex-col gap-3 h-full">
-    <div class="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-[13px] text-amber-800 flex items-start gap-2.5">
-      <span class="text-[16px] leading-none mt-0.5 shrink-0">⚠️</span>
-      <span>Paste or edit the full JSON below. Clicking <strong>Save &amp; Apply</strong> will permanently update the site and overwrite all form-tab edits. Invalid JSON will be rejected.</span>
+  return `<div class="flex flex-col gap-3" style="height:calc(100vh - 200px)">
+    <div class="flex items-start gap-2.5 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-[12.5px] text-amber-800">
+      <span class="text-[15px] leading-none mt-0.5 shrink-0">⚠️</span>
+      <span>Edit raw JSON below. <strong>Save &amp; Apply</strong> replaces all content. Invalid JSON is rejected.</span>
     </div>
-    <div class="relative flex-1">
-      <textarea id="rawJsonEditor"
-        spellcheck="false"
-        class="w-full h-[480px] bg-[#0E1E18] text-emerald-300 font-mono text-[12.5px] leading-relaxed rounded-2xl border border-stoneLine p-5 resize-none focus:outline-none focus:border-pine"
-        style="tab-size:2"
+    <div class="relative flex-1 min-h-0">
+      <textarea id="rawJsonEditor" spellcheck="false"
+        class="cs-json-editor w-full h-full"
       >${esc(json)}</textarea>
-      <button onclick="copyRawJson()" title="Copy to clipboard"
-        class="absolute top-3 right-3 bg-white/10 hover:bg-white/20 text-emerald-200 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      <button onclick="copyRawJson()" title="Copy"
+        class="absolute top-3 right-3 inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 text-emerald-200 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         Copy
       </button>
     </div>
-    <div id="rawJsonStatus" class="text-[12.5px] text-muted h-5"></div>
+    <div id="rawJsonStatus" class="cs-json-status"></div>
   </div>`;
 }
 
@@ -1980,191 +2120,142 @@ document.addEventListener('input', e=>{
     const parsed = JSON.parse(e.target.value);
     if(!parsed.company || !parsed.products) throw new Error('Missing required fields (company, products)');
     draft = parsed;
-    if(status){ status.textContent = '✓ Valid JSON'; status.className = 'text-[12.5px] text-emerald-600 h-5'; }
+    if(status){ status.textContent = '✓ Valid JSON'; status.className = 'cs-json-status ok'; }
   }catch(err){
-    if(status){ status.textContent = '✗ ' + err.message; status.className = 'text-[12.5px] text-red-500 h-5'; }
+    if(status){ status.textContent = '✗ ' + err.message; status.className = 'cs-json-status err'; }
   }
 });
 
 function renderSectionsTab(){
-  const s = draft.sections || {};
-  const sp = s.products || {}, sq = s.qualityStrip || {}, sw = s.why || {};
-  const sc = s.process || {}, sm = s.markets || {}, sct = s.contact || {};
-  const sf = s.footer  || {}, sa = s.about || {};
-  const n  = draft.nav || {};
-  const c  = draft.company || {};
-  return `<div class="space-y-6">
+  const s   = draft.sections || {};
+  const sp  = s.products     || {};
+  const sq  = s.qualityStrip || {};
+  const sw  = s.why          || {};
+  const sc  = s.process      || {};
+  const sm  = s.markets      || {};
+  const sct = s.contact      || {};
+  const sf  = s.footer       || {};
+  const sa  = s.about        || {};
+  const n   = draft.nav      || {};
+  const c   = draft.company  || {};
+  const seo = draft.seo      || {};
 
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Hero Overlays</p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        ${fld('Since Badge','company.heroSinceBadge',c.heroSinceBadge||'● SINCE 2016')}
-        ${fld('CTA Button 1 Label','company.heroCTA1Label',c.heroCTA1Label||'Explore Products →')}
-        ${fld('CTA Button 1 Link','company.heroCTA1Href',c.heroCTA1Href||'#products')}
-        ${fld('CTA Button 2 Label','company.heroCTA2Label',c.heroCTA2Label||'Contact Us')}
-        ${fld('QC Overlay Text','company.heroOverlayQC',c.heroOverlayQC||'')}
-        ${fld('QC Overlay Sub','company.heroOverlayQCSub',c.heroOverlayQCSub||'')}
-        ${fld('Live Shipment Route','company.heroOverlayShipRoute',c.heroOverlayShipRoute||'')}
-        ${fld('Live Shipment Text','company.heroOverlayShipText',c.heroOverlayShipText||'')}
-        ${fld('Origin Label','company.heroOverlayOriginLabel',c.heroOverlayOriginLabel||'Origin')}
-        ${fld('Origin Text','company.heroOverlayOriginText',c.heroOverlayOriginText||'')}
-        ${fld('Buyer Count Badge','company.heroBuyerCount',c.heroBuyerCount||'200+')}
-        ${fld('Buyer Rating','company.heroBuyerRating',c.heroBuyerRating||'4.9/5 Buyer Rating')}
-        ${fld('Buyer Label','company.heroBuyerLabel',c.heroBuyerLabel||'Trusted by importers','text',{wide:true})}
-      </div>
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Hero Stats</p>
-      ${fld('Stats (JSON array — [{count,suffix,label}])','heroStats',JSON.stringify(draft.heroStats||[]),'textarea',{wide:true,rows:4})}
-      <span class="text-[10.5px] text-muted mt-1 block">Format: <code>[{"count":20,"suffix":"+","label":"Countries Served"},…]</code></span>
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">About Section</p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        ${fld('Eyebrow','sections.about.eyebrow',(sa).eyebrow||'')}
-        ${fld('About Years Badge','company.aboutYears',c.aboutYears||'9')}
-        ${fld('About Years Label','company.aboutYearsLabel',c.aboutYearsLabel||'Years of Export Excellence')}
-        ${fld('Heading','company.aboutHeading',c.aboutHeading||'')}
-        ${fld('Heading Italic','company.aboutHeadingEm',c.aboutHeadingEm||'')}
-        ${fld('Heading End','company.aboutHeadingEnd',c.aboutHeadingEnd||'')}
-        ${fld('CTA Button Label','company.aboutCTALabel',c.aboutCTALabel||'Work With Us →')}
-        ${fld('Founder Role','company.founderRole',c.founderRole||'Founder & Managing Partner')}
-      </div>
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Products Section</p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        ${fld('Eyebrow','sections.products.eyebrow',sp.eyebrow||'')}
-        ${fld('Heading','sections.products.heading',sp.heading||'')}
-        ${fld('Heading Italic','sections.products.headingEm',sp.headingEm||'')}
-        ${fld('Subtitle','sections.products.subtitle',sp.subtitle||'','textarea',{wide:true,rows:2})}
-        ${fld('Banner Text','sections.products.bannerText',sp.bannerText||'','textarea',{wide:true,rows:2})}
-        ${fld('Banner CTA Label','sections.products.bannerCTA',sp.bannerCTA||'')}
-      </div>
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Quality Strip</p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        ${fld('Eyebrow','sections.qualityStrip.eyebrow',sq.eyebrow||'')}
-        ${fld('Heading','sections.qualityStrip.heading',sq.heading||'')}
-        ${fld('Heading Italic','sections.qualityStrip.headingEm',sq.headingEm||'')}
-      </div>
+  return `<div class="space-y-3">
+    ${csSection('🦸','Hero Overlays',`
+      ${fld('Since Badge','company.heroSinceBadge',c.heroSinceBadge||'')}
+      ${fld('CTA Button 1 Label','company.heroCTA1Label',c.heroCTA1Label||'')}
+      ${fld('CTA Button 1 Link','company.heroCTA1Href',c.heroCTA1Href||'')}
+      ${fld('CTA Button 2 Label','company.heroCTA2Label',c.heroCTA2Label||'')}
+      ${fld('CTA Button 2 Link','company.heroCTA2Href',c.heroCTA2Href||'')}
+      ${fld('QC Overlay Text','company.heroOverlayQC',c.heroOverlayQC||'')}
+      ${fld('QC Overlay Sub','company.heroOverlayQCSub',c.heroOverlayQCSub||'')}
+      ${fld('Live Shipment Route','company.heroOverlayShipRoute',c.heroOverlayShipRoute||'')}
+      ${fld('Live Shipment Text','company.heroOverlayShipText',c.heroOverlayShipText||'')}
+      ${fld('Origin Label','company.heroOverlayOriginLabel',c.heroOverlayOriginLabel||'Origin')}
+      ${fld('Origin Text','company.heroOverlayOriginText',c.heroOverlayOriginText||'')}
+      ${fld('Buyer Count Badge','company.heroBuyerCount',c.heroBuyerCount||'200+')}
+      ${fld('Buyer Rating Text','company.heroBuyerRating',c.heroBuyerRating||'')}
+      ${fld('Buyer Sub Label','company.heroBuyerLabel',c.heroBuyerLabel||'','text',{wide:true})}
+    `,true)}
+    ${csSection('📊','Hero Stats',`
+      ${fld('Stats JSON Array','heroStats',JSON.stringify(draft.heroStats||[]),'textarea',{wide:true,rows:4,hint:'[{"count":20,"suffix":"+","label":"Countries Served"},…]'})}
+    `)}
+    ${csSection('👤','About Section',`
+      ${fld('Eyebrow','sections.about.eyebrow',sa.eyebrow||'')}
+      ${fld('Heading','company.aboutHeading',c.aboutHeading||'')}
+      ${fld('Heading Italic','company.aboutHeadingEm',c.aboutHeadingEm||'')}
+      ${fld('Heading End','company.aboutHeadingEnd',c.aboutHeadingEnd||'')}
+      ${fld('Years Badge','company.aboutYears',c.aboutYears||'9')}
+      ${fld('Years Label','company.aboutYearsLabel',c.aboutYearsLabel||'')}
+      ${fld('CTA Label','company.aboutCTALabel',c.aboutCTALabel||'')}
+      ${fld('Founder Role','company.founderRole',c.founderRole||'')}
+    `)}
+    ${csSection('📦','Products Section',`
+      ${fld('Eyebrow','sections.products.eyebrow',sp.eyebrow||'')}
+      ${fld('Heading','sections.products.heading',sp.heading||'')}
+      ${fld('Heading Italic','sections.products.headingEm',sp.headingEm||'')}
+      ${fld('Subtitle','sections.products.subtitle',sp.subtitle||'','textarea',{wide:true,rows:2})}
+      ${fld('Banner Text','sections.products.bannerText',sp.bannerText||'','textarea',{wide:true,rows:2})}
+      ${fld('Banner CTA Label','sections.products.bannerCTA',sp.bannerCTA||'')}
+    `)}
+    ${csSection('🛡️','Quality Strip',`
+      ${fld('Eyebrow','sections.qualityStrip.eyebrow',sq.eyebrow||'')}
+      ${fld('Heading','sections.qualityStrip.heading',sq.heading||'')}
+      ${fld('Heading Italic','sections.qualityStrip.headingEm',sq.headingEm||'')}
       ${(sq.items||[]).map((item,i)=>`
-        <div class="mt-3 grid sm:grid-cols-2 gap-3 pt-3 border-t border-stoneLine/60">
-          <p class="sm:col-span-2 text-[10.5px] font-semibold text-muted uppercase tracking-widest">Item ${i+1}</p>
-          ${fld('Title',`sections.qualityStrip.items.${i}.title`,item.title||'')}
-          ${fld('Text', `sections.qualityStrip.items.${i}.text`, item.text||'','textarea',{wide:true,rows:2})}
-        </div>`).join('')}
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Why Choose Us Section</p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        ${fld('Eyebrow','sections.why.eyebrow',sw.eyebrow||'')}
-        ${fld('Heading','sections.why.heading',sw.heading||'')}
-        ${fld('Heading Italic','sections.why.headingEm',sw.headingEm||'')}
-      </div>
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Process Section</p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        ${fld('Eyebrow','sections.process.eyebrow',sc.eyebrow||'')}
-        ${fld('Heading','sections.process.heading',sc.heading||'')}
-        ${fld('Heading Italic','sections.process.headingEm',sc.headingEm||'')}
-        ${fld('Subtitle','sections.process.subtitle',sc.subtitle||'','text',{wide:true})}
-        ${fld('CTA Heading','sections.process.ctaHeading',sc.ctaHeading||'')}
-        ${fld('CTA Italic','sections.process.ctaHeadingEm',sc.ctaHeadingEm||'')}
-        ${fld('CTA Sub','sections.process.ctaSub',sc.ctaSub||'')}
-        ${fld('CTA Btn 1','sections.process.ctaBtn1',sc.ctaBtn1||'')}
-        ${fld('CTA Btn 2 (WA)','sections.process.ctaBtn2',sc.ctaBtn2||'')}
-      </div>
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Markets Section</p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        ${fld('Eyebrow','sections.markets.eyebrow',sm.eyebrow||'')}
-        ${fld('Heading','sections.markets.heading',sm.heading||'')}
-        ${fld('Heading Italic','sections.markets.headingEm',sm.headingEm||'')}
-        ${fld('Subtitle','sections.markets.subtitle',sm.subtitle||'','text',{wide:true})}
-        ${fld('Map: Count Label','sections.markets.mapCountLabel',sm.mapCountLabel||'')}
-        ${fld('Map: Count Sub','sections.markets.mapCountSub',sm.mapCountSub||'')}
-        ${fld('Map: Ports (right)','sections.markets.mapPortsRight',sm.mapPortsRight||'')}
-        ${fld('Testimonials Eyebrow','sections.markets.testiEyebrow',sm.testiEyebrow||'')}
-        ${fld('FAQ Eyebrow','sections.markets.faqEyebrow',sm.faqEyebrow||'')}
-        ${fld('FAQ Heading','sections.markets.faqHeading',sm.faqHeading||'')}
-        ${fld('FAQ Heading Italic','sections.markets.faqHeadingEm',sm.faqHeadingEm||'')}
-        ${fld('FAQ Subtext','sections.markets.faqSubtext',sm.faqSubtext||'')}
-        ${fld('FAQ WA Button','sections.markets.faqWALabel',sm.faqWALabel||'')}
-      </div>
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Contact Section</p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        ${fld('Eyebrow','sections.contact.eyebrow',sct.eyebrow||'')}
-        ${fld('Heading','sections.contact.heading',sct.heading||'')}
-        ${fld('Heading Italic','sections.contact.headingEm',sct.headingEm||'')}
-        ${fld('Subtitle','sections.contact.subtitle',sct.subtitle||'','textarea',{wide:true,rows:2})}
-        ${fld('WA Heading','sections.contact.waHeading',sct.waHeading||'')}
-        ${fld('WA Sub','sections.contact.waSub',sct.waSub||'')}
-        ${fld('Form Title','sections.contact.formTitle',sct.formTitle||'')}
-        ${fld('Form Badge','sections.contact.formBadge',sct.formBadge||'')}
-        ${fld('Submit Btn','sections.contact.submitLabel',sct.submitLabel||'')}
-        ${fld('WA Btn','sections.contact.waLabel',sct.waLabel||'')}
-        ${fld('Privacy Note','sections.contact.formPrivacy',sct.formPrivacy||'','textarea',{wide:true,rows:2})}
-      </div>
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Footer</p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        ${fld('Contact Label','sections.footer.contactLabel',sf.contactLabel||'')}
-        ${fld('Certs Label','sections.footer.certsLabel',sf.certsLabel||'')}
-        ${fld('WA Quick Label','sections.footer.waQuickLabel',sf.waQuickLabel||'')}
-        ${fld('IEC Badge Title','sections.footer.iecBadgeTitle',sf.iecBadgeTitle||'')}
-        ${fld('IEC Badge Sub','sections.footer.iecBadgeSub',sf.iecBadgeSub||'')}
-        ${fld('GST Badge Title','sections.footer.gstBadgeTitle',sf.gstBadgeTitle||'')}
-        ${fld('GST Badge Sub','sections.footer.gstBadgeSub',sf.gstBadgeSub||'')}
-        ${fld('Globe Chip 1','sections.globeChips.0.text',(s.globeChips||[])[0]?.text||'20+ Countries')}
-        ${fld('Globe Chip 2','sections.globeChips.1.text',(s.globeChips||[])[1]?.text||'IEC Certified')}
-        ${fld('Globe Chip 3','sections.globeChips.2.text',(s.globeChips||[])[2]?.text||'480+ / Year')}
-        ${fld('Footer About','company.footerAbout',c.footerAbout||'','textarea',{wide:true,rows:3})}
-        ${fld('Copyright Text','company.footerCopyright',c.footerCopyright||'')}
-        ${fld('Privacy Label','company.footerPrivacyLabel',c.footerPrivacyLabel||'')}
-        ${fld('Privacy URL','company.footerPrivacyHref',c.footerPrivacyHref||'')}
-        ${fld('Terms Label','company.footerTermsLabel',c.footerTermsLabel||'')}
-        ${fld('Terms URL','company.footerTermsHref',c.footerTermsHref||'')}
-      </div>
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">Navigation</p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        ${fld('Edit Content Button','nav.editBtnLabel',n.editBtnLabel||'Edit Content')}
-        ${fld('Get Quote Button','nav.quoteBtnLabel',n.quoteBtnLabel||'Get Quote →')}
-      </div>
-    </div>
-
-    <div class="bg-white border border-stoneLine rounded-2xl p-4">
-      <p class="text-[11px] font-bold uppercase tracking-widest text-muted mb-3">SEO & Meta Tags</p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        ${fld('Page Title','seo.title',(draft.seo||{}).title||'','text',{wide:true})}
-        ${fld('Meta Description','seo.description',(draft.seo||{}).description||'','textarea',{wide:true,rows:3})}
-        ${fld('Keywords','seo.keywords',(draft.seo||{}).keywords||'','text',{wide:true})}
-        ${fld('Canonical URL','seo.canonical',(draft.seo||{}).canonical||'')}
-        ${fld('OG / Twitter Image URL','seo.ogImage',(draft.seo||{}).ogImage||'')}
-        ${fld('Twitter Handle','seo.twitterHandle',(draft.seo||{}).twitterHandle||'')}
-      </div>
-    </div>
+        ${fld('Item '+(i+1)+' Title','sections.qualityStrip.items.'+i+'.title',item.title||'')}
+        ${fld('Item '+(i+1)+' Text','sections.qualityStrip.items.'+i+'.text',item.text||'','textarea',{wide:true,rows:2})}`).join('')}
+    `)}
+    ${csSection('⭐','Why Choose Us',`
+      ${fld('Eyebrow','sections.why.eyebrow',sw.eyebrow||'')}
+      ${fld('Heading','sections.why.heading',sw.heading||'')}
+      ${fld('Heading Italic','sections.why.headingEm',sw.headingEm||'')}
+    `)}
+    ${csSection('⚙️','Process Section',`
+      ${fld('Eyebrow','sections.process.eyebrow',sc.eyebrow||'')}
+      ${fld('Heading','sections.process.heading',sc.heading||'')}
+      ${fld('Heading Italic','sections.process.headingEm',sc.headingEm||'')}
+      ${fld('Subtitle','sections.process.subtitle',sc.subtitle||'','text',{wide:true})}
+      ${fld('CTA Heading','sections.process.ctaHeading',sc.ctaHeading||'')}
+      ${fld('CTA Italic','sections.process.ctaHeadingEm',sc.ctaHeadingEm||'')}
+      ${fld('CTA Sub','sections.process.ctaSub',sc.ctaSub||'','text',{wide:true})}
+      ${fld('CTA Btn 1','sections.process.ctaBtn1',sc.ctaBtn1||'')}
+      ${fld('CTA Btn 2 (WA)','sections.process.ctaBtn2',sc.ctaBtn2||'')}
+    `)}
+    ${csSection('🌍','Markets Section',`
+      ${fld('Eyebrow','sections.markets.eyebrow',sm.eyebrow||'')}
+      ${fld('Heading','sections.markets.heading',sm.heading||'')}
+      ${fld('Heading Italic','sections.markets.headingEm',sm.headingEm||'')}
+      ${fld('Subtitle','sections.markets.subtitle',sm.subtitle||'','text',{wide:true})}
+      ${fld('Map Count Label','sections.markets.mapCountLabel',sm.mapCountLabel||'')}
+      ${fld('Map Count Sub','sections.markets.mapCountSub',sm.mapCountSub||'')}
+      ${fld('Map Ports (right)','sections.markets.mapPortsRight',sm.mapPortsRight||'')}
+      ${fld('Testimonials Eyebrow','sections.markets.testiEyebrow',sm.testiEyebrow||'')}
+      ${fld('FAQ Eyebrow','sections.markets.faqEyebrow',sm.faqEyebrow||'')}
+      ${fld('FAQ Heading','sections.markets.faqHeading',sm.faqHeading||'')}
+      ${fld('FAQ Heading Italic','sections.markets.faqHeadingEm',sm.faqHeadingEm||'')}
+      ${fld('FAQ Subtext','sections.markets.faqSubtext',sm.faqSubtext||'')}
+      ${fld('FAQ WA Button','sections.markets.faqWALabel',sm.faqWALabel||'')}
+    `)}
+    ${csSection('📬','Contact Section',`
+      ${fld('Eyebrow','sections.contact.eyebrow',sct.eyebrow||'')}
+      ${fld('Heading','sections.contact.heading',sct.heading||'')}
+      ${fld('Heading Italic','sections.contact.headingEm',sct.headingEm||'')}
+      ${fld('Subtitle','sections.contact.subtitle',sct.subtitle||'','textarea',{wide:true,rows:2})}
+      ${fld('WA Heading','sections.contact.waHeading',sct.waHeading||'')}
+      ${fld('WA Sub','sections.contact.waSub',sct.waSub||'')}
+      ${fld('Form Title','sections.contact.formTitle',sct.formTitle||'')}
+      ${fld('Form Badge','sections.contact.formBadge',sct.formBadge||'')}
+      ${fld('Submit Label','sections.contact.submitLabel',sct.submitLabel||'')}
+      ${fld('WA Button Label','sections.contact.waLabel',sct.waLabel||'')}
+      ${fld('Privacy Note','sections.contact.formPrivacy',sct.formPrivacy||'','textarea',{wide:true,rows:2})}
+    `)}
+    ${csSection('🦶','Footer Labels',`
+      ${fld('Contact Label','sections.footer.contactLabel',sf.contactLabel||'')}
+      ${fld('Certs Label','sections.footer.certsLabel',sf.certsLabel||'')}
+      ${fld('WA Quick Label','sections.footer.waQuickLabel',sf.waQuickLabel||'')}
+      ${fld('IEC Badge Title','sections.footer.iecBadgeTitle',sf.iecBadgeTitle||'')}
+      ${fld('IEC Badge Sub','sections.footer.iecBadgeSub',sf.iecBadgeSub||'')}
+      ${fld('GST Badge Title','sections.footer.gstBadgeTitle',sf.gstBadgeTitle||'')}
+      ${fld('GST Badge Sub','sections.footer.gstBadgeSub',sf.gstBadgeSub||'')}
+      ${fld('Globe Chip 1','sections.globeChips.0.text',(s.globeChips||[])[0]?.text||'')}
+      ${fld('Globe Chip 2','sections.globeChips.1.text',(s.globeChips||[])[1]?.text||'')}
+      ${fld('Globe Chip 3','sections.globeChips.2.text',(s.globeChips||[])[2]?.text||'')}
+    `)}
+    ${csSection('🔍','SEO & Meta',`
+      ${fld('Page Title','seo.title',seo.title||'','text',{wide:true})}
+      ${fld('Meta Description','seo.description',seo.description||'','textarea',{wide:true,rows:3})}
+      ${fld('Keywords','seo.keywords',seo.keywords||'','text',{wide:true})}
+      ${fld('Canonical URL','seo.canonical',seo.canonical||'')}
+      ${fld('OG Image URL','seo.ogImage',seo.ogImage||'')}
+      ${fld('Twitter Handle','seo.twitterHandle',seo.twitterHandle||'')}
+    `)}
+    ${csSection('🧭','Navigation',`
+      ${fld('Edit Content Button','nav.editBtnLabel',n.editBtnLabel||'')}
+      ${fld('Get Quote Button','nav.quoteBtnLabel',n.quoteBtnLabel||'')}
+    `)}
   </div>`;
 }
-
 function renderTabBody(id){
   if(id==='raw-json')     return renderRawJsonTab();
   if(id==='sections')     return renderSectionsTab();
