@@ -624,7 +624,7 @@ tailwind.config = {
     <div>
       <p class="eyebrow text-clayDark">CMS • Visual Editor</p>
       <h3 class="font-display text-[24px] text-pine mt-1">Content Studio</h3>
-      <p class="text-[12.5px] text-muted mt-1">Edit company info, products, markets &amp; more — or use <strong>Raw JSON</strong> for full control.</p>
+      <p class="text-[12.5px] text-muted mt-1">Edit any content below. <strong class="text-pine">Save &amp; Apply</strong> bakes changes into a new <code>index.html</code> — replace your deployed file to publish globally.</p>
     </div>
     <button onclick="closeDataPanel()" class="w-9 h-9 rounded-full border border-stoneLine grid place-items-center hover:bg-pine hover:text-paper transition shrink-0">✕</button>
   </div>
@@ -1115,9 +1115,25 @@ try{
   const saved = localStorage.getItem('cbc_site_data');
   if(saved){
     const parsed = JSON.parse(saved);
-    SITE_DATA = Object.assign(JSON.parse(JSON.stringify(DEFAULT_DATA)), parsed);
+    SITE_DATA = deepMerge(JSON.parse(JSON.stringify(DEFAULT_DATA)), parsed);
   }
 }catch(e){}
+
+/* Deep merge: recursively merges src into a clone of dst.
+   Arrays are replaced wholesale (not concatenated). */
+function deepMerge(dst, src){
+  if(!src || typeof src !== 'object' || Array.isArray(src)) return src !== undefined ? src : dst;
+  const out = Object.assign({}, dst);
+  for(const k of Object.keys(src)){
+    if(src[k] !== null && typeof src[k] === 'object' && !Array.isArray(src[k]) &&
+       dst[k]  !== null && typeof dst[k]  === 'object' && !Array.isArray(dst[k])){
+      out[k] = deepMerge(dst[k], src[k]);
+    } else {
+      out[k] = src[k];
+    }
+  }
+  return out;
+}
 
 let activeCategory = "All";
 let testiIndex = 0, testiTimer = null;
@@ -2291,14 +2307,64 @@ function applyJSON(){
     }
     if(!draft || !draft.company || !draft.products) throw new Error('Required fields missing');
     SITE_DATA = JSON.parse(JSON.stringify(draft));
-    // Persist permanently — overwrites localStorage so page reloads keep changes
-    localStorage.setItem('cbc_site_data', JSON.stringify(SITE_DATA));
-    // Also patch DEFAULT_DATA in-memory so the session treats this as the new baseline
-    Object.assign(DEFAULT_DATA, JSON.parse(JSON.stringify(SITE_DATA)));
-    renderAll();
-    closeDataPanel();
-    toast('Content saved & applied across the whole site ✓');
-  }catch(err){ toast('Cannot save: '+err.message); }
+
+    /* 1. Deep-patch DEFAULT_DATA in-memory (covers current session) */
+    const keys = Object.keys(SITE_DATA);
+    keys.forEach(k => { DEFAULT_DATA[k] = JSON.parse(JSON.stringify(SITE_DATA[k])); });
+
+    /* 2. Persist in localStorage as fallback */
+    try{ localStorage.setItem('cbc_site_data', JSON.stringify(SITE_DATA)); }catch(e){}
+
+    /* 3. Bake into the HTML file itself — fetch the source, replace DEFAULT_DATA block,
+          then download the updated file so the user can replace index.html on the server.
+          This makes the change global for ALL visitors, not just this browser. */
+    fetch(location.href)
+      .then(r => r.text())
+      .then(html => {
+        /* Find the DEFAULT_DATA = { ... }; block and replace it.
+           We locate it by the unique comment line right above it. */
+        const marker = 'const DEFAULT_DATA = ';
+        const start  = html.indexOf(marker);
+        if(start === -1) throw new Error('Could not locate DEFAULT_DATA in source');
+
+        /* Find the matching closing }; by counting braces from the opening { */
+        let depth = 0, i = start + marker.length, end = -1;
+        while(i < html.length){
+          if(html[i] === '{') depth++;
+          else if(html[i] === '}'){
+            depth--;
+            if(depth === 0){ end = i + 1; break; }
+          }
+          i++;
+        }
+        /* skip optional whitespace + semicolon */
+        if(end !== -1 && html[end] === ';') end++;
+        if(end === -1) throw new Error('Could not find end of DEFAULT_DATA block');
+
+        const newBlock = `const DEFAULT_DATA = ${JSON.stringify(SITE_DATA, null, 2)};`;
+        const updated  = html.slice(0, start) + newBlock + html.slice(end);
+
+        /* Download the updated HTML */
+        const blob = new Blob([updated], { type: 'text/html' });
+        const a    = document.createElement('a');
+        a.href     = URL.createObjectURL(blob);
+        a.download = 'index.html';
+        a.click();
+        URL.revokeObjectURL(a.href);
+
+        renderAll();
+        closeDataPanel();
+        toast('✓ Saved! Download complete — replace your index.html to publish globally.');
+      })
+      .catch(err => {
+        /* fetch can fail locally (file:// protocol) — fall back to render-only */
+        renderAll();
+        closeDataPanel();
+        toast('✓ Applied this session. Open via a server to enable global bake-in.');
+        console.warn('Bake-in failed (likely file:// protocol):', err.message);
+      });
+
+  }catch(err){ toast('Cannot save: ' + err.message); }
 }
 function downloadJSON(){
   const b = new Blob([JSON.stringify(SITE_DATA,null,2)],{type:'application/json'});
