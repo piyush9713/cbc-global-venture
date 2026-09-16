@@ -489,13 +489,74 @@ tailwind.config = {
   <!-- top accent line -->
   <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-clay/60 to-transparent"></div>
 
-  <div class="relative max-w-7xl mx-auto px-5 pt-10 pb-10">
+  <!-- ── Globe SVG — absolute background ── -->
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden" aria-hidden="true">
+    <div class="relative opacity-[.13]" style="width:520px;height:520px">
+      <!-- spin rings -->
+      <div class="absolute inset-0 rounded-full border border-white/30" style="animation:ftr-spin 28s linear infinite"></div>
+      <div class="absolute" style="inset:30px;border-radius:999px;border:1px solid rgba(255,255,255,.2);animation:ftr-spin 18s linear infinite reverse"></div>
+      <svg viewBox="0 0 260 260" width="520" height="520" class="absolute inset-0 overflow-visible">
+        <defs>
+          <radialGradient id="ftrGlobe" cx="42%" cy="36%" r="60%">
+            <stop offset="0%"   stop-color="#2E7D5A" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#0A1E18" stop-opacity="1"/>
+          </radialGradient>
+          <radialGradient id="ftrGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#B9975B" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#B9975B" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="130" cy="130" r="95" fill="url(#ftrGlow)"/>
+        <circle cx="130" cy="130" r="72" fill="url(#ftrGlobe)" opacity="0.95"/>
+        <!-- latitude lines -->
+        <ellipse cx="130" cy="130" rx="72" ry="22" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+        <ellipse cx="130" cy="130" rx="72" ry="44" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+        <ellipse cx="130" cy="130" rx="72" ry="65" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+        <!-- longitude arcs -->
+        <ellipse cx="130" cy="130" rx="25" ry="72" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+        <ellipse cx="130" cy="130" rx="55" ry="72" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+        <line x1="58" y1="130" x2="202" y2="130" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+        <!-- continent blobs -->
+        <path d="M138,108 C145,106 154,110 156,118 C158,126 153,138 148,143 C144,148 136,148 132,143 C128,138 126,128 128,120 C130,113 133,110 138,108Z" fill="rgba(185,151,91,.7)"/>
+        <path d="M115,102 C120,99 126,101 128,107 C130,113 126,120 120,121 C114,122 108,117 107,112 C106,107 110,104 115,102Z" fill="rgba(185,151,91,.5)"/>
+        <path d="M104,88 C110,84 118,85 120,91 C122,97 118,104 112,105 C106,106 100,101 99,95 C98,90 99,91 104,88Z" fill="rgba(185,151,91,.4)"/>
+        <path d="M110,118 C116,115 122,118 123,125 C124,133 120,142 114,144 C108,146 103,141 102,134 C101,127 104,121 110,118Z" fill="rgba(185,151,91,.35)"/>
+        <!-- rim -->
+        <circle cx="130" cy="130" r="72" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+        <path d="M80,85 A72,72 0 0,1 175,85" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- orbit rings -->
+        <ellipse cx="130" cy="130" rx="108" ry="34" fill="none" stroke="rgba(185,151,91,.4)" stroke-width="1" style="transform-origin:130px 130px;animation:ftr-spin 22s linear infinite"/>
+        <ellipse cx="130" cy="130" rx="95"  ry="30" fill="none" stroke="rgba(185,151,91,.3)" stroke-width="1" style="transform-origin:130px 130px;animation:ftr-spin 16s linear infinite reverse"/>
+        <!-- orbit dots -->
+        <g style="animation:ftr-orbit1 22s linear infinite;transform-origin:130px 130px">
+          <circle cx="238" cy="130" r="5.5" fill="#B9975B" opacity="0.9"/>
+          <circle cx="238" cy="130" r="9"   fill="#B9975B" opacity="0.2"/>
+        </g>
+        <g style="animation:ftr-orbit1 22s linear infinite -11s;transform-origin:130px 130px">
+          <circle cx="238" cy="130" r="4"   fill="#E9C767" opacity="0.75"/>
+        </g>
+        <g style="animation:ftr-orbit2 16s linear infinite;transform-origin:130px 130px">
+          <circle cx="225" cy="130" r="4"   fill="#FAF8F4" opacity="0.6"/>
+        </g>
+        <!-- ship -->
+        <g style="animation:ftr-ship 8s ease-in-out infinite;transform-origin:130px 216px">
+          <rect x="106" y="212" width="48" height="9" rx="2.5" fill="rgba(185,151,91,.8)"/>
+          <rect x="111" y="206" width="11" height="7" rx="1.5" fill="rgba(185,151,91,.6)"/>
+          <rect x="126" y="204" width="14" height="9" rx="1.5" fill="rgba(185,151,91,.65)"/>
+          <rect x="143" y="207" width="9"  height="6" rx="1.5" fill="rgba(185,151,91,.55)"/>
+          <path d="M104,221 Q130,228 156,221" fill="rgba(185,151,91,.45)" stroke="rgba(185,151,91,.5)" stroke-width=".8"/>
+        </g>
+      </svg>
+    </div>
+  </div>
 
-    <!-- ── TOP ROW: brand + animated visual ── -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-20 pb-12 border-b border-white/10">
+  <div class="relative max-w-7xl mx-auto px-5 pt-12 pb-10">
+
+    <!-- ── MAIN ROW: Brand · Contact · Certifications ── -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 pb-12 border-b border-white/10">
 
       <!-- Brand block -->
-      <div class="max-w-md shrink-0">
+      <div>
         <div class="flex items-center gap-3 mb-5">
           <span class="w-11 h-11 rounded-xl bg-paper text-pine grid place-items-center font-display text-lg relative overflow-hidden shrink-0">C<span class="absolute -bottom-1 -right-1 w-4 h-4 bg-clay/90 rounded-tl-xl"></span></span>
           <div>
@@ -505,164 +566,35 @@ tailwind.config = {
         </div>
         <p id="footerAbout" class="text-[13.5px] leading-relaxed font-light"></p>
         <div class="flex gap-2 mt-5" id="socialRow"></div>
+        <!-- globe chips row — visible on all screen sizes below brand -->
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span id="globeChipBadge1" class="inline-flex items-center gap-1.5 bg-clay/15 border border-clay/25 rounded-full px-3 py-1.5 text-[11.5px] font-semibold text-clay"><span class="w-1.5 h-1.5 rounded-full bg-clay inline-block"></span><span id="globeChip1Text">20+ Countries</span></span>
+          <span id="globeChipBadge2" class="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5 text-[11.5px] font-semibold text-paper/70">✓ <span id="globeChip2Text">IEC Certified</span></span>
+          <span id="globeChipBadge3" class="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5 text-[11.5px] font-semibold text-[#E9C767]">🚢 <span id="globeChip3Text">480+ / Year</span></span>
+        </div>
       </div>
-
-      <!-- ── Animated trade globe visual ── -->
-      <div class="hidden md:flex flex-1 items-center justify-center min-h-[200px] relative select-none" aria-hidden="true">
-
-        <!-- Outer glow ring -->
-        <div class="absolute w-[260px] h-[260px] rounded-full border border-white/5"
-             style="animation:ftr-spin 28s linear infinite"></div>
-        <div class="absolute w-[210px] h-[210px] rounded-full border border-white/8"
-             style="animation:ftr-spin 18s linear infinite reverse"></div>
-
-        <!-- SVG globe + orbit dots + trade lines -->
-        <svg viewBox="0 0 260 260" width="260" height="260" class="relative z-10 overflow-visible">
-          <defs>
-            <!-- radial glow for globe -->
-            <radialGradient id="ftrGlobe" cx="42%" cy="36%" r="60%">
-              <stop offset="0%"   stop-color="#2E7D5A" stop-opacity="1"/>
-              <stop offset="100%" stop-color="#0A1E18" stop-opacity="1"/>
-            </radialGradient>
-            <!-- clay glow -->
-            <radialGradient id="ftrGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%"   stop-color="#B9975B" stop-opacity="0.35"/>
-              <stop offset="100%" stop-color="#B9975B" stop-opacity="0"/>
-            </radialGradient>
-            <!-- orbit path (ellipse as path) -->
-            <path id="ftrOrbit1" d="M130,65 A65,22 0 1,1 129.9,65" fill="none"/>
-            <path id="ftrOrbit2" d="M75,130 A22,65 0 1,1 75.1,130" fill="none"/>
-            <path id="ftrOrbit3" d="M65,130 A130,40 -25 1,1 64.9,130" fill="none"/>
-          </defs>
-
-          <!-- background clay glow bloom -->
-          <circle cx="130" cy="130" r="95" fill="url(#ftrGlow)"/>
-
-          <!-- main globe -->
-          <circle cx="130" cy="130" r="72" fill="url(#ftrGlobe)" opacity="0.95"/>
-
-          <!-- globe latitude lines -->
-          <ellipse cx="130" cy="130" rx="72" ry="22" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
-          <ellipse cx="130" cy="130" rx="72" ry="44" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-          <ellipse cx="130" cy="130" rx="72" ry="65" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-
-          <!-- globe longitude arc (vertical) -->
-          <ellipse cx="130" cy="130" rx="25" ry="72" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
-          <ellipse cx="130" cy="130" rx="55" ry="72" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-
-          <!-- globe equator -->
-          <line x1="58" y1="130" x2="202" y2="130" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
-
-          <!-- continent blobs (stylised) -->
-          <!-- India/South Asia -->
-          <path d="M138,108 C145,106 154,110 156,118 C158,126 153,138 148,143 C144,148 136,148 132,143 C128,138 126,128 128,120 C130,113 133,110 138,108Z" fill="rgba(185,151,91,.55)"/>
-          <!-- Middle East -->
-          <path d="M115,102 C120,99 126,101 128,107 C130,113 126,120 120,121 C114,122 108,117 107,112 C106,107 110,104 115,102Z" fill="rgba(185,151,91,.35)"/>
-          <!-- Europe -->
-          <path d="M104,88 C110,84 118,85 120,91 C122,97 118,104 112,105 C106,106 100,101 99,95 C98,90 99,91 104,88Z" fill="rgba(185,151,91,.28)"/>
-          <!-- Africa hint -->
-          <path d="M110,118 C116,115 122,118 123,125 C124,133 120,142 114,144 C108,146 103,141 102,134 C101,127 104,121 110,118Z" fill="rgba(185,151,91,.22)"/>
-
-          <!-- globe rim highlight -->
-          <circle cx="130" cy="130" r="72" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
-          <path d="M80,85 A72,72 0 0,1 175,85" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.5" stroke-linecap="round"/>
-
-          <!-- ── Orbit rings ── -->
-          <!-- outer ring tilted -->
-          <ellipse cx="130" cy="130" rx="108" ry="34" fill="none" stroke="rgba(185,151,91,.18)" stroke-width="1"
-                   style="transform-origin:130px 130px;animation:ftr-spin 22s linear infinite"/>
-          <!-- inner ring -->
-          <ellipse cx="130" cy="130" rx="95" ry="30" fill="none" stroke="rgba(185,151,91,.12)" stroke-width="1"
-                   style="transform-origin:130px 130px;animation:ftr-spin 16s linear infinite reverse"/>
-
-          <!-- ── Animated orbit dots (trade nodes) ── -->
-          <!-- dot 1 — outer ring CW -->
-          <g style="animation:ftr-orbit1 22s linear infinite;transform-origin:130px 130px">
-            <circle cx="238" cy="130" r="5.5" fill="#B9975B" opacity="0.9"/>
-            <circle cx="238" cy="130" r="9" fill="#B9975B" opacity="0.18"/>
-          </g>
-          <!-- dot 2 — outer ring offset 180° -->
-          <g style="animation:ftr-orbit1 22s linear infinite -11s;transform-origin:130px 130px">
-            <circle cx="238" cy="130" r="4" fill="#E9C767" opacity="0.75"/>
-            <circle cx="238" cy="130" r="7.5" fill="#E9C767" opacity="0.15"/>
-          </g>
-          <!-- dot 3 — inner ring CCW -->
-          <g style="animation:ftr-orbit2 16s linear infinite;transform-origin:130px 130px">
-            <circle cx="225" cy="130" r="4" fill="#FAF8F4" opacity="0.6"/>
-            <circle cx="225" cy="130" r="7" fill="#FAF8F4" opacity="0.12"/>
-          </g>
-          <!-- dot 4 — inner ring offset 120° -->
-          <g style="animation:ftr-orbit2 16s linear infinite -5.3s;transform-origin:130px 130px">
-            <circle cx="225" cy="130" r="3.5" fill="#B9975B" opacity="0.55"/>
-          </g>
-
-          <!-- ── Container ship icon at bottom ── -->
-          <g style="animation:ftr-ship 8s ease-in-out infinite;transform-origin:130px 216px">
-            <rect x="106" y="212" width="48" height="9" rx="2.5" fill="rgba(185,151,91,.7)"/>
-            <rect x="111" y="206" width="11" height="7" rx="1.5" fill="rgba(185,151,91,.5)"/>
-            <rect x="126" y="204" width="14" height="9" rx="1.5" fill="rgba(185,151,91,.55)"/>
-            <rect x="143" y="207" width="9"  height="6" rx="1.5" fill="rgba(185,151,91,.45)"/>
-            <!-- hull bottom -->
-            <path d="M104,221 Q130,228 156,221" fill="rgba(185,151,91,.35)" stroke="rgba(185,151,91,.4)" stroke-width=".8"/>
-            <!-- wake lines -->
-            <path d="M90,224 Q110,222 130,224 Q150,226 170,224" fill="none" stroke="rgba(255,255,255,.12)" stroke-width=".8" stroke-linecap="round"/>
-            <path d="M94,227 Q118,225 130,227 Q142,229 166,227" fill="none" stroke="rgba(255,255,255,.07)" stroke-width=".8" stroke-linecap="round"/>
-          </g>
-
-          <!-- ── Floating stat chips (rendered by JS) ── -->
-          <g id="globeChip1" style="animation:ftr-float1 5s ease-in-out infinite">
-            <rect x="162" y="52" width="100" height="28" rx="8" fill="rgba(14,30,24,.85)" stroke="rgba(185,151,91,.4)" stroke-width="1"/>
-            <circle cx="176" cy="66" r="4.5" fill="#B9975B" opacity=".9"/>
-            <text id="globeChip1Text" x="185" y="70" font-size="10" font-family="Inter,sans-serif" font-weight="600" fill="#FAF8F4" opacity=".9">20+ Countries</text>
-          </g>
-          <!-- chip bottom-left -->
-          <g id="globeChip2" style="animation:ftr-float2 6s ease-in-out infinite">
-            <rect x="16" y="158" width="100" height="26" rx="8" fill="rgba(14,30,24,.85)" stroke="rgba(185,151,91,.3)" stroke-width="1"/>
-            <text x="30" y="175" font-size="9" font-family="Inter,sans-serif" font-weight="700" fill="#B9975B">✓</text>
-            <text id="globeChip2Text" x="41" y="175" font-size="9.5" font-family="Inter,sans-serif" font-weight="600" fill="#FAF8F4" opacity=".85">IEC Certified</text>
-          </g>
-          <!-- chip bottom-right -->
-          <g id="globeChip3" style="animation:ftr-float1 7s ease-in-out infinite -2s">
-            <rect x="162" y="166" width="90" height="26" rx="8" fill="rgba(14,30,24,.85)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-            <text id="globeChip3Text" x="173" y="183" font-size="9.5" font-family="Inter,sans-serif" font-weight="600" fill="#E9C767" opacity=".9">🚢 480+ / Year</text>
-          </g>
-        </svg>
-
-        <!-- pulse ring behind globe -->
-        <div class="absolute w-[148px] h-[148px] rounded-full border border-clay/20"
-             style="animation:ftr-pulse-ring 3s ease-out infinite"></div>
-        <div class="absolute w-[148px] h-[148px] rounded-full border border-clay/10"
-             style="animation:ftr-pulse-ring 3s ease-out infinite 1.5s"></div>
-      </div>
-
-    </div>
-
-    <!-- ── BOTTOM ROW: Contact + Certifications ── -->
-    <div class="grid md:grid-cols-[1.1fr_1fr] gap-10 pt-12">
 
       <!-- Contact -->
       <div>
         <p id="footContactLabel" class="text-[11px] font-bold uppercase tracking-widest text-clay mb-4"></p>
         <ul class="grid gap-3 text-[13.5px]" id="footContact"></ul>
-        <!-- Quick CTA -->
         <a id="footWa" href="#" target="_blank"
           class="mt-5 inline-flex items-center gap-2.5 bg-[#1FA855]/15 hover:bg-[#1FA855]/25 border border-[#1FA855]/30 text-[#4ADE80] rounded-xl px-4 py-2.5 text-[13px] font-medium transition">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2z"/></svg>
-          WhatsApp a quick enquiry
+          <span id="footWaLabel"></span>
         </a>
       </div>
 
-      <!-- Certifications compact grid -->
+      <!-- Certifications -->
       <div>
         <p id="footCertsLabel" class="text-[11px] font-bold uppercase tracking-widest text-clay mb-4"></p>
         <div id="footCerts"></div>
-        <!-- IEC + GST prominent badges -->
-        <div class="mt-4 flex flex-wrap gap-2" id="footBadges"></div>
+        <div class="mt-4 flex flex-col gap-2" id="footBadges"></div>
       </div>
     </div>
 
     <!-- ── BOTTOM BAR ── -->
-    <div class="mt-12 pt-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] text-paper/40">
+    <div class="mt-8 pt-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] text-paper/40">
       <p>© <span id="year"></span> <span id="footerCopyright"></span></p>
       <p class="flex gap-5">
         <a id="footerPrivacyLink" href="#" class="hover:text-paper/70 transition"></a>
@@ -1426,9 +1358,9 @@ function renderAll(){
   $('#footContactLabel').textContent = sf.contactLabel || 'Get In Touch';
   $('#footCertsLabel').textContent   = sf.certsLabel   || 'Certifications & Compliance';
   const chips = s.globeChips || [];
-  if(chips[0]) { const el=$('#globeChip1Text'); if(el) el.textContent=chips[0].text||'20+ Countries'; }
-  if(chips[1]) { const el=$('#globeChip2Text'); if(el) el.textContent=chips[1].text||'IEC Certified'; }
-  if(chips[2]) { const el=$('#globeChip3Text'); if(el) el.textContent=chips[2].text||'480+ / Year'; }
+  if(chips[0]){ const el=$('#globeChip1Text'); if(el) el.textContent = chips[0].text || '20+ Countries'; }
+  if(chips[1]){ const el=$('#globeChip2Text'); if(el) el.textContent = chips[1].text || 'IEC Certified'; }
+  if(chips[2]){ const el=$('#globeChip3Text'); if(el) el.textContent = chips[2].text || '480+ / Year'; }
 
   /* ── Footer bottom bar ── */
   $('#year').textContent = new Date().getFullYear();
@@ -1758,6 +1690,7 @@ function renderFooter(){
 
   /* ── WhatsApp footer CTA ── */
   $('#footWa').href = waLink(`Hello ${c.name}, I'd like to make a trade enquiry.`);
+  const footWaLbl = $('#footWaLabel'); if(footWaLbl) footWaLbl.textContent = sf.waQuickLabel || 'WhatsApp a quick enquiry';
 
   /* ── Certifications — compact 2-col grid ── */
   const certList = (sf.certifications || []);
