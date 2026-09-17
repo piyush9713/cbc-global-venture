@@ -3070,7 +3070,7 @@
     function formatBanner(text) {
       if (!text) return '';
       if (text.includes('**')) {
-        return esc(text).replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-ink">$1</strong>');
+        return esc(text).replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-pine">$1</strong>');
       }
       return esc(text).replace(/Need private labelling or custom specs\?/gi, '<strong class="font-semibold text-ink">Need private labelling or custom specs?</strong>');
     }
