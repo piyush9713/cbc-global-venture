@@ -2181,7 +2181,7 @@
   <!-- TOAST -->
   <div id="toast"
     class="fixed bottom-6 left-1/2 -translate-x-1/2 translate-y-24 opacity-0 transition-all duration-500 z-[70] bg-pine text-paper rounded-2xl px-6 py-4 shadow-lift flex items-center gap-3 max-w-[92vw]">
-    <span class="w-8 h-8 rounded-full bg-emerald-400/20 text-emerald-300 grid place-items-center shrink-0">✓</span>
+    <span id="toastIcon" class="w-8 h-8 rounded-full bg-emerald-400/20 text-emerald-300 grid place-items-center shrink-0 font-bold text-sm">✓</span>
     <p id="toastMsg" class="text-[14px] font-medium">Done</p>
   </div>
 
@@ -2273,6 +2273,7 @@
   "company": {
     "name": "CBC Global Venture",
     "tagline": "Trade Beyond Borders",
+    "topbarText": "IEC Certified Exporter • Serving 20+ Countries • Response within 24 hours",
     "logoImage": "",
     "logoText": "C",
     "logoAlt": "CBC Global Venture",
@@ -3040,11 +3041,34 @@
     const $$ = s => document.querySelectorAll(s);
     const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 
-    function toast(msg) {
-      $('#toastMsg').textContent = msg;
+    function toast(msg, isError = false) {
+      const msgEl = $('#toastMsg');
+      const iconEl = $('#toastIcon');
       const t = $('#toast');
+      if (!t || !msgEl) return;
+
+      msgEl.textContent = msg;
+
+      const isErr = isError ||
+        msg.startsWith('✕') ||
+        /error|incorrect|fail|invalid|denied/i.test(msg);
+
+      if (iconEl) {
+        if (isErr) {
+          iconEl.textContent = '✕';
+          iconEl.className = 'w-8 h-8 rounded-full bg-rose-500/25 text-rose-300 grid place-items-center shrink-0 font-bold text-sm';
+        } else if (msg.includes('🛠️') || /dev mode/i.test(msg)) {
+          iconEl.textContent = '🛠️';
+          iconEl.className = 'w-8 h-8 rounded-full bg-amber-400/20 text-amber-300 grid place-items-center shrink-0 text-sm';
+        } else {
+          iconEl.textContent = '✓';
+          iconEl.className = 'w-8 h-8 rounded-full bg-emerald-400/20 text-emerald-300 grid place-items-center shrink-0 font-bold text-sm';
+        }
+      }
+
       t.classList.add('toast-show');
-      setTimeout(() => t.classList.remove('toast-show'), 3200);
+      if (window._toastTimer) clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => t.classList.remove('toast-show'), 3500);
     }
     function waLink(text) {
       return `https://wa.me/${SITE_DATA.company.whatsapp}?text=${encodeURIComponent(text)}`;
@@ -3071,9 +3095,9 @@
       const n = SITE_DATA.nav;
 
       /* ── SEO / meta ── */
-      const seo = SITE_DATA.seo || {};
-      document.title = seo.title || `${c.name} — Import Export Company India`;
-      const setMeta = (sel, val) => { const el = document.querySelector(sel); if (el && val) el.setAttribute('content', val); };
+      const seo = SITE_DATA.seo;
+      document.title = seo.title;
+      const setMeta = (sel, val) => { const el = document.querySelector(sel); if (el && val !== undefined) el.setAttribute('content', val); };
       setMeta('meta[name="description"]', seo.description);
       setMeta('meta[name="keywords"]', seo.keywords);
       setMeta('meta[name="author"]', c.name);
@@ -3089,7 +3113,7 @@
       const canon = document.querySelector('link[rel="canonical"]'); if (canon && seo.canonical) canon.href = seo.canonical;
 
       /* ── Favicon ── */
-      const favUrl = c.favicon || (SITE_DATA.seo && SITE_DATA.seo.favicon) || '/favicon.svg';
+      const favUrl = c.favicon;
       if (favUrl) {
         const fSvg = $('#faviconSvg'); if (fSvg) fSvg.href = favUrl;
         const fIco = $('#faviconIco'); if (fIco) fIco.href = favUrl;
@@ -3097,7 +3121,7 @@
       }
 
       /* ── Top bar ── */
-      $('#topbarText').textContent = `IEC Certified Exporter • Since ${c.established} • Serving 20+ Countries`;
+      $('#topbarText').textContent = c.topbarText;
       $('#topEmail').textContent = c.email; $('#topEmail').href = `mailto:${c.email}`;
       $('#topPhone').textContent = c.phone; $('#topPhone').href = `tel:${c.phone.replace(/\s/g, '')}`;
       const topItems = ["IEC Certified Exporter", `Since ${c.established}`, "Serving 20+ Countries", "Response within 24 hours", c.email, c.phone];
@@ -3105,112 +3129,112 @@
       $('#topMarquee').innerHTML = one + one;
 
       /* ── Nav & Brand Logo ── */
-      if ($('#navBrandName')) $('#navBrandName').textContent = c.name || 'CBC Global Venture';
-      if ($('#navBrandTagline')) $('#navBrandTagline').textContent = c.tagline || 'Import • Export • Sourcing';
+      if ($('#navBrandName')) $('#navBrandName').textContent = c.name;
+      if ($('#navBrandTagline')) $('#navBrandTagline').textContent = c.tagline;
       const navMark = $('#navLogoMark');
       if (navMark) {
         if (c.logoImage) {
           navMark.className = 'h-10 max-w-[200px] flex items-center shrink-0';
-          navMark.innerHTML = `<img src="${esc(c.logoImage)}" alt="${esc(c.logoAlt || c.name || 'Logo')}" class="h-10 w-auto max-h-10 object-contain rounded-lg">`;
+          navMark.innerHTML = `<img src="${esc(c.logoImage)}" alt="${esc(c.logoAlt)}" class="h-10 w-auto max-h-10 object-contain rounded-lg">`;
         } else {
-          const lChar = esc(c.logoText || (c.name ? c.name[0] : 'C'));
+          const lChar = esc(c.logoText);
           navMark.className = 'w-10 h-10 rounded-xl bg-pine text-paper grid place-items-center font-display text-lg relative overflow-hidden shrink-0';
           navMark.innerHTML = `${lChar}<span class="absolute -bottom-1 -right-1 w-5 h-5 bg-clay/90 rounded-tl-xl"></span>`;
         }
       }
-      $('#desktopNav').innerHTML = (n.links || []).map(l =>
+      $('#desktopNav').innerHTML = n.links.map(l =>
         `<a href="${esc(l.href)}" class="nav-link hover:text-pine" data-nav="${esc(l.id)}">${esc(l.label)}</a>`
       ).join('');
-      if ($('#navEditLabel')) $('#navEditLabel').textContent = n.editBtnLabel || 'Edit Content';
-      $('#navQuoteLabel').textContent = n.quoteBtnLabel || 'Get Quote →';
+      if ($('#navEditLabel')) $('#navEditLabel').textContent = n.editBtnLabel;
+      $('#navQuoteLabel').textContent = n.quoteBtnLabel;
       $('#navQuoteBtn').href = '#contact';
-      const lastMobile = (n.mobileLinks || []).length - 1;
-      $('#mobileMenuLinks').innerHTML = (n.mobileLinks || []).map((l, i) =>
+      const lastMobile = n.mobileLinks.length - 1;
+      $('#mobileMenuLinks').innerHTML = n.mobileLinks.map((l, i) =>
         `<a href="${esc(l.href)}" class="py-3 ${i < lastMobile ? 'border-b border-stoneLine/70' : ''}">${esc(l.label)}</a>`
       ).join('') + (n.mobileCTA ? `<a href="${esc(n.mobileCTA.href)}" class="mt-2 bg-pine text-paper text-center rounded-full py-3">${esc(n.mobileCTA.label)}</a>` : '');
 
       /* ── Hero ── */
-      $('#heroSinceBadge').textContent = c.heroSinceBadge || '● SINCE 2016';
+      $('#heroSinceBadge').textContent = c.heroSinceBadge;
       $('#heroBadge').textContent = c.heroBadge;
       $('#heroTitleA').textContent = c.heroTitleA;
       $('#heroTitleB').textContent = c.heroTitleB;
       $('#heroSubtitle').textContent = c.heroSubtitle;
       // CTAs
       $('#heroCTAs').innerHTML = `
-    <a href="${esc(c.heroCTA1Href || '#products')}" class="btn-primary inline-flex justify-center items-center gap-2 bg-pine text-paper rounded-full px-8 py-4 text-[15px] font-medium shadow-soft"><span>${esc(c.heroCTA1Label || 'Explore Products →')}</span></a>
-    <a href="${esc(c.heroCTA2Href || '#contact')}" class="inline-flex justify-center items-center gap-2 bg-white border border-ink/15 rounded-full px-8 py-4 text-[15px] font-medium hover:border-pine hover:text-pine transition">${esc(c.heroCTA2Label || 'Contact Us')}</a>`;
+    <a href="${esc(c.heroCTA1Href)}" class="btn-primary inline-flex justify-center items-center gap-2 bg-pine text-paper rounded-full px-8 py-4 text-[15px] font-medium shadow-soft"><span>${esc(c.heroCTA1Label)}</span></a>
+    <a href="${esc(c.heroCTA2Href)}" class="inline-flex justify-center items-center gap-2 bg-white border border-ink/15 rounded-full px-8 py-4 text-[15px] font-medium hover:border-pine hover:text-pine transition">${esc(c.heroCTA2Label)}</a>`;
       // Buyer avatars
-      const imgs = SITE_DATA.heroBuyerImages || [];
+      const imgs = SITE_DATA.heroBuyerImages;
       $('#heroBuyerAvatars').innerHTML = imgs.map(src => `<img src="${esc(src)}" class="w-10 h-10 rounded-full border-2 border-paper object-cover" alt="buyer" loading="lazy">`).join('') +
-        `<span class="w-10 h-10 rounded-full border-2 border-paper bg-pine text-paper text-[11px] font-semibold grid place-items-center">${esc(SITE_DATA.heroBuyerCount || '200+')}</span>`;
-      $('#heroBuyerRating').textContent = SITE_DATA.heroBuyerRating || '4.9/5 Buyer Rating';
-      $('#heroBuyerLabel').textContent = SITE_DATA.heroBuyerLabel || 'Trusted by importers, wholesalers & distributors';
+        `<span class="w-10 h-10 rounded-full border-2 border-paper bg-pine text-paper text-[11px] font-semibold grid place-items-center">${esc(SITE_DATA.heroBuyerCount)}</span>`;
+      $('#heroBuyerRating').textContent = SITE_DATA.heroBuyerRating;
+      $('#heroBuyerLabel').textContent = SITE_DATA.heroBuyerLabel;
       // Stats
-      $('#heroStats').innerHTML = (SITE_DATA.heroStats || []).map(st => `
+      $('#heroStats').innerHTML = SITE_DATA.heroStats.map(st => `
     <div>
-      <p class="font-display text-[28px] md:text-[34px] text-pine leading-none"><span data-count="${st.count}">0</span>${esc(st.suffix || '+')}</p>
+      <p class="font-display text-[28px] md:text-[34px] text-pine leading-none"><span data-count="${st.count}">0</span>${esc(st.suffix)}</p>
       <p class="text-[12px] uppercase tracking-widest text-muted mt-1.5">${esc(st.label)}</p>
     </div>`).join('');
       // Image + overlays
-      $('#heroImage').src = c.heroImage; $('#heroImage').alt = c.heroImageAlt || '';
-      $('#heroOverlayQCText').textContent = c.heroOverlayQC || 'QC Passed • SGS Tested';
-      $('#heroOverlayQCSub').textContent = c.heroOverlayQCSub || 'Lab report attached';
-      $('#heroShipRoute').textContent = c.heroOverlayShipRoute || '';
-      $('#heroShipText').textContent = c.heroOverlayShipText || '';
-      $('#heroOriginLabel').textContent = c.heroOverlayOriginLabel || 'Origin';
-      $('#heroOriginText').textContent = c.heroOverlayOriginText || '';
+      $('#heroImage').src = c.heroImage; $('#heroImage').alt = c.heroImageAlt;
+      $('#heroOverlayQCText').textContent = c.heroOverlayQC;
+      $('#heroOverlayQCSub').textContent = c.heroOverlayQCSub;
+      $('#heroShipRoute').textContent = c.heroOverlayShipRoute;
+      $('#heroShipText').textContent = c.heroOverlayShipText;
+      $('#heroOriginLabel').textContent = c.heroOverlayOriginLabel;
+      $('#heroOriginText').textContent = c.heroOverlayOriginText;
 
       /* ── Marquee ── */
       $('#marquee').innerHTML = [...SITE_DATA.marquee, ...SITE_DATA.marquee].map(t => `<span class="px-8 flex items-center gap-8 whitespace-nowrap">${esc(t)} <span class="text-clay">✦</span></span>`).join('');
 
       /* ── About ── */
-      const ai = SITE_DATA.aboutImages || [];
+      const ai = SITE_DATA.aboutImages;
       $('#aboutImages').innerHTML = `
     <div class="grid grid-cols-[1fr_.85fr] gap-4">
-      ${ai[0] ? `<img src="${esc(ai[0].src)}" alt="${esc(ai[0].alt)}" class="rounded-3xl h-[320px] md:h-[440px] w-full object-cover shadow-card parallax-img" data-speed="${esc(ai[0].speed || '0.06')}" loading="lazy">` : ''}
+      ${ai[0] ? `<img src="${esc(ai[0].src)}" alt="${esc(ai[0].alt)}" class="rounded-3xl h-[320px] md:h-[440px] w-full object-cover shadow-card parallax-img" data-speed="${esc(ai[0].speed)}" loading="lazy">` : ''}
       <div class="space-y-4 pt-10">
-        ${ai[1] ? `<img src="${esc(ai[1].src)}" alt="${esc(ai[1].alt)}" class="rounded-3xl h-[150px] md:h-[210px] w-full object-cover shadow-card parallax-img" data-speed="${esc(ai[1].speed || '0.1')}" loading="lazy">` : ''}
+        ${ai[1] ? `<img src="${esc(ai[1].src)}" alt="${esc(ai[1].alt)}" class="rounded-3xl h-[150px] md:h-[210px] w-full object-cover shadow-card parallax-img" data-speed="${esc(ai[1].speed)}" loading="lazy">` : ''}
         ${ai[2] ? `<img src="${esc(ai[2].src)}" alt="${esc(ai[2].alt)}" class="rounded-3xl h-[150px] md:h-[210px] w-full object-cover shadow-card" loading="lazy">` : ''}
       </div>
     </div>
     <div class="absolute -bottom-6 left-6 bg-pine text-paper rounded-2xl px-6 py-5 shadow-lift">
-      <p class="font-display text-[36px] leading-none">${esc(c.aboutYears || '9')}<span class="text-clay">+</span></p>
-      <p class="text-[12px] tracking-widest uppercase opacity-70 mt-1">${esc(c.aboutYearsLabel || 'Years of Export Excellence').replace('\n', '<br>')}</p>
+      <p class="font-display text-[36px] leading-none">${esc(c.aboutYears)}<span class="text-clay">+</span></p>
+      <p class="text-[12px] tracking-widest uppercase opacity-70 mt-1">${esc(c.aboutYearsLabel).replace('\n', '<br>')}</p>
     </div>`;
-      $('#aboutEyebrow').innerHTML = `<span class="w-8 h-px bg-clay inline-block"></span> ${esc((s.about || {}).eyebrow || '01 — About Us')}`;
-      const ah = c.aboutHeading || 'A bridge between';
-      const ahe = c.aboutHeadingEm || 'Indian farms';
-      const ahend = c.aboutHeadingEnd || 'and global buyers.';
+      $('#aboutEyebrow').innerHTML = `<span class="w-8 h-px bg-clay inline-block"></span> ${esc(s.about.eyebrow)}`;
+      const ah = c.aboutHeading;
+      const ahe = c.aboutHeadingEm;
+      const ahend = c.aboutHeadingEnd;
       $('#aboutHeading').innerHTML = `${esc(ah)} <em class="italic font-normal text-ink">${esc(ahe)}</em> ${esc(ahend)}`;
       $('#aboutText').textContent = c.aboutText;
       $('#aboutChecks').innerHTML = SITE_DATA.aboutChecks.map(t => `<div class="flex items-start gap-2.5 bg-white border border-stoneLine rounded-xl px-3.5 py-3"><span class="w-5 h-5 rounded-full bg-pine text-paper grid place-items-center text-[11px] shrink-0 mt-0.5">✓</span><span class="text-ink/75">${esc(t)}</span></div>`).join('');
       $('#aboutCTA').innerHTML = `
-    <a href="#contact" class="btn-primary bg-pine text-paper rounded-full px-7 py-3.5 text-[14px] font-medium"><span>${esc(c.aboutCTALabel || 'Work With Us →')}</span></a>
+    <a href="#contact" class="btn-primary bg-pine text-paper rounded-full px-7 py-3.5 text-[14px] font-medium"><span>${esc(c.aboutCTALabel)}</span></a>
     <div class="flex items-center gap-3">
-      <span class="w-11 h-11 rounded-full bg-cream grid place-items-center font-display italic text-pine text-lg">${esc((c.founder || 'C')[0])}</span>
-      <div class="text-[13px]"><p class="font-semibold">${esc(c.founder)}</p><p class="text-muted">${esc(c.founderRole || 'Founder & Managing Partner')}</p></div>
+      <span class="w-11 h-11 rounded-full bg-cream grid place-items-center font-display italic text-pine text-lg">${esc(c.founder[0])}</span>
+      <div class="text-[13px]"><p class="font-semibold">${esc(c.founder)}</p><p class="text-muted">${esc(c.founderRole)}</p></div>
     </div>`;
 
       /* ── Products section header + banner ── */
-      const sp = s.products || {};
+      const sp = s.products;
       $('#productsHeader').innerHTML = `
-    <p class="reveal eyebrow text-clayDark flex items-center justify-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> ${esc(sp.eyebrow || '02 — Our Products')} <span class="w-8 h-px bg-clay inline-block"></span></p>
-    <h2 class="reveal font-display font-light text-[34px] md:text-[46px] leading-tight mt-4 text-pine">${esc(sp.heading || 'Export-ready product')} <em class="italic text-ink">${esc(sp.headingEm || 'portfolio.')}</em></h2>
-    <p class="reveal mt-4 text-ink/60 font-light text-[16px]">${esc(sp.subtitle || '')}</p>`;
+    <p class="reveal eyebrow text-clayDark flex items-center justify-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> ${esc(sp.eyebrow)} <span class="w-8 h-px bg-clay inline-block"></span></p>
+    <h2 class="reveal font-display font-light text-[34px] md:text-[46px] leading-tight mt-4 text-pine">${esc(sp.heading)} <em class="italic text-ink">${esc(sp.headingEm)}</em></h2>
+    <p class="reveal mt-4 text-ink/60 font-light text-[16px]">${esc(sp.subtitle)}</p>`;
       $('#productsBanner').innerHTML = `
-    <p class="text-[14px] text-ink/70">${esc(sp.bannerText || '')}</p>
-    <a href="${esc(sp.bannerCTAHref || '#contact')}" class="shrink-0 bg-pine text-paper text-[13px] font-medium rounded-full px-6 py-3 hover:bg-pineLight transition">${esc(sp.bannerCTA || 'Request Custom Quote')}</a>`;
+    <p class="text-[14px] text-ink/70">${esc(sp.bannerText)}</p>
+    <a href="${esc(sp.bannerCTAHref)}" class="shrink-0 bg-pine text-paper text-[13px] font-medium rounded-full px-6 py-3 hover:bg-pineLight transition">${esc(sp.bannerCTA)}</a>`;
 
       /* ── Quality strip ── */
-      const qs = s.qualityStrip || {};
+      const qs = s.qualityStrip;
       const qIcons = [
         '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
         '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h10M7 17h6"/>',
         '<path d="M21 8 12 3 3 8v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/>'
       ];
-      const qItems = (qs.items || []);
+      const qItems = qs.items;
       $('#qualityStrip').innerHTML =
-        `<div class="reveal"><p class="eyebrow text-clay">${esc(qs.eyebrow || 'Certified Quality')}</p><p class="font-display text-[26px] mt-2 font-light">${esc(qs.heading || 'Tested. Certified.')}<br><em class="italic">${esc(qs.headingEm || 'Trusted.')}</em></p></div>` +
+        `<div class="reveal"><p class="eyebrow text-clay">${esc(qs.eyebrow)}</p><p class="font-display text-[26px] mt-2 font-light">${esc(qs.heading)}<br><em class="italic">${esc(qs.headingEm)}</em></p></div>` +
         qItems.map((item, i) => `
       <div class="reveal reveal-d${i + 1} flex gap-4">
         <span class="w-11 h-11 shrink-0 rounded-xl bg-white/10 grid place-items-center text-clay"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${qIcons[i] || qIcons[0]}</svg></span>
@@ -3218,64 +3242,64 @@
       </div>`).join('');
 
       /* ── Why header ── */
-      const sw = s.why || {};
+      const sw = s.why;
       $('#whyHeader').innerHTML = `
-    <p class="reveal eyebrow text-clayDark justify-center flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> ${esc(sw.eyebrow || '03 — Why Choose Us')} <span class="w-8 h-px bg-clay inline-block"></span></p>
-    <h2 class="reveal font-display font-light text-[34px] md:text-[46px] mt-4 text-pine">${esc(sw.heading || 'The partner buyers')} <em class="italic text-ink">${esc(sw.headingEm || 'reorder from.')}</em></h2>`;
+    <p class="reveal eyebrow text-clayDark justify-center flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> ${esc(sw.eyebrow)} <span class="w-8 h-px bg-clay inline-block"></span></p>
+    <h2 class="reveal font-display font-light text-[34px] md:text-[46px] mt-4 text-pine">${esc(sw.heading)} <em class="italic text-ink">${esc(sw.headingEm)}</em></h2>`;
 
       /* ── Process header + CTA ── */
-      const sc = s.process || {};
+      const sc = s.process;
       $('#processHeader').innerHTML = `
     <div>
-      <p class="reveal eyebrow text-clayDark flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> ${esc(sc.eyebrow || '04 — Import & Export Process')}</p>
-      <h2 class="reveal font-display font-light text-[34px] md:text-[46px] mt-4 text-pine">${esc(sc.heading || 'From enquiry to delivery')} <em class="italic text-ink">${esc(sc.headingEm || 'in 5 steps.')}</em></h2>
+      <p class="reveal eyebrow text-clayDark flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> ${esc(sc.eyebrow)}</p>
+      <h2 class="reveal font-display font-light text-[34px] md:text-[46px] mt-4 text-pine">${esc(sc.heading)} <em class="italic text-ink">${esc(sc.headingEm)}</em></h2>
     </div>
-    <p class="reveal text-[14px] text-muted max-w-sm">${esc(sc.subtitle || '')}</p>`;
+    <p class="reveal text-[14px] text-muted max-w-sm">${esc(sc.subtitle)}</p>`;
       $('#processCTA').innerHTML = `
     <div>
-      <p class="font-display text-[24px] md:text-[30px] font-light">${esc(sc.ctaHeading || 'Get your CIF quote')} <em class="italic text-clay">${esc(sc.ctaHeadingEm || 'within 24 hours.')}</em></p>
-      <p class="text-paper/60 text-[14px] mt-2">${esc(sc.ctaSub || '')}</p>
+      <p class="font-display text-[24px] md:text-[30px] font-light">${esc(sc.ctaHeading)} <em class="italic text-clay">${esc(sc.ctaHeadingEm)}</em></p>
+      <p class="text-paper/60 text-[14px] mt-2">${esc(sc.ctaSub)}</p>
     </div>
     <div class="flex flex-col sm:flex-row gap-3 shrink-0">
-      <a href="#contact" class="bg-paper text-pine rounded-full px-7 py-3.5 text-[14px] font-semibold text-center hover:bg-white transition">${esc(sc.ctaBtn1 || 'Start Enquiry')}</a>
-      <a id="processWhatsapp" href="#" target="_blank" class="border border-paper/30 rounded-full px-7 py-3.5 text-[14px] font-medium text-center hover:bg-white/10 transition">${esc(sc.ctaBtn2 || 'WhatsApp Us')}</a>
+      <a href="#contact" class="bg-paper text-pine rounded-full px-7 py-3.5 text-[14px] font-semibold text-center hover:bg-white transition">${esc(sc.ctaBtn1)}</a>
+      <a id="processWhatsapp" href="#" target="_blank" class="border border-paper/30 rounded-full px-7 py-3.5 text-[14px] font-medium text-center hover:bg-white/10 transition">${esc(sc.ctaBtn2)}</a>
     </div>`;
 
       /* ── Markets header + map stats ── */
-      const sm = s.markets || {};
+      const sm = s.markets;
       $('#marketsHeader').innerHTML = `
-    <p class="reveal eyebrow text-clayDark flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> ${esc(sm.eyebrow || '05 — Global Markets')}</p>
-    <h2 class="reveal font-display font-light text-[34px] md:text-[46px] mt-4 text-pine leading-tight">${esc(sm.heading || 'Serving buyers')} <em class="italic text-ink">${esc(sm.headingEm || 'across 4 continents.')}</em></h2>
-    <p class="reveal mt-4 text-ink/60 font-light">${esc(sm.subtitle || '')}</p>`;
-      const ports = (sm.mapPortsRight || 'Nhava Sheva • Mundra\nTuticorin • Chennai').split('\n');
+    <p class="reveal eyebrow text-clayDark flex items-center gap-3"><span class="w-8 h-px bg-clay inline-block"></span> ${esc(sm.eyebrow)}</p>
+    <h2 class="reveal font-display font-light text-[34px] md:text-[46px] mt-4 text-pine leading-tight">${esc(sm.heading)} <em class="italic text-ink">${esc(sm.headingEm)}</em></h2>
+    <p class="reveal mt-4 text-ink/60 font-light">${esc(sm.subtitle)}</p>`;
+      const ports = sm.mapPortsRight.split('\n');
       $('#marketsMapStats').innerHTML = `
-    <div><p class="font-display text-[28px] leading-none">${esc(sm.mapCountLabel || '20+ Countries')}</p><p class="text-[12px] uppercase tracking-widest opacity-60 mt-1">${esc(sm.mapCountSub || 'Active trade lanes')}</p></div>
+    <div><p class="font-display text-[28px] leading-none">${esc(sm.mapCountLabel)}</p><p class="text-[12px] uppercase tracking-widest opacity-60 mt-1">${esc(sm.mapCountSub)}</p></div>
     <div class="text-right text-[12px] opacity-80 leading-relaxed">${ports.map(l => esc(l)).join('<br>')}</div>`;
-      $('#testiEyebrow').textContent = sm.testiEyebrow || 'Buyer Stories';
+      $('#testiEyebrow').textContent = sm.testiEyebrow;
 
       /* ── FAQ sidebar ── */
       $('#faqSidebar').innerHTML = `
-    <p class="reveal eyebrow text-clayDark">${esc(sm.faqEyebrow || 'Common Questions')}</p>
-    <h3 class="reveal font-display font-light text-[30px] md:text-[36px] mt-3 text-pine">${esc(sm.faqHeading || 'Everything importers')} <em class="italic text-ink">${esc(sm.faqHeadingEm || 'ask us.')}</em></h3>
-    <p class="reveal text-ink/60 text-[14px] mt-3">${esc(sm.faqSubtext || '')}</p>
+    <p class="reveal eyebrow text-clayDark">${esc(sm.faqEyebrow)}</p>
+    <h3 class="reveal font-display font-light text-[30px] md:text-[36px] mt-3 text-pine">${esc(sm.faqHeading)} <em class="italic text-ink">${esc(sm.faqHeadingEm)}</em></h3>
+    <p class="reveal text-ink/60 text-[14px] mt-3">${esc(sm.faqSubtext)}</p>
     <a id="faqWhatsapp" href="${waLink(`Hello ${c.name}, I have a question about your export process.`)}" target="_blank"
        class="reveal mt-5 inline-flex items-center gap-2 bg-[#1FA855] text-white rounded-full px-6 py-3 text-[14px] font-medium shadow-card hover:brightness-105 transition">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5s.8 1.9.8 2c.1.1.1.3 0 .5l-.4.5c-.2.2-.3.4-.1.7.2.3.9 1.5 2 2.4 1.4 1.2 2.5 1.6 2.9 1.8.3.2.5.1.7-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4 0 .1 0 .7-.4 1.6z"/></svg>
-      ${esc(sm.faqWALabel || 'Chat on WhatsApp')}
+      ${esc(sm.faqWALabel)}
     </a>`;
 
       /* ── Contact section ── */
-      const sct = s.contact || {};
-      $('#contactEyebrow').innerHTML = `<span class="w-8 h-px bg-clay inline-block"></span> ${esc(sct.eyebrow || '06 — Contact & Enquiry')}`;
-      $('#contactHeading').innerHTML = `${esc(sct.heading || 'Let\'s discuss')} <em class="italic text-clay">${esc(sct.headingEm || 'your requirement.')}</em>`;
-      $('#contactSubtitle').textContent = sct.subtitle || '';
-      $('#contactWAHeading').textContent = sct.waHeading || 'Chat on WhatsApp';
-      $('#contactWASub').textContent = sct.waSub || 'Fastest way to get pricing & availability';
-      $('#formTitle').textContent = sct.formTitle || 'Request Export Quote';
-      $('#formBadge').textContent = sct.formBadge || '24H RESPONSE';
-      $('#formSubmitBtn').textContent = sct.submitLabel || 'Send Enquiry →';
-      $('#formWABtn').textContent = sct.waLabel || 'Send via WhatsApp';
-      $('#formPrivacy').textContent = sct.formPrivacy || 'By submitting, you agree to be contacted about your enquiry. We never share buyer data.';
+      const sct = s.contact;
+      $('#contactEyebrow').innerHTML = `<span class="w-8 h-px bg-clay inline-block"></span> ${esc(sct.eyebrow)}`;
+      $('#contactHeading').innerHTML = `${esc(sct.heading)} <em class="italic text-clay">${esc(sct.headingEm)}</em>`;
+      $('#contactSubtitle').textContent = sct.subtitle;
+      $('#contactWAHeading').textContent = sct.waHeading;
+      $('#contactWASub').textContent = sct.waSub;
+      $('#formTitle').textContent = sct.formTitle;
+      $('#formBadge').textContent = sct.formBadge;
+      $('#formSubmitBtn').textContent = sct.submitLabel;
+      $('#formWABtn').textContent = sct.waLabel;
+      $('#formPrivacy').textContent = sct.formPrivacy;
 
       /* ── WhatsApp links ── */
       $('#processWhatsapp') && ($('#processWhatsapp').href = waLink(`Hello ${c.name}, I want a CIF quote for agro commodities.`));
@@ -3284,30 +3308,30 @@
 
       /* ── Footer brand ── */
       $('#footerBrandName').textContent = c.name;
-      $('#footerBrandTagline').textContent = c.tagline || 'Import • Export • Sourcing';
-      $('#footerAbout').textContent = c.footerAbout || '';
+      $('#footerBrandTagline').textContent = c.tagline;
+      $('#footerAbout').textContent = c.footerAbout;
       const footMark = $('#footLogoMark');
       if (footMark) {
         if (c.logoImage) {
           footMark.className = 'h-11 max-w-[200px] flex items-center shrink-0 p-1 bg-white/10 rounded-xl';
-          footMark.innerHTML = `<img src="${esc(c.logoImage)}" alt="${esc(c.logoAlt || c.name || 'Logo')}" class="h-9 w-auto max-h-9 object-contain">`;
+          footMark.innerHTML = `<img src="${esc(c.logoImage)}" alt="${esc(c.logoAlt)}" class="h-9 w-auto max-h-9 object-contain">`;
         } else {
-          const lChar = esc(c.logoText || (c.name ? c.name[0] : 'C'));
+          const lChar = esc(c.logoText);
           footMark.className = 'w-11 h-11 rounded-xl bg-paper text-pine grid place-items-center font-display text-lg relative overflow-hidden shrink-0';
           footMark.innerHTML = `${lChar}<span class="absolute -bottom-1 -right-1 w-4 h-4 bg-clay/90 rounded-tl-xl"></span>`;
         }
       }
 
       /* ── Footer labels + globe chips ── */
-      const sf = s.footer || {};
-      $('#footContactLabel').textContent = sf.contactLabel || 'Get In Touch';
-      $('#footCertsLabel').textContent = sf.certsLabel || 'Certifications & Compliance';
+      const sf = s.footer;
+      $('#footContactLabel').textContent = sf.contactLabel;
+      $('#footCertsLabel').textContent = sf.certsLabel;
 
       /* ── Footer bottom bar ── */
       $('#year').textContent = new Date().getFullYear();
-      $('#footerCopyright').textContent = c.footerCopyright || `${c.name}. All rights reserved.`;
-      const fpLink = $('#footerPrivacyLink'); if (fpLink) { fpLink.textContent = c.footerPrivacyLabel || 'Privacy Policy'; fpLink.href = c.footerPrivacyHref || '#'; }
-      const ftLink = $('#footerTermsLink'); if (ftLink) { ftLink.textContent = c.footerTermsLabel || 'Terms of Use'; ftLink.href = c.footerTermsHref || '#'; }
+      $('#footerCopyright').textContent = c.footerCopyright;
+      const fpLink = $('#footerPrivacyLink'); if (fpLink) { fpLink.textContent = c.footerPrivacyLabel; fpLink.href = c.footerPrivacyHref; }
+      const ftLink = $('#footerTermsLink'); if (ftLink) { ftLink.textContent = c.footerTermsLabel; ftLink.href = c.footerTermsHref; }
 
       renderContactCards();
       renderProductChips(); renderProducts(); renderWhy(); renderProcess();
@@ -3335,7 +3359,7 @@
 
     /* ============ PRODUCTS ============ */
     function renderProductChips() {
-      const cats = SITE_DATA.productCategories || ['All'];
+      const cats = SITE_DATA.productCategories;
       $('#productChips').innerHTML = cats.map(cat =>
         `<button onclick="setCategory('${esc(cat).replace(/'/g, "\\'")}')" class="pill shrink-0 text-[13px] font-medium border border-stoneLine bg-white rounded-full px-5 py-2.5 ${activeCategory === cat ? 'active' : ''}">${esc(cat)}</button>`
       ).join('');
@@ -3343,7 +3367,7 @@
     function setCategory(c) { activeCategory = c; renderProductChips(); renderProducts(); }
 
     function renderProducts() {
-      const list = (SITE_DATA.products || []).filter(p =>
+      const list = SITE_DATA.products.filter(p =>
         activeCategory === "All" || p.category === activeCategory
       );
       if (!list.length) {
@@ -3352,17 +3376,14 @@
       }
       $('#productGrid').innerHTML = list.map((p, i) => `
     <article class="product-card reveal visible" style="animation:fadeUp .6s ${i * 0.06}s both">
-      <div class="p-media tone-${esc(p.tone || 'green')}">
-        <span class="p-cat">${esc(p.category || '')}</span>
-        <span class="p-emoji" aria-hidden="true">${esc(p.emoji || '📦')}</span>
-        <span class="p-origin">${pinIcon()} ${esc(p.origin || '')}</span>
+      <div class="p-media tone-${esc(p.tone)}">
+        <span class="p-cat">${esc(p.category)}</span>
+        <span class="p-emoji" aria-hidden="true">${esc(p.emoji)}</span>
+        <span class="p-origin">${pinIcon()} ${esc(p.origin)}</span>
       </div>
       <div class="p-5 md:p-6 flex flex-col flex-1">
         <h3 class="font-display text-[20px] leading-snug text-pine">${esc(p.name)}</h3>
         <p class="text-[13.5px] text-ink/60 mt-2 leading-relaxed font-light line-clamp-3">${esc(p.description)}</p>
-        <!-- <ul class="p-specs mt-4">
-          ${(p.specs || []).map(s => `<li><span>${esc(s.label)}</span><strong>${esc(s.value)}</strong></li>`).join('')}
-        </ul> -->
         <div class="mt-5 flex items-center gap-3">
           <button onclick="enquireProduct('${esc(p.id || p.name).replace(/'/g, "\\'")}')" class="flex-1 bg-pine text-paper rounded-full py-3 text-[14px] font-semibold hover:bg-pineLight transition flex items-center justify-center gap-2">
             Request Quote →
@@ -3376,7 +3397,7 @@
       const p = SITE_DATA.products.find(x => x.id === id) || SITE_DATA.products.find(x => x.name === id);
       if (p) {
         // Set the product-interest custom select to the product's category
-        const cat = p.category || '';
+        const cat = p.category;
         if (cat && _cselState['formProduct'] !== undefined) {
           const em = catEmoji(cat);
           _cselState['formProduct'] = { value: cat, label: cat, iso: '', emoji: em };
@@ -3419,7 +3440,7 @@
 
     /* ============ MARKETS (region cards with flag chips) ============ */
     function renderMarketRegions() {
-      const regions = SITE_DATA.marketRegions || [];
+      const regions = SITE_DATA.marketRegions;
       $('#regionGrid').innerHTML = regions.map((r, i) => `
     <div class="region-card reveal ${i % 2 === 1 ? 'reveal-d1' : ''} bg-white border border-stoneLine rounded-2xl p-5">
       <div class="flex items-center gap-3 mb-4">
@@ -3430,7 +3451,7 @@
         </div>
       </div>
       <div class="flex flex-wrap gap-1.5">
-        ${r.countries.map(c => `<span class="country-chip"><span class="fi fi-${c.iso || ''}" style="width:1.1em;height:.83em;border-radius:2px;flex-shrink:0;box-shadow:0 0 0 1px rgba(0,0,0,.12)"></span>${esc(c.name)}</span>`).join('')}
+        ${r.countries.map(c => `<span class="country-chip"><span class="fi fi-${esc(c.iso)}" style="width:1.1em;height:.83em;border-radius:2px;flex-shrink:0;box-shadow:0 0 0 1px rgba(0,0,0,.12)"></span>${esc(c.name)}</span>`).join('')}
       </div>
     </div>`).join('');
     }
@@ -3438,9 +3459,9 @@
     function renderTesti() {
       $('#testiWrap').innerHTML = SITE_DATA.testimonials.map((t, i) => `
     <div class="testi-slide ${i === 0 ? 'active' : ''}">
-      <p class="text-clay tracking-widest text-[14px]">${"★".repeat(Math.max(1, Math.min(5, +t.stars || 5)))}</p>
+      <p class="text-clay tracking-widest text-[14px]">${"★".repeat(+t.stars)}</p>
       <p class="font-display font-light text-[20px] md:text-[26px] leading-snug mt-3 text-pine">“${esc(t.text)}”</p>
-      <div class="flex items-center gap-3 mt-5"><span class="w-11 h-11 rounded-full bg-pine text-paper grid place-items-center font-display">${esc((t.name || '?')[0])}</span><div><p class="font-semibold text-[14px]">${esc(t.name)}</p><p class="text-[12.5px] text-muted">${esc(t.role)}</p></div></div>
+      <div class="flex items-center gap-3 mt-5"><span class="w-11 h-11 rounded-full bg-pine text-paper grid place-items-center font-display">${esc(t.name ? t.name[0] : '')}</span><div><p class="font-semibold text-[14px]">${esc(t.name)}</p><p class="text-[12.5px] text-muted">${esc(t.role)}</p></div></div>
     </div>`).join('');
       $('#testiDots').innerHTML = SITE_DATA.testimonials.map((_, i) => `<button onclick="goTesti(${i})" class="h-1.5 rounded-full transition-all ${i === 0 ? 'w-8 bg-pine' : 'w-4 bg-stoneLine'}" aria-label="slide ${i + 1}"></button>`).join('');
       clearInterval(testiTimer); testiTimer = setInterval(() => moveTesti(1), 6000);
@@ -3564,7 +3585,7 @@
       buildCsel($('#formCountry'), countryOpts, true);
 
       /* ---- Product Interest — categories only ---- */
-      const cats = (SITE_DATA.productCategories || []).filter(c => c !== 'All');
+      const cats = SITE_DATA.productCategories.filter(c => c !== 'All');
       const catOpts = [
         { value: '', label: 'Select category…' },
         ...cats.map(c => ({ value: c, label: c, emoji: catEmoji(c) })),
@@ -3592,12 +3613,12 @@
 
     function catEmoji(cat) {
       const map = { 'Grains & Cereals': '🌾', 'Spices': '🌶️', 'Tea & Beverages': '🍃', 'Agro Fresh': '🥭', 'Textiles': '🧵', 'Handicrafts': '🏺' };
-      return map[cat] || '📦';
+      return map[cat] || '';
     }
 
     function renderFooter() {
       const c = SITE_DATA.company;
-      const sf = SITE_DATA.sections?.footer || {};
+      const sf = SITE_DATA.sections.footer;
 
       /* ── Socials ── */
       $('#socialRow').innerHTML = [
@@ -3607,7 +3628,7 @@
         ["x", "X", "M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1.6 2H8l4.4 5.9L18.9 2zm-1.1 18h1.7L7 3.9H5.2L17.8 20z"]
       ].map(([k, label, path]) => {
         const key = k === 'ig' ? 'instagram' : k === 'fb' ? 'facebook' : k;
-        const url = c.socials[key] || '#';
+        const url = c.socials[key];
         return `<a href="${esc(url)}" aria-label="${label}" rel="noopener noreferrer" target="_blank"
       class="w-8 h-8 rounded-lg bg-white/8 border border-white/10 grid place-items-center hover:bg-clay hover:border-clay hover:text-pine transition">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="${path}"/></svg></a>`;
@@ -3615,12 +3636,6 @@
         `<a href="${waLink('Hello, I found you via website')}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
     class="w-8 h-8 rounded-lg bg-[#1FA855] text-white grid place-items-center hover:brightness-110 transition">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2z"/></svg></a>`;
-
-      /* ── Nav links (two-column) ── */
-      // const links = [["About Us","#about"],["Products","#products"],["Why Choose Us","#why"],["Process","#process"],["Global Markets","#markets"],["Contact","#contact"]];
-      // $('#footLinks').innerHTML = links.map(([t,h])=>
-      //   `<a href="${h}" class="text-paper/60 hover:text-clay transition-colors duration-200 leading-snug">${t}</a>`
-      // ).join('');
 
       /* ── Contact with SVG icons ── */
       $('#footContact').innerHTML = `
@@ -3631,10 +3646,10 @@
 
       /* ── WhatsApp footer CTA ── */
       $('#footWa').href = waLink(`Hello ${c.name}, I'd like to make a trade enquiry.`);
-      const footWaLbl = $('#footWaLabel'); if (footWaLbl) footWaLbl.textContent = sf.waQuickLabel || 'WhatsApp a quick enquiry';
+      const footWaLbl = $('#footWaLabel'); if (footWaLbl) footWaLbl.textContent = sf.waQuickLabel;
 
       /* ── Certifications — compact 2-col grid ── */
-      const certList = (sf.certifications || []);
+      const certList = sf.certifications;
       $('#footCerts').innerHTML = `<div class="grid grid-cols-2 gap-2">` +
         certList.map(cert => `
       <div class="flex items-start gap-2 bg-white/5 border border-white/8 rounded-xl p-3 hover:bg-white/8 transition">
@@ -3649,22 +3664,22 @@
       $('#footBadges').innerHTML = `
     <div class="flex items-center gap-2.5 bg-gradient-to-r from-clay/20 to-clay/10 border border-clay/30 rounded-xl px-3.5 py-2.5">
       <span class="text-clay shrink-0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
-      <div><p class="text-[10px] font-bold uppercase tracking-widest text-clay/80 leading-none">${esc(sf.iecBadgeTitle || 'IEC Certified')}</p><p class="text-paper/50 text-[11px] mt-0.5">${esc(sf.iecBadgeSub || 'Import Export Code · DGFT')}</p></div>
+      <div><p class="text-[10px] font-bold uppercase tracking-widest text-clay/80 leading-none">${esc(sf.iecBadgeTitle)}</p><p class="text-paper/50 text-[11px] mt-0.5">${esc(sf.iecBadgeSub)}</p></div>
     </div>
     <div class="flex items-center gap-2.5 bg-gradient-to-r from-emerald-500/15 to-emerald-500/8 border border-emerald-500/25 rounded-xl px-3.5 py-2.5">
       <span class="text-emerald-400 shrink-0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
-      <div><p class="text-[10px] font-bold uppercase tracking-widest text-emerald-400/80 leading-none">${esc(sf.gstBadgeTitle || 'GST Compliant')}</p><p class="text-paper/50 text-[11px] mt-0.5">${esc(sf.gstBadgeSub || 'Registered Tax Entity · India')}</p></div>
+      <div><p class="text-[10px] font-bold uppercase tracking-widest text-emerald-400/80 leading-none">${esc(sf.gstBadgeTitle)}</p><p class="text-paper/50 text-[11px] mt-0.5">${esc(sf.gstBadgeSub)}</p></div>
     </div>`;
     }
     function renderSchema() {
       const c = SITE_DATA.company;
-      const seo = SITE_DATA.seo || {};
+      const seo = SITE_DATA.seo;
       $('#seo-schema').textContent = JSON.stringify({
         "@context": "https://schema.org", "@type": "Organization",
         "name": c.name, "email": c.email, "telephone": c.phone,
         "address": c.address, "foundingDate": c.established,
-        "url": seo.canonical || '', "logo": seo.ogImage || '',
-        "description": seo.description || ''
+        "url": seo.canonical, "logo": seo.ogImage,
+        "description": seo.description
       });
     }
 
@@ -3922,7 +3937,7 @@
     function renderCompanyTab() {
       const c = draft.company || {};
       const seo = draft.seo || {};
-      const currentFavicon = c.favicon || seo.favicon || '/favicon.svg';
+      const currentFavicon = c.favicon || seo.favicon;
 
       return `<div class="space-y-3">
     ${csSection('🎨', 'Branding, Logo & Favicon', `
@@ -3941,10 +3956,10 @@
             <div class="flex items-center gap-3 p-2.5 bg-[#FAF8F4] rounded-xl min-h-[54px] border border-stoneLine/60">
               ${c.logoImage ? 
                 `<img id="studioHeaderLogoPrev" src="${esc(c.logoImage)}" alt="Logo" class="h-9 w-auto max-h-9 object-contain rounded-md" onerror="this.src='/favicon.svg'">` : 
-                `<span class="w-9 h-9 rounded-xl bg-pine text-paper grid place-items-center font-display text-base font-bold shrink-0">${esc(c.logoText || (c.name ? c.name[0] : 'C'))}</span>`}
+                `<span class="w-9 h-9 rounded-xl bg-pine text-paper grid place-items-center font-display text-base font-bold shrink-0">${esc(c.logoText)}</span>`}
               <div class="leading-tight">
-                <p class="font-display font-medium text-[14.5px] text-ink leading-tight">${esc(c.name || 'Company Name')}</p>
-                <p class="text-[9.5px] uppercase tracking-wider text-muted mt-0.5">${esc(c.tagline || 'Tagline')}</p>
+                <p class="font-display font-medium text-[14.5px] text-ink leading-tight">${esc(c.name)}</p>
+                <p class="text-[9.5px] uppercase tracking-wider text-muted mt-0.5">${esc(c.tagline)}</p>
               </div>
             </div>
           </div>
@@ -3955,10 +3970,10 @@
             <div class="flex items-center gap-3 p-2.5 bg-white/5 rounded-xl min-h-[54px] border border-white/10">
               ${c.logoImage ? 
                 `<img id="studioFooterLogoPrev" src="${esc(c.logoImage)}" alt="Logo" class="h-9 w-auto max-h-9 object-contain p-0.5 bg-white/10 rounded-md" onerror="this.src='/favicon.svg'">` : 
-                `<span class="w-9 h-9 rounded-xl bg-paper text-pine grid place-items-center font-display text-base font-bold shrink-0">${esc(c.logoText || (c.name ? c.name[0] : 'C'))}</span>`}
+                `<span class="w-9 h-9 rounded-xl bg-paper text-pine grid place-items-center font-display text-base font-bold shrink-0">${esc(c.logoText)}</span>`}
               <div class="leading-tight">
-                <p class="font-display font-medium text-[14.5px] text-white leading-tight">${esc(c.name || 'Company Name')}</p>
-                <p class="text-[9.5px] uppercase tracking-wider text-white/50 mt-0.5">${esc(c.tagline || 'Tagline')}</p>
+                <p class="font-display font-medium text-[14.5px] text-white leading-tight">${esc(c.name)}</p>
+                <p class="text-[9.5px] uppercase tracking-wider text-white/50 mt-0.5">${esc(c.tagline)}</p>
               </div>
             </div>
           </div>
@@ -3969,7 +3984,7 @@
           <label class="cs-field">
             <span>Logo Image (URL or Upload Image)</span>
             <div class="flex gap-2">
-              <input type="text" data-path="company.logoImage" value="${esc(c.logoImage || '')}" placeholder="Enter image URL (e.g. /logo.png or https://...) or click Upload" class="cs-input flex-1 font-mono text-[12px]">
+              <input type="text" data-path="company.logoImage" value="${esc(c.logoImage)}" placeholder="Enter image URL (e.g. /logo.png or https://...) or click Upload" class="cs-input flex-1 font-mono text-[12px]">
               <button onclick="$('#logoFileInput').click()" type="button" class="bg-pine hover:bg-pineLight text-white text-[12px] font-semibold px-4 py-2 rounded-xl transition cursor-pointer shrink-0 flex items-center gap-1.5 shadow-sm">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 Upload File
@@ -3981,8 +3996,8 @@
         </div>
 
         <div class="grid sm:grid-cols-2 gap-3 pt-1">
-          ${fld('Text Monogram (when no image)', 'company.logoText', c.logoText || 'C', 'text', { hint: 'Letter(s) e.g. "C" or "CBC"' })}
-          ${fld('Logo Alt Description', 'company.logoAlt', c.logoAlt || (c.name || 'Company Logo'), 'text')}
+          ${fld('Text Monogram (when no image)', 'company.logoText', c.logoText, 'text', { hint: 'Letter(s) e.g. "C" or "CBC"' })}
+          ${fld('Logo Alt Description', 'company.logoAlt', c.logoAlt, 'text')}
         </div>
       </div>
 
@@ -3993,7 +4008,7 @@
           <!-- Miniature Browser Tab Preview -->
           <div class="inline-flex items-center gap-2 bg-white border border-stoneLine px-3 py-1.5 rounded-lg shadow-sm">
             <img src="${esc(currentFavicon)}" alt="Favicon" class="w-4 h-4 object-contain rounded-sm" onerror="this.src='/favicon.svg'">
-            <span class="text-[11.5px] font-medium text-ink truncate max-w-[150px]">${esc((draft.seo && draft.seo.title) || c.name || 'CBC Global')}</span>
+            <span class="text-[11.5px] font-medium text-ink truncate max-w-[150px]">${esc(seo.title)}</span>
           </div>
         </div>
 
@@ -4015,12 +4030,13 @@
     `, true)}
     ${csSection('🏢', 'Business Info', `
       ${fld('Company Name', 'company.name', c.name, 'text', { wide: true })}
+      ${fld('Top Bar Banner Text', 'company.topbarText', c.topbarText, 'text', { wide: true })}
       ${fld('Founded Year', 'company.established', c.established, 'number')}
       ${fld('City', 'company.city', c.city)}
       ${fld('Full Address', 'company.address', c.address, 'textarea', { wide: true, rows: 2 })}
       ${fld('Founder Name', 'company.founder', c.founder)}
-      ${fld('Founder Role', 'company.founderRole', c.founderRole || '')}
-      ${fld('Tagline', 'company.tagline', c.tagline || '')}
+      ${fld('Founder Role', 'company.founderRole', c.founderRole)}
+      ${fld('Tagline', 'company.tagline', c.tagline)}
       ${fld('Working Hours', 'company.hours', c.hours)}
     `)}
     ${csSection('📞', 'Contact Details', `
@@ -4029,37 +4045,37 @@
       ${fld('WhatsApp (with country code, digits only)', 'company.whatsapp', c.whatsapp)}
     `)}
     ${csSection('🦸', 'Hero Section', `
-      ${fld('Since Badge', 'company.heroSinceBadge', c.heroSinceBadge || '● SINCE 2016', 'text', { wide: true })}
+      ${fld('Since Badge', 'company.heroSinceBadge', c.heroSinceBadge, 'text', { wide: true })}
       ${fld('Hero Badge (below since)', 'company.heroBadge', c.heroBadge, 'text', { wide: true })}
       ${fld('Title Line 1', 'company.heroTitleA', c.heroTitleA)}
       ${fld('Title Line 2 (italic)', 'company.heroTitleB', c.heroTitleB)}
       ${fld('Subtitle', 'company.heroSubtitle', c.heroSubtitle, 'textarea', { wide: true, rows: 2 })}
       ${fld('Hero Image URL', 'company.heroImage', c.heroImage, 'text', { wide: true })}
-      ${fld('CTA Button 1 Label', 'company.heroCTA1Label', c.heroCTA1Label || '')}
-      ${fld('CTA Button 1 Link', 'company.heroCTA1Href', c.heroCTA1Href || '')}
-      ${fld('CTA Button 2 Label', 'company.heroCTA2Label', c.heroCTA2Label || '')}
-      ${fld('Shipment Route Overlay', 'company.heroOverlayShipRoute', c.heroOverlayShipRoute || '')}
-      ${fld('Shipment Text Overlay', 'company.heroOverlayShipText', c.heroOverlayShipText || '')}
-      ${fld('Origin Chip Text', 'company.heroOverlayOriginText', c.heroOverlayOriginText || '')}
+      ${fld('CTA Button 1 Label', 'company.heroCTA1Label', c.heroCTA1Label)}
+      ${fld('CTA Button 1 Link', 'company.heroCTA1Href', c.heroCTA1Href)}
+      ${fld('CTA Button 2 Label', 'company.heroCTA2Label', c.heroCTA2Label)}
+      ${fld('Shipment Route Overlay', 'company.heroOverlayShipRoute', c.heroOverlayShipRoute)}
+      ${fld('Shipment Text Overlay', 'company.heroOverlayShipText', c.heroOverlayShipText)}
+      ${fld('Origin Chip Text', 'company.heroOverlayOriginText', c.heroOverlayOriginText)}
     `)}
     ${csSection('👤', 'About Section', `
       ${fld('About Paragraph', 'company.aboutText', c.aboutText, 'textarea', { wide: true, rows: 5 })}
-      ${fld('Heading', 'company.aboutHeading', c.aboutHeading || '')}
-      ${fld('Heading Italic Part', 'company.aboutHeadingEm', c.aboutHeadingEm || '')}
-      ${fld('Years Badge Number', 'company.aboutYears', c.aboutYears || '9')}
-      ${fld('Years Badge Label', 'company.aboutYearsLabel', c.aboutYearsLabel || '')}
-      ${fld('CTA Label', 'company.aboutCTALabel', c.aboutCTALabel || '')}
+      ${fld('Heading', 'company.aboutHeading', c.aboutHeading)}
+      ${fld('Heading Italic Part', 'company.aboutHeadingEm', c.aboutHeadingEm)}
+      ${fld('Years Badge Number', 'company.aboutYears', c.aboutYears)}
+      ${fld('Years Badge Label', 'company.aboutYearsLabel', c.aboutYearsLabel)}
+      ${fld('CTA Label', 'company.aboutCTALabel', c.aboutCTALabel)}
     `)}
     ${csSection('🔗', 'Social Links', `
-      ${['linkedin', 'instagram', 'facebook', 'x', 'youtube'].map(k => fld(k[0].toUpperCase() + k.slice(1), 'company.socials.' + k, (c.socials || {})[k] || '')).join('')}
+      ${['linkedin', 'instagram', 'facebook', 'x', 'youtube'].map(k => fld(k[0].toUpperCase() + k.slice(1), 'company.socials.' + k, (c.socials || {})[k])).join('')}
     `)}
     ${csSection('🦶', 'Footer', `
-      ${fld('Footer About Text', 'company.footerAbout', c.footerAbout || '', 'textarea', { wide: true, rows: 3 })}
-      ${fld('Copyright Text', 'company.footerCopyright', c.footerCopyright || '', 'text', { wide: true })}
-      ${fld('Privacy Label', 'company.footerPrivacyLabel', c.footerPrivacyLabel || '')}
-      ${fld('Privacy URL', 'company.footerPrivacyHref', c.footerPrivacyHref || '')}
-      ${fld('Terms Label', 'company.footerTermsLabel', c.footerTermsLabel || '')}
-      ${fld('Terms URL', 'company.footerTermsHref', c.footerTermsHref || '')}
+      ${fld('Footer About Text', 'company.footerAbout', c.footerAbout, 'textarea', { wide: true, rows: 3 })}
+      ${fld('Copyright Text', 'company.footerCopyright', c.footerCopyright, 'text', { wide: true })}
+      ${fld('Privacy Label', 'company.footerPrivacyLabel', c.footerPrivacyLabel)}
+      ${fld('Privacy URL', 'company.footerPrivacyHref', c.footerPrivacyHref)}
+      ${fld('Terms Label', 'company.footerTermsLabel', c.footerTermsLabel)}
+      ${fld('Terms URL', 'company.footerTermsHref', c.footerTermsHref)}
     `)}
     ${csSection('📢', 'Marquee & Bullets', `
       ${fld('Trust Bar Marquee Items', 'marquee', draft.marquee, 'list', { wide: true, rows: 5, hint: 'One item per line — shown scrolling in the top trust bar' })}
@@ -4534,114 +4550,114 @@
 
       return `<div class="space-y-3">
     ${csSection('🦸', 'Hero Overlays', `
-      ${fld('Since Badge', 'company.heroSinceBadge', c.heroSinceBadge || '')}
-      ${fld('CTA Button 1 Label', 'company.heroCTA1Label', c.heroCTA1Label || '')}
-      ${fld('CTA Button 1 Link', 'company.heroCTA1Href', c.heroCTA1Href || '')}
-      ${fld('CTA Button 2 Label', 'company.heroCTA2Label', c.heroCTA2Label || '')}
-      ${fld('CTA Button 2 Link', 'company.heroCTA2Href', c.heroCTA2Href || '')}
-      ${fld('QC Overlay Text', 'company.heroOverlayQC', c.heroOverlayQC || '')}
-      ${fld('QC Overlay Sub', 'company.heroOverlayQCSub', c.heroOverlayQCSub || '')}
-      ${fld('Live Shipment Route', 'company.heroOverlayShipRoute', c.heroOverlayShipRoute || '')}
-      ${fld('Live Shipment Text', 'company.heroOverlayShipText', c.heroOverlayShipText || '')}
-      ${fld('Origin Label', 'company.heroOverlayOriginLabel', c.heroOverlayOriginLabel || 'Origin')}
-      ${fld('Origin Text', 'company.heroOverlayOriginText', c.heroOverlayOriginText || '')}
-      ${fld('Buyer Count Badge', 'company.heroBuyerCount', c.heroBuyerCount || '200+')}
-      ${fld('Buyer Rating Text', 'company.heroBuyerRating', c.heroBuyerRating || '')}
-      ${fld('Buyer Sub Label', 'company.heroBuyerLabel', c.heroBuyerLabel || '', 'text', { wide: true })}
+      ${fld('Since Badge', 'company.heroSinceBadge', c.heroSinceBadge)}
+      ${fld('CTA Button 1 Label', 'company.heroCTA1Label', c.heroCTA1Label)}
+      ${fld('CTA Button 1 Link', 'company.heroCTA1Href', c.heroCTA1Href)}
+      ${fld('CTA Button 2 Label', 'company.heroCTA2Label', c.heroCTA2Label)}
+      ${fld('CTA Button 2 Link', 'company.heroCTA2Href', c.heroCTA2Href)}
+      ${fld('QC Overlay Text', 'company.heroOverlayQC', c.heroOverlayQC)}
+      ${fld('QC Overlay Sub', 'company.heroOverlayQCSub', c.heroOverlayQCSub)}
+      ${fld('Live Shipment Route', 'company.heroOverlayShipRoute', c.heroOverlayShipRoute)}
+      ${fld('Live Shipment Text', 'company.heroOverlayShipText', c.heroOverlayShipText)}
+      ${fld('Origin Label', 'company.heroOverlayOriginLabel', c.heroOverlayOriginLabel)}
+      ${fld('Origin Text', 'company.heroOverlayOriginText', c.heroOverlayOriginText)}
+      ${fld('Buyer Count Badge', 'company.heroBuyerCount', c.heroBuyerCount)}
+      ${fld('Buyer Rating Text', 'company.heroBuyerRating', c.heroBuyerRating)}
+      ${fld('Buyer Sub Label', 'company.heroBuyerLabel', c.heroBuyerLabel, 'text', { wide: true })}
     `, true)}
     ${csSection('📊', 'Hero Stats', `
       ${fld('Stats JSON Array', 'heroStats', JSON.stringify(draft.heroStats || []), 'textarea', { wide: true, rows: 4, hint: '[{"count":20,"suffix":"+","label":"Countries Served"},…]' })}
     `)}
     ${csSection('👤', 'About Section', `
-      ${fld('Eyebrow', 'sections.about.eyebrow', sa.eyebrow || '')}
-      ${fld('Heading', 'company.aboutHeading', c.aboutHeading || '')}
-      ${fld('Heading Italic', 'company.aboutHeadingEm', c.aboutHeadingEm || '')}
-      ${fld('Heading End', 'company.aboutHeadingEnd', c.aboutHeadingEnd || '')}
-      ${fld('Years Badge', 'company.aboutYears', c.aboutYears || '9')}
-      ${fld('Years Label', 'company.aboutYearsLabel', c.aboutYearsLabel || '')}
-      ${fld('CTA Label', 'company.aboutCTALabel', c.aboutCTALabel || '')}
-      ${fld('Founder Role', 'company.founderRole', c.founderRole || '')}
+      ${fld('Eyebrow', 'sections.about.eyebrow', sa.eyebrow)}
+      ${fld('Heading', 'company.aboutHeading', c.aboutHeading)}
+      ${fld('Heading Italic', 'company.aboutHeadingEm', c.aboutHeadingEm)}
+      ${fld('Heading End', 'company.aboutHeadingEnd', c.aboutHeadingEnd)}
+      ${fld('Years Badge', 'company.aboutYears', c.aboutYears)}
+      ${fld('Years Label', 'company.aboutYearsLabel', c.aboutYearsLabel)}
+      ${fld('CTA Label', 'company.aboutCTALabel', c.aboutCTALabel)}
+      ${fld('Founder Role', 'company.founderRole', c.founderRole)}
     `)}
     ${csSection('📦', 'Products Section', `
-      ${fld('Eyebrow', 'sections.products.eyebrow', sp.eyebrow || '')}
-      ${fld('Heading', 'sections.products.heading', sp.heading || '')}
-      ${fld('Heading Italic', 'sections.products.headingEm', sp.headingEm || '')}
-      ${fld('Subtitle', 'sections.products.subtitle', sp.subtitle || '', 'textarea', { wide: true, rows: 2 })}
-      ${fld('Banner Text', 'sections.products.bannerText', sp.bannerText || '', 'textarea', { wide: true, rows: 2 })}
-      ${fld('Banner CTA Label', 'sections.products.bannerCTA', sp.bannerCTA || '')}
+      ${fld('Eyebrow', 'sections.products.eyebrow', sp.eyebrow)}
+      ${fld('Heading', 'sections.products.heading', sp.heading)}
+      ${fld('Heading Italic', 'sections.products.headingEm', sp.headingEm)}
+      ${fld('Subtitle', 'sections.products.subtitle', sp.subtitle, 'textarea', { wide: true, rows: 2 })}
+      ${fld('Banner Text', 'sections.products.bannerText', sp.bannerText, 'textarea', { wide: true, rows: 2 })}
+      ${fld('Banner CTA Label', 'sections.products.bannerCTA', sp.bannerCTA)}
     `)}
     ${csSection('🛡️', 'Quality Strip', `
-      ${fld('Eyebrow', 'sections.qualityStrip.eyebrow', sq.eyebrow || '')}
-      ${fld('Heading', 'sections.qualityStrip.heading', sq.heading || '')}
-      ${fld('Heading Italic', 'sections.qualityStrip.headingEm', sq.headingEm || '')}
+      ${fld('Eyebrow', 'sections.qualityStrip.eyebrow', sq.eyebrow)}
+      ${fld('Heading', 'sections.qualityStrip.heading', sq.heading)}
+      ${fld('Heading Italic', 'sections.qualityStrip.headingEm', sq.headingEm)}
       ${(sq.items || []).map((item, i) => `
-        ${fld('Item ' + (i + 1) + ' Title', 'sections.qualityStrip.items.' + i + '.title', item.title || '')}
-        ${fld('Item ' + (i + 1) + ' Text', 'sections.qualityStrip.items.' + i + '.text', item.text || '', 'textarea', { wide: true, rows: 2 })}`).join('')}
+        ${fld('Item ' + (i + 1) + ' Title', 'sections.qualityStrip.items.' + i + '.title', item.title)}
+        ${fld('Item ' + (i + 1) + ' Text', 'sections.qualityStrip.items.' + i + '.text', item.text, 'textarea', { wide: true, rows: 2 })}`).join('')}
     `)}
     ${csSection('⭐', 'Why Choose Us', `
-      ${fld('Eyebrow', 'sections.why.eyebrow', sw.eyebrow || '')}
-      ${fld('Heading', 'sections.why.heading', sw.heading || '')}
-      ${fld('Heading Italic', 'sections.why.headingEm', sw.headingEm || '')}
+      ${fld('Eyebrow', 'sections.why.eyebrow', sw.eyebrow)}
+      ${fld('Heading', 'sections.why.heading', sw.heading)}
+      ${fld('Heading Italic', 'sections.why.headingEm', sw.headingEm)}
     `)}
     ${csSection('⚙️', 'Process Section', `
-      ${fld('Eyebrow', 'sections.process.eyebrow', sc.eyebrow || '')}
-      ${fld('Heading', 'sections.process.heading', sc.heading || '')}
-      ${fld('Heading Italic', 'sections.process.headingEm', sc.headingEm || '')}
-      ${fld('Subtitle', 'sections.process.subtitle', sc.subtitle || '', 'text', { wide: true })}
-      ${fld('CTA Heading', 'sections.process.ctaHeading', sc.ctaHeading || '')}
-      ${fld('CTA Italic', 'sections.process.ctaHeadingEm', sc.ctaHeadingEm || '')}
-      ${fld('CTA Sub', 'sections.process.ctaSub', sc.ctaSub || '', 'text', { wide: true })}
-      ${fld('CTA Btn 1', 'sections.process.ctaBtn1', sc.ctaBtn1 || '')}
-      ${fld('CTA Btn 2 (WA)', 'sections.process.ctaBtn2', sc.ctaBtn2 || '')}
+      ${fld('Eyebrow', 'sections.process.eyebrow', sc.eyebrow)}
+      ${fld('Heading', 'sections.process.heading', sc.heading)}
+      ${fld('Heading Italic', 'sections.process.headingEm', sc.headingEm)}
+      ${fld('Subtitle', 'sections.process.subtitle', sc.subtitle, 'text', { wide: true })}
+      ${fld('CTA Heading', 'sections.process.ctaHeading', sc.ctaHeading)}
+      ${fld('CTA Italic', 'sections.process.ctaHeadingEm', sc.ctaHeadingEm)}
+      ${fld('CTA Sub', 'sections.process.ctaSub', sc.ctaSub, 'text', { wide: true })}
+      ${fld('CTA Btn 1', 'sections.process.ctaBtn1', sc.ctaBtn1)}
+      ${fld('CTA Btn 2 (WA)', 'sections.process.ctaBtn2', sc.ctaBtn2)}
     `)}
     ${csSection('🌍', 'Markets Section', `
-      ${fld('Eyebrow', 'sections.markets.eyebrow', sm.eyebrow || '')}
-      ${fld('Heading', 'sections.markets.heading', sm.heading || '')}
-      ${fld('Heading Italic', 'sections.markets.headingEm', sm.headingEm || '')}
-      ${fld('Subtitle', 'sections.markets.subtitle', sm.subtitle || '', 'text', { wide: true })}
-      ${fld('Map Count Label', 'sections.markets.mapCountLabel', sm.mapCountLabel || '')}
-      ${fld('Map Count Sub', 'sections.markets.mapCountSub', sm.mapCountSub || '')}
-      ${fld('Map Ports (right)', 'sections.markets.mapPortsRight', sm.mapPortsRight || '')}
-      ${fld('Testimonials Eyebrow', 'sections.markets.testiEyebrow', sm.testiEyebrow || '')}
-      ${fld('FAQ Eyebrow', 'sections.markets.faqEyebrow', sm.faqEyebrow || '')}
-      ${fld('FAQ Heading', 'sections.markets.faqHeading', sm.faqHeading || '')}
-      ${fld('FAQ Heading Italic', 'sections.markets.faqHeadingEm', sm.faqHeadingEm || '')}
-      ${fld('FAQ Subtext', 'sections.markets.faqSubtext', sm.faqSubtext || '')}
-      ${fld('FAQ WA Button', 'sections.markets.faqWALabel', sm.faqWALabel || '')}
+      ${fld('Eyebrow', 'sections.markets.eyebrow', sm.eyebrow)}
+      ${fld('Heading', 'sections.markets.heading', sm.heading)}
+      ${fld('Heading Italic', 'sections.markets.headingEm', sm.headingEm)}
+      ${fld('Subtitle', 'sections.markets.subtitle', sm.subtitle, 'text', { wide: true })}
+      ${fld('Map Count Label', 'sections.markets.mapCountLabel', sm.mapCountLabel)}
+      ${fld('Map Count Sub', 'sections.markets.mapCountSub', sm.mapCountSub)}
+      ${fld('Map Ports (right)', 'sections.markets.mapPortsRight', sm.mapPortsRight)}
+      ${fld('Testimonials Eyebrow', 'sections.markets.testiEyebrow', sm.testiEyebrow)}
+      ${fld('FAQ Eyebrow', 'sections.markets.faqEyebrow', sm.faqEyebrow)}
+      ${fld('FAQ Heading', 'sections.markets.faqHeading', sm.faqHeading)}
+      ${fld('FAQ Heading Italic', 'sections.markets.faqHeadingEm', sm.faqHeadingEm)}
+      ${fld('FAQ Subtext', 'sections.markets.faqSubtext', sm.faqSubtext)}
+      ${fld('FAQ WA Button', 'sections.markets.faqWALabel', sm.faqWALabel)}
     `)}
     ${csSection('📬', 'Contact Section', `
-      ${fld('Eyebrow', 'sections.contact.eyebrow', sct.eyebrow || '')}
-      ${fld('Heading', 'sections.contact.heading', sct.heading || '')}
-      ${fld('Heading Italic', 'sections.contact.headingEm', sct.headingEm || '')}
-      ${fld('Subtitle', 'sections.contact.subtitle', sct.subtitle || '', 'textarea', { wide: true, rows: 2 })}
-      ${fld('WA Heading', 'sections.contact.waHeading', sct.waHeading || '')}
-      ${fld('WA Sub', 'sections.contact.waSub', sct.waSub || '')}
-      ${fld('Form Title', 'sections.contact.formTitle', sct.formTitle || '')}
-      ${fld('Form Badge', 'sections.contact.formBadge', sct.formBadge || '')}
-      ${fld('Submit Label', 'sections.contact.submitLabel', sct.submitLabel || '')}
-      ${fld('WA Button Label', 'sections.contact.waLabel', sct.waLabel || '')}
-      ${fld('Privacy Note', 'sections.contact.formPrivacy', sct.formPrivacy || '', 'textarea', { wide: true, rows: 2 })}
+      ${fld('Eyebrow', 'sections.contact.eyebrow', sct.eyebrow)}
+      ${fld('Heading', 'sections.contact.heading', sct.heading)}
+      ${fld('Heading Italic', 'sections.contact.headingEm', sct.headingEm)}
+      ${fld('Subtitle', 'sections.contact.subtitle', sct.subtitle, 'textarea', { wide: true, rows: 2 })}
+      ${fld('WA Heading', 'sections.contact.waHeading', sct.waHeading)}
+      ${fld('WA Sub', 'sections.contact.waSub', sct.waSub)}
+      ${fld('Form Title', 'sections.contact.formTitle', sct.formTitle)}
+      ${fld('Form Badge', 'sections.contact.formBadge', sct.formBadge)}
+      ${fld('Submit Label', 'sections.contact.submitLabel', sct.submitLabel)}
+      ${fld('WA Button Label', 'sections.contact.waLabel', sct.waLabel)}
+      ${fld('Privacy Note', 'sections.contact.formPrivacy', sct.formPrivacy, 'textarea', { wide: true, rows: 2 })}
     `)}
     ${csSection('🦶', 'Footer Labels', `
-      ${fld('Contact Label', 'sections.footer.contactLabel', sf.contactLabel || '')}
-      ${fld('Certs Label', 'sections.footer.certsLabel', sf.certsLabel || '')}
-      ${fld('WA Quick Label', 'sections.footer.waQuickLabel', sf.waQuickLabel || '')}
-      ${fld('IEC Badge Title', 'sections.footer.iecBadgeTitle', sf.iecBadgeTitle || '')}
-      ${fld('IEC Badge Sub', 'sections.footer.iecBadgeSub', sf.iecBadgeSub || '')}
-      ${fld('GST Badge Title', 'sections.footer.gstBadgeTitle', sf.gstBadgeTitle || '')}
-      ${fld('GST Badge Sub', 'sections.footer.gstBadgeSub', sf.gstBadgeSub || '')}
+      ${fld('Contact Label', 'sections.footer.contactLabel', sf.contactLabel)}
+      ${fld('Certs Label', 'sections.footer.certsLabel', sf.certsLabel)}
+      ${fld('WA Quick Label', 'sections.footer.waQuickLabel', sf.waQuickLabel)}
+      ${fld('IEC Badge Title', 'sections.footer.iecBadgeTitle', sf.iecBadgeTitle)}
+      ${fld('IEC Badge Sub', 'sections.footer.iecBadgeSub', sf.iecBadgeSub)}
+      ${fld('GST Badge Title', 'sections.footer.gstBadgeTitle', sf.gstBadgeTitle)}
+      ${fld('GST Badge Sub', 'sections.footer.gstBadgeSub', sf.gstBadgeSub)}
     `)}
     ${csSection('🔍', 'SEO & Meta', `
-      ${fld('Page Title', 'seo.title', seo.title || '', 'text', { wide: true })}
-      ${fld('Meta Description', 'seo.description', seo.description || '', 'textarea', { wide: true, rows: 3 })}
-      ${fld('Keywords', 'seo.keywords', seo.keywords || '', 'text', { wide: true })}
-      ${fld('Canonical URL', 'seo.canonical', seo.canonical || '')}
-      ${fld('OG Image URL', 'seo.ogImage', seo.ogImage || '')}
-      ${fld('Twitter Handle', 'seo.twitterHandle', seo.twitterHandle || '')}
+      ${fld('Page Title', 'seo.title', seo.title, 'text', { wide: true })}
+      ${fld('Meta Description', 'seo.description', seo.description, 'textarea', { wide: true, rows: 3 })}
+      ${fld('Keywords', 'seo.keywords', seo.keywords, 'text', { wide: true })}
+      ${fld('Canonical URL', 'seo.canonical', seo.canonical)}
+      ${fld('OG Image URL', 'seo.ogImage', seo.ogImage)}
+      ${fld('Twitter Handle', 'seo.twitterHandle', seo.twitterHandle)}
     `)}
     ${csSection('🧭', 'Navigation', `
-      ${fld('Edit Content Button', 'nav.editBtnLabel', n.editBtnLabel || '')}
-      ${fld('Get Quote Button', 'nav.quoteBtnLabel', n.quoteBtnLabel || '')}
+      ${fld('Edit Content Button', 'nav.editBtnLabel', n.editBtnLabel)}
+      ${fld('Get Quote Button', 'nav.quoteBtnLabel', n.quoteBtnLabel)}
     `)}
   </div>`;
     }
@@ -4814,8 +4830,39 @@
       }
     });
 
+    /* ---------- Environment Detection & Studio Auth ---------- */
+    function isDevEnvironment() {
+      const h = window.location.hostname || '';
+      const p = window.location.port || '';
+      if (
+        h === 'localhost' ||
+        h === '127.0.0.1' ||
+        h === '0.0.0.0' ||
+        h === '' ||
+        window.location.protocol === 'file:' ||
+        h.endsWith('.local') ||
+        /^192\.168\./.test(h) ||
+        /^10\./.test(h) ||
+        /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(h) ||
+        ['3000', '5173', '5500', '8080', '8000', '4200'].includes(p)
+      ) {
+        return true;
+      }
+      try {
+        const q = new URLSearchParams(window.location.search);
+        if (q.get('dev') === '1' || q.get('dev') === 'true') return true;
+        if (localStorage.getItem('cbc_dev_mode') === 'true') return true;
+      } catch (e) { }
+      return false;
+    }
+
     /* ---------- Secret Code Auth Modal for Content Studio ---------- */
-    function openSecretModal() {
+    function openSecretModal(forceModal = false) {
+      if (!forceModal && isDevEnvironment()) {
+        openDataPanel();
+        toast('Content Studio opened (Dev Mode)');
+        return;
+      }
       const modal = $('#secretModal');
       const input = $('#secretCodeInput');
       const err = $('#secretError');
@@ -4856,9 +4903,11 @@
       const val = (input?.value || '').trim();
 
       if (!val) {
+        const emptyMsg = 'Please enter a passcode.';
         if (err) err.classList.remove('hidden');
-        if (errText) errText.textContent = 'Please enter a passcode.';
+        if (errText) errText.textContent = emptyMsg;
         if (input) input.classList.add('!border-rose-500');
+        toast(emptyMsg, true);
         return;
       }
 
@@ -4898,6 +4947,7 @@
             input.classList.add('!border-rose-500');
             input.select();
           }
+          toast(msg, true);
         }
       } catch (networkErr) {
         console.warn('Backend verification network error:', networkErr);
@@ -4908,9 +4958,11 @@
           openDataPanel();
           toast('✓ Content Studio unlocked (offline mode)');
         } else {
+          const errMsg = 'Server unavailable. Start Vercel or configure GitHub Token.';
           if (err) err.classList.remove('hidden');
-          if (errText) errText.textContent = 'Server unavailable. Start Vercel or configure GitHub Token.';
+          if (errText) errText.textContent = errMsg;
           if (input) input.classList.add('!border-rose-500');
+          toast(errMsg, true);
         }
       } finally {
         if (submitBtn) {
@@ -5065,7 +5117,12 @@
         if (isPanelOpen) {
           closeDataPanel();
         } else {
-          openSecretModal();
+          if (isDevEnvironment()) {
+            openDataPanel();
+            toast('Content Studio opened (Dev Mode)');
+          } else {
+            openSecretModal();
+          }
         }
         return;
       }
