@@ -505,10 +505,19 @@
     }
 
     /* Override Tailwind @forms plugin which targets [type=*] with high specificity */
-    [type='text'], [type='email'], [type='url'], [type='password'],
-    [type='number'], [type='date'], [type='tel'], [type='search'],
-    [type='time'], [type='month'], [type='week'],
-    textarea, select {
+    [type='text'],
+    [type='email'],
+    [type='url'],
+    [type='password'],
+    [type='number'],
+    [type='date'],
+    [type='tel'],
+    [type='search'],
+    [type='time'],
+    [type='month'],
+    [type='week'],
+    textarea,
+    select {
       border-radius: 14px !important;
       border-color: #E7E0D2 !important;
       font-size: 13.5px !important;
@@ -516,10 +525,19 @@
       --tw-ring-shadow: none !important
     }
 
-    [type='text']:focus, [type='email']:focus, [type='url']:focus, [type='password']:focus,
-    [type='number']:focus, [type='date']:focus, [type='tel']:focus, [type='search']:focus,
-    [type='time']:focus, [type='month']:focus, [type='week']:focus,
-    textarea:focus, select:focus {
+    [type='text']:focus,
+    [type='email']:focus,
+    [type='url']:focus,
+    [type='password']:focus,
+    [type='number']:focus,
+    [type='date']:focus,
+    [type='tel']:focus,
+    [type='search']:focus,
+    [type='time']:focus,
+    [type='month']:focus,
+    [type='week']:focus,
+    textarea:focus,
+    select:focus {
       border-color: #6B7772 !important;
       box-shadow: 0 0 0 3px rgba(107, 119, 114, .15) !important;
       outline: none !important;
@@ -725,7 +743,7 @@
     }
 
     .cs-field label,
-    .cs-field > span {
+    .cs-field>span {
       font-size: 11px;
       font-weight: 700;
       letter-spacing: .1em;
@@ -1946,6 +1964,121 @@
     </div>
   </dialog>
 
+  <!-- PUBLISH LIVE MODAL -->
+  <dialog id="publishModal"
+    class="rounded-[2rem] p-0 w-[min(480px,94vw)] shadow-lift bg-[#FAF8F4] border border-stoneLine text-ink backdrop:bg-black/60 backdrop:backdrop-blur-sm overflow-hidden">
+    <div class="relative p-6 sm:p-7">
+      <button onclick="closePublishModal()" type="button"
+        class="absolute top-5 right-5 w-8 h-8 rounded-full bg-cream hover:bg-stoneLine text-muted hover:text-ink grid place-items-center transition text-sm cursor-pointer"
+        aria-label="Close">✕</button>
+
+      <div class="flex items-center gap-3.5 mb-5">
+        <div class="w-12 h-12 rounded-2xl bg-[#0E241E] text-emerald-400 grid place-items-center shadow-soft shrink-0 text-xl">
+          🚀
+        </div>
+        <div>
+          <h3 class="font-display font-semibold text-[19px] text-pine leading-tight">Publish to Live Site</h3>
+          <p class="text-[11.5px] text-muted mt-0.5">GitHub Auto-Commit &bull; Vercel Deployment</p>
+        </div>
+      </div>
+
+      <!-- State: Progress -->
+      <div id="publishProgressState" class="space-y-4">
+        <div class="bg-white rounded-2xl p-4 border border-stoneLine space-y-3">
+          <div class="flex items-center gap-3 text-[13px] font-medium" id="pStep1">
+            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 grid place-items-center text-xs shrink-0 font-bold" id="pStep1Icon">1</span>
+            <span class="text-ink" id="pStep1Text">Connecting &amp; validating credentials...</span>
+          </div>
+          <div class="flex items-center gap-3 text-[13px] font-medium opacity-50" id="pStep2">
+            <span class="w-6 h-6 rounded-full bg-stone-100 text-muted grid place-items-center text-xs shrink-0 font-bold" id="pStep2Icon">2</span>
+            <span class="text-ink" id="pStep2Text">Baking data &amp; committing to GitHub main...</span>
+          </div>
+          <div class="flex items-center gap-3 text-[13px] font-medium opacity-50" id="pStep3">
+            <span class="w-6 h-6 rounded-full bg-stone-100 text-muted grid place-items-center text-xs shrink-0 font-bold" id="pStep3Icon">3</span>
+            <span class="text-ink" id="pStep3Text">Triggering Vercel deployment...</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center gap-2 py-2 text-muted text-[13px]">
+          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-emerald-600" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+          <span id="publishStatusMsg">Publishing in progress...</span>
+        </div>
+      </div>
+
+      <!-- State: Success -->
+      <div id="publishSuccessState" class="hidden space-y-4">
+        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-center space-y-2">
+          <div class="w-12 h-12 rounded-full bg-emerald-500 text-white grid place-items-center mx-auto text-xl shadow-md">✓</div>
+          <h4 class="font-semibold text-[17px] text-emerald-950">Published Successfully!</h4>
+          <p class="text-[13px] text-emerald-800 leading-relaxed">
+            Your changes have been committed to GitHub. Vercel is now building and deploying your live website (~30-45s).
+          </p>
+          <div class="pt-2 flex flex-wrap items-center justify-center gap-2">
+            <span class="text-[11px] font-mono bg-white px-2.5 py-1 rounded-md border border-emerald-200 text-emerald-800 font-semibold" id="publishCommitSha">commit #main</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between gap-3 pt-2">
+          <a id="publishCommitLink" href="https://github.com/piyush9713/cbc-global-venture" target="_blank" rel="noopener noreferrer"
+            class="flex-1 text-center bg-white hover:bg-stoneLine text-ink border border-stoneLine text-[12.5px] font-semibold rounded-xl py-2.5 transition">
+            View on GitHub ↗
+          </a>
+          <button onclick="closePublishModal()" type="button"
+            class="flex-1 bg-pine hover:bg-pineLight text-white text-[12.5px] font-semibold rounded-xl py-2.5 transition cursor-pointer">
+            Done
+          </button>
+        </div>
+      </div>
+
+      <!-- State: Error -->
+      <div id="publishErrorState" class="hidden space-y-4">
+        <div class="bg-rose-50 border border-rose-200 rounded-2xl p-4 space-y-2">
+          <div class="flex items-center gap-2 text-rose-700 font-semibold text-[14px]">
+            <span>⚠️</span>
+            <span>Publishing Failed</span>
+          </div>
+          <p id="publishErrorMsg" class="text-[12.5px] text-rose-800 leading-relaxed">
+            An error occurred while communicating with GitHub.
+          </p>
+        </div>
+
+        <div id="publishTokenFixBox" class="bg-white border border-stoneLine rounded-2xl p-4 space-y-2.5 hidden">
+          <p class="text-[12px] font-semibold text-pine">GitHub Token Required</p>
+          <p class="text-[11.5px] text-muted leading-relaxed">
+            Enter your GitHub Personal Access Token (classic with <code class="bg-cream px-1 rounded">repo</code> scope, or fine-grained with <code class="bg-cream px-1 rounded">Contents: Read &amp; Write</code>):
+          </p>
+          <div class="flex gap-2">
+            <input type="password" id="modalTokenInput" placeholder="ghp_xxxxxxxxxxxx"
+              class="flex-1 bg-[#FAF8F4] border border-stoneLine rounded-xl px-3 py-1.5 text-[12px] outline-none font-mono">
+            <button onclick="saveModalToken()" type="button"
+              class="bg-pine hover:bg-pineLight text-white text-[12px] font-semibold px-3 py-1.5 rounded-xl transition cursor-pointer">
+              Save &amp; Retry
+            </button>
+          </div>
+          <a href="https://github.com/settings/tokens/new?scopes=repo&description=CBC+Global+Content+Studio" target="_blank" rel="noopener noreferrer"
+            class="text-[11px] text-emerald-700 hover:underline block">
+            Generate new GitHub token ↗
+          </a>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <button onclick="publishLive()" type="button"
+            class="flex-1 bg-pine hover:bg-pineLight text-white text-[13px] font-semibold rounded-xl py-2.5 transition cursor-pointer">
+            Retry Publishing
+          </button>
+          <button onclick="closePublishModal()" type="button"
+            class="bg-white hover:bg-stoneLine text-muted text-[13px] font-medium border border-stoneLine rounded-xl px-4 py-2.5 transition cursor-pointer">
+            Cancel
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </dialog>
+
   <!-- DATA STUDIO PANEL -->
   <div id="dataOverlay" onclick="closeDataPanel()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] hidden">
   </div>
@@ -2011,16 +2144,33 @@
     </div>
 
     <!-- ── Footer actions ── -->
-    <div class="flex items-center gap-3 px-5 py-3.5 bg-white border-t border-stoneLine flex-shrink-0">
-      <p class="text-[11.5px] text-muted flex-1 leading-tight hidden sm:block">Save &amp; Apply bakes data into <code
-          class="bg-cream px-1 rounded">index.html</code> — upload to publish globally.</p>
-      <button onclick="applyJSON()"
-        class="inline-flex items-center gap-2 bg-[#0E241E] hover:bg-pine text-white rounded-xl px-6 py-2.5 text-[13.5px] font-semibold transition flex-shrink-0">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M20 6 9 17l-5-5" />
-        </svg>
-        Save &amp; Apply
-      </button>
+    <div class="flex items-center justify-between gap-3 px-5 py-3.5 bg-white border-t border-stoneLine flex-shrink-0 flex-wrap sm:flex-nowrap">
+      <div class="flex items-center gap-2 text-[12px] text-muted">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0 animate-pulse"></span>
+        <span class="hidden md:inline text-pine font-medium">GitHub:</span>
+        <code class="text-[11px] text-pine font-mono bg-cream px-1.5 py-0.5 rounded border border-stoneLine">piyush9713/cbc-global-venture</code>
+      </div>
+      <div class="flex items-center gap-2.5 ml-auto">
+        <button onclick="applyJSON()" title="Save in browser session and download backup HTML"
+          class="inline-flex items-center gap-1.5 bg-[#FAF8F4] hover:bg-stoneLine text-ink border border-stoneLine rounded-xl px-3.5 py-2.5 text-[13px] font-medium transition flex-shrink-0 cursor-pointer">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+            <polyline points="17 21 17 13 7 13 7 21" />
+            <polyline points="7 3 7 8 15 8" />
+          </svg>
+          Save Locally
+        </button>
+        <button onclick="publishLive()"
+          class="inline-flex items-center gap-2 bg-[#0E241E] hover:bg-pine text-white shadow-md rounded-xl px-5 py-2.5 text-[13.5px] font-semibold transition flex-shrink-0 cursor-pointer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+            <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+            <path d="M12 9V4s3.03.55 4 2c1.08 1.62 0 5 0 5" />
+          </svg>
+          Publish Live 🚀
+        </button>
+      </div>
     </div>
   </aside>
 
@@ -2077,16 +2227,16 @@
 
       company: {
         name: "CBC Global Venture",
-        tagline: "Import • Export • Sourcing",
+        tagline: "Trade Beyond Borders",
         studioCode: "cbc2026",
         established: 2016,
         city: "Indore, Madhya Pradesh, India",
         address: "2nd Floor, Trade House, AB Road, Indore, MP 452001, India",
         email: "connect@cbcglobalventure.com",
-        phone: "+91 98260 12345",
-        whatsapp: "919826012345",
+        phone: "+91 99933 56293",
+        whatsapp: "919993356293",
         hours: "Mon–Sat · 9:30–19:00 IST",
-        founder: "Chandresh B. Chouhan",
+        founder: "Jay Choudhary",
         founderRole: "Founder & Managing Partner",
         heroBadge: "IEC Certified • APEDA Registered Exporter",
         heroSinceBadge: "● SINCE 2016",
@@ -3169,6 +3319,7 @@
       { id: 'why', label: 'Why Us', icon: '⭐', desc: 'Advantages & differentiators', group: 'Content' },
       { id: 'testimonials', label: 'Reviews', icon: '💬', desc: 'Buyer testimonials', group: 'Content' },
       { id: 'faqs', label: 'FAQs', icon: '❓', desc: 'Frequently asked questions', group: 'Content' },
+      { id: 'publish', label: 'Publish Live', icon: '🚀', desc: 'GitHub & Vercel deployment', group: 'Publish' },
       { id: 'raw-json', label: 'Raw JSON', icon: '{ }', desc: 'Full data as JSON', group: 'Advanced' }
     ];
 
@@ -3366,6 +3517,408 @@
   </div>`;
     }
 
+    function renderPublishTab() {
+      const savedToken = localStorage.getItem('cbc_github_token') || '';
+      return `<div class="space-y-5 max-w-2xl">
+        <!-- Live Publishing Status Banner -->
+        <div class="bg-gradient-to-br from-[#0E241E] to-pine text-paper rounded-2xl p-5 shadow-soft border border-white/10">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <span class="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 text-[11px] font-semibold px-2.5 py-1 rounded-full mb-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                Vercel Auto-Deploy Connected
+              </span>
+              <h3 class="font-display font-semibold text-[18px] text-white">One-Click Global Publishing</h3>
+              <p class="text-[12.5px] text-white/70 mt-1.5 leading-relaxed">
+                When you click <strong>Publish Live</strong>, your edits are committed directly to your GitHub repository (<code class="bg-white/10 text-emerald-300 px-1.5 py-0.5 rounded text-[11.5px] font-mono">piyush9713/cbc-global-venture</code>). Vercel detects the new commit and automatically builds &amp; updates the live site in ~30–45 seconds.
+              </p>
+            </div>
+            <div class="text-3xl shrink-0 p-2 bg-white/5 rounded-2xl">🚀</div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2 text-[12px] text-white/80">
+              <span>Target:</span>
+              <a href="https://github.com/piyush9713/cbc-global-venture" target="_blank" rel="noopener noreferrer" class="text-emerald-300 hover:underline font-mono text-[11.5px]">piyush9713/cbc-global-venture (main) ↗</a>
+            </div>
+            <button onclick="publishLive()" type="button" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-[#0E241E] font-bold text-[13px] px-5 py-2 rounded-xl transition shadow-md cursor-pointer">
+              <span>Publish Live Now</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Optional Custom Commit Message -->
+        <div class="bg-white rounded-2xl p-5 border border-stoneLine space-y-3">
+          <label class="cs-field">
+            <span>Commit Message (Optional)</span>
+            <input type="text" id="studioCommitMsg" placeholder="e.g., Updated contact details &amp; added new products" class="cs-input">
+            <p class="cs-hint">This appears in your GitHub commit history for this change.</p>
+          </label>
+        </div>
+
+        <!-- GitHub Authentication Settings -->
+        <div class="bg-white rounded-2xl p-5 border border-stoneLine space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="font-semibold text-[14px] text-pine">GitHub Token Configuration</h4>
+              <p class="text-[11.5px] text-muted mt-0.5">Authorize Content Studio to push commits to your repository.</p>
+            </div>
+            <span class="cs-badge ${savedToken ? 'cs-badge-green' : 'cs-badge-amber'}">${savedToken ? '● Token Saved' : '● Optional in Vercel'}</span>
+          </div>
+
+          <div class="bg-cream/60 rounded-xl p-3.5 text-[12px] text-muted space-y-1.5 border border-stoneLine">
+            <p class="font-medium text-ink">Two flexible ways to authenticate:</p>
+            <p>1. <strong>On Vercel (Recommended):</strong> Add <code class="bg-white px-1.5 py-0.5 rounded border border-stoneLine text-pine font-mono">GITHUB_TOKEN</code> to your Vercel Project Environment Variables. The backend handles commits securely.</p>
+            <p>2. <strong>Browser Token (For Local or Direct Publishing):</strong> Save your GitHub Personal Access Token below. It is stored securely only in your browser's <code class="font-mono text-[11px]">localStorage</code>.</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="cs-field">
+              <span>GitHub Personal Access Token (PAT)</span>
+              <div class="flex gap-2">
+                <input type="password" id="studioGithubTokenInput" value="${savedToken}" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="cs-input flex-1 font-mono">
+                <button onclick="saveStudioToken()" type="button" class="bg-pine hover:bg-pineLight text-white text-[12.5px] font-semibold px-4 py-2 rounded-xl transition cursor-pointer">
+                  Save
+                </button>
+                ${savedToken ? `<button onclick="clearStudioToken()" type="button" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-[12.5px] font-semibold px-3 py-2 rounded-xl border border-rose-200 transition cursor-pointer" title="Remove token">✕</button>` : ''}
+              </div>
+            </label>
+            <div class="flex items-center justify-between pt-1 text-[11.5px] flex-wrap gap-2">
+              <a href="https://github.com/settings/tokens/new?scopes=repo&description=CBC+Global+Content+Studio" target="_blank" rel="noopener noreferrer" class="text-emerald-700 hover:underline font-medium">
+                🔑 Generate a GitHub Token (with 'repo' scope) ↗
+              </a>
+              <button onclick="testGithubConnection()" type="button" class="text-muted hover:text-pine font-medium underline cursor-pointer">
+                Test Connection
+              </button>
+            </div>
+            <div id="tokenTestResult" class="text-[12px] hidden pt-1"></div>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function saveStudioToken() {
+      const val = ($('#studioGithubTokenInput')?.value || '').trim();
+      if (val) {
+        localStorage.setItem('cbc_github_token', val);
+        toast('✓ GitHub Token saved');
+        renderStudio();
+      } else {
+        localStorage.removeItem('cbc_github_token');
+        toast('Token removed');
+        renderStudio();
+      }
+    }
+
+    function clearStudioToken() {
+      localStorage.removeItem('cbc_github_token');
+      toast('Token removed');
+      renderStudio();
+    }
+
+    function saveModalToken() {
+      const val = ($('#modalTokenInput')?.value || '').trim();
+      if (val) {
+        localStorage.setItem('cbc_github_token', val);
+        toast('✓ GitHub Token saved');
+        $('#publishTokenFixBox')?.classList.add('hidden');
+        publishLive();
+      } else {
+        toast('Please enter a valid token');
+      }
+    }
+
+    async function testGithubConnection() {
+      const resEl = $('#tokenTestResult');
+      if (resEl) {
+        resEl.classList.remove('hidden', 'text-rose-600', 'text-emerald-700', 'text-amber-700');
+        resEl.classList.add('text-muted');
+        resEl.textContent = 'Testing connection...';
+      }
+
+      const customToken = ($('#studioGithubTokenInput')?.value || localStorage.getItem('cbc_github_token') || '').trim();
+
+      if (customToken) {
+        try {
+          const res = await fetch('https://api.github.com/repos/piyush9713/cbc-global-venture/contents/index.html?ref=main', {
+            headers: {
+              'Accept': 'application/vnd.github.v3+json',
+              'Authorization': `Bearer ${customToken}`,
+              'User-Agent': 'CBC-Global-Content-Studio'
+            }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (resEl) {
+              resEl.className = 'text-[12px] text-emerald-700 font-medium pt-1';
+              resEl.textContent = `✓ Connected! Successfully accessed piyush9713/cbc-global-venture (SHA: ${data.sha.slice(0, 7)})`;
+            }
+          } else {
+            const err = await res.json().catch(() => ({}));
+            if (resEl) {
+              resEl.className = 'text-[12px] text-rose-600 font-medium pt-1';
+              resEl.textContent = `✗ Connection failed (${res.status}): ${err.message || res.statusText}`;
+            }
+          }
+        } catch (e) {
+          if (resEl) {
+            resEl.className = 'text-[12px] text-rose-600 font-medium pt-1';
+            resEl.textContent = `✗ Error: ${e.message}`;
+          }
+        }
+      } else {
+        try {
+          const res = await fetch('/api/publish', { method: 'OPTIONS' });
+          if (res.ok) {
+            if (resEl) {
+              resEl.className = 'text-[12px] text-emerald-700 font-medium pt-1';
+              resEl.textContent = '✓ /api/publish endpoint is reachable on server. Ensure GITHUB_TOKEN is set in Vercel environment variables.';
+            }
+          } else {
+            if (resEl) {
+              resEl.className = 'text-[12px] text-amber-700 font-medium pt-1';
+              resEl.textContent = 'Notice: No local token saved. If not using Vercel environment variables, save a token above.';
+            }
+          }
+        } catch (e) {
+          if (resEl) {
+            resEl.className = 'text-[12px] text-amber-700 font-medium pt-1';
+            resEl.textContent = 'Notice: Running locally without /api server. Enter a GitHub Token above to enable direct publishing.';
+          }
+        }
+      }
+    }
+
+    function openPublishModal() {
+      const m = $('#publishModal');
+      if (!m) return;
+      $('#publishProgressState')?.classList.remove('hidden');
+      $('#publishSuccessState')?.classList.add('hidden');
+      $('#publishErrorState')?.classList.add('hidden');
+      $('#publishTokenFixBox')?.classList.add('hidden');
+      m.showModal();
+    }
+
+    function closePublishModal() {
+      const m = $('#publishModal');
+      if (m?.open) m.close();
+    }
+
+    function setPublishStep(step, msg) {
+      if ($('#publishStatusMsg')) $('#publishStatusMsg').textContent = msg;
+      for (let i = 1; i <= 3; i++) {
+        const el = $('#pStep' + i);
+        const icon = $('#pStep' + i + 'Icon');
+        if (!el || !icon) continue;
+        if (i < step) {
+          el.style.opacity = '1';
+          icon.className = 'w-6 h-6 rounded-full bg-emerald-500 text-white grid place-items-center text-xs shrink-0 font-bold';
+          icon.textContent = '✓';
+        } else if (i === step) {
+          el.style.opacity = '1';
+          icon.className = 'w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 grid place-items-center text-xs shrink-0 font-bold animate-pulse';
+          icon.textContent = '' + i;
+        } else {
+          el.style.opacity = '0.4';
+          icon.className = 'w-6 h-6 rounded-full bg-stone-100 text-muted grid place-items-center text-xs shrink-0 font-bold';
+          icon.textContent = '' + i;
+        }
+      }
+    }
+
+    function setPublishSuccess(result) {
+      $('#publishProgressState')?.classList.add('hidden');
+      $('#publishErrorState')?.classList.add('hidden');
+      const succ = $('#publishSuccessState');
+      if (succ) succ.classList.remove('hidden');
+
+      const shaEl = $('#publishCommitSha');
+      if (shaEl && result?.commitSha) {
+        shaEl.textContent = `Commit #${result.commitSha.slice(0, 7)}`;
+      }
+      const linkEl = $('#publishCommitLink');
+      if (linkEl && result?.commitUrl) {
+        linkEl.href = result.commitUrl;
+      }
+      toast('🚀 Published! Live site updating in ~30s');
+    }
+
+    function setPublishError(errMsg) {
+      $('#publishProgressState')?.classList.add('hidden');
+      $('#publishSuccessState')?.classList.add('hidden');
+      const errState = $('#publishErrorState');
+      if (errState) errState.classList.remove('hidden');
+
+      const msgEl = $('#publishErrorMsg');
+      if (msgEl) msgEl.textContent = errMsg;
+
+      const lower = (errMsg || '').toLowerCase();
+      if (lower.includes('token') || lower.includes('401') || lower.includes('credentials') || lower.includes('unauthorized')) {
+        $('#publishTokenFixBox')?.classList.remove('hidden');
+      }
+    }
+
+    async function commitDirectToGitHub(token, siteData, commitMsg) {
+      const owner = 'piyush9713';
+      const repo = 'cbc-global-venture';
+      const branch = 'main';
+      const filePath = 'index.html';
+
+      const headers = {
+        'Accept': 'application/vnd.github.v3+json',
+        'Authorization': `Bearer ${token.trim()}`,
+        'User-Agent': 'CBC-Global-Content-Studio'
+      };
+
+      setPublishStep(1, 'Fetching current repository file from GitHub...');
+      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}?ref=${branch}`, { headers });
+      if (!getRes.ok) {
+        const err = await getRes.json().catch(() => ({}));
+        throw new Error(`GitHub fetch failed (${getRes.status}): ${err.message || getRes.statusText}`);
+      }
+
+      const fileData = await getRes.json();
+      const sha = fileData.sha;
+
+      // UTF-8 safe decode
+      const binary = atob(fileData.content.replace(/\s/g, ''));
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const rawContent = new TextDecoder('utf-8').decode(bytes);
+
+      setPublishStep(2, 'Patching DEFAULT_DATA block...');
+      const marker = 'const DEFAULT_DATA = ';
+      const start = rawContent.indexOf(marker);
+      if (start === -1) throw new Error('Could not locate DEFAULT_DATA in remote index.html');
+
+      let depth = 0, i = start + marker.length, end = -1;
+      while (i < rawContent.length) {
+        if (rawContent[i] === '{') depth++;
+        else if (rawContent[i] === '}') {
+          depth--;
+          if (depth === 0) { end = i + 1; break; }
+        }
+        i++;
+      }
+      if (end !== -1 && rawContent[end] === ';') end++;
+      if (end === -1) throw new Error('Could not find end of DEFAULT_DATA');
+
+      const newBlock = `const DEFAULT_DATA = ${JSON.stringify(siteData, null, 2)};`;
+      const updatedHtml = rawContent.slice(0, start) + newBlock + rawContent.slice(end);
+
+      // UTF-8 safe encode
+      const encBytes = new TextEncoder().encode(updatedHtml);
+      let encBinary = '';
+      for (let j = 0; j < encBytes.length; j++) encBinary += String.fromCharCode(encBytes[j]);
+      const base64Content = btoa(encBinary);
+
+      setPublishStep(2, 'Committing updated file to GitHub main branch...');
+      const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
+        method: 'PUT',
+        headers: { ...headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: commitMsg,
+          content: base64Content,
+          sha: sha,
+          branch: branch
+        })
+      });
+
+      if (!putRes.ok) {
+        const putErr = await putRes.json().catch(() => ({}));
+        throw new Error(`GitHub commit failed (${putRes.status}): ${putErr.message || putRes.statusText}`);
+      }
+
+      setPublishStep(3, 'Commit verified! Waiting for Vercel deployment...');
+      const putData = await putRes.json();
+      return {
+        success: true,
+        commitUrl: putData.commit?.html_url || `https://github.com/${owner}/${repo}/commits/${branch}`,
+        commitSha: putData.commit?.sha || null,
+        repo: `${owner}/${repo}`,
+        branch: branch
+      };
+    }
+
+    async function publishLive() {
+      try {
+        if (activeStudioTab === 'raw-json') {
+          const ta = $('#rawJsonEditor');
+          if (ta) {
+            const parsed = JSON.parse(ta.value);
+            if (!parsed.company || !parsed.products) throw new Error('Required fields missing');
+            draft = parsed;
+          }
+        }
+        if (!draft || !draft.company || !draft.products) {
+          toast('Error: Missing required fields in site data');
+          return;
+        }
+
+        openPublishModal();
+        setPublishStep(1, 'Validating data and connecting to GitHub...');
+
+        const siteData = JSON.parse(JSON.stringify(draft));
+        const secretCode = $('#secretCodeInput')?.value || sessionStorage.getItem('cbc_studio_code') || 'cbc2026';
+        const customToken = localStorage.getItem('cbc_github_token') || '';
+        const commitMsg = ($('#studioCommitMsg')?.value || '').trim() ||
+          `chore(content): update website content via Content Studio [${new Date().toISOString().replace('T', ' ').slice(0, 16)} UTC]`;
+
+        let result = null;
+
+        // Try /api/publish first
+        try {
+          setPublishStep(1, 'Contacting deployment server (/api/publish)...');
+          const res = await fetch('/api/publish', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              secretCode,
+              siteData,
+              customToken: customToken || undefined,
+              commitMessage: commitMsg
+            })
+          });
+
+          if (res.ok) {
+            setPublishStep(3, 'Commit pushed via server! Deployment starting...');
+            result = await res.json();
+          } else if (res.status === 404) {
+            console.warn('/api/publish returned 404 (local static server?), using direct GitHub API commit');
+          } else {
+            const errBody = await res.json().catch(() => ({}));
+            if (errBody.code === 'TOKEN_REQUIRED' || !customToken) {
+              throw new Error(errBody.error || `Server returned error (${res.status})`);
+            }
+          }
+        } catch (apiErr) {
+          if (!customToken) {
+            throw apiErr;
+          }
+          console.warn('Server publish error, falling back to direct GitHub API:', apiErr.message);
+        }
+
+        // Direct GitHub API fallback
+        if (!result) {
+          if (!customToken) {
+            throw new Error('GitHub Token required. Either configure GITHUB_TOKEN in Vercel or enter your Personal Access Token in the box below.');
+          }
+          result = await commitDirectToGitHub(customToken, siteData, commitMsg);
+        }
+
+        // Also update local runtime memory and localStorage
+        SITE_DATA = JSON.parse(JSON.stringify(siteData));
+        const keys = Object.keys(SITE_DATA);
+        keys.forEach(k => { DEFAULT_DATA[k] = JSON.parse(JSON.stringify(SITE_DATA[k])); });
+        try { localStorage.setItem('cbc_site_data', JSON.stringify(SITE_DATA)); } catch (e) { }
+        renderAll();
+
+        setPublishSuccess(result);
+      } catch (err) {
+        setPublishError(err.message || 'Publishing failed');
+      }
+    }
+
     function renderRawJsonTab() {
       const json = JSON.stringify(draft, null, 2);
       return `<div class="flex flex-col gap-3" style="height:calc(100vh - 220px)">
@@ -3535,6 +4088,7 @@
   </div>`;
     }
     function renderTabBody(id) {
+      if (id === 'publish') return renderPublishTab();
       if (id === 'raw-json') return renderRawJsonTab();
       if (id === 'sections') return renderSectionsTab();
       if (id === 'company') return renderCompanyTab();
@@ -3743,6 +4297,7 @@
       if (customCode) validCodes.push(customCode);
 
       if (validCodes.some(c => c.toLowerCase() === val.toLowerCase())) {
+        try { sessionStorage.setItem('cbc_studio_code', val); } catch (e) { }
         closeSecretModal();
         openDataPanel();
         toast('✓ Content Studio unlocked');
