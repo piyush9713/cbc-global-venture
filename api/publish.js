@@ -25,14 +25,10 @@ module.exports = async function handler(req, res) {
   try {
     const { secretCode, siteData, customToken, commitMessage, owner, repo, branch } = req.body || {};
 
-    // 1. Passcode verification
+    // 1. Passcode verification (server-side only)
     const validCodes = ['cbc2026', 'admin', 'cbc@admin'];
     if (process.env.STUDIO_SECRET_CODE) {
       validCodes.push(process.env.STUDIO_SECRET_CODE.trim());
-    }
-    const customCode = siteData?.company?.studioCode?.trim();
-    if (customCode) {
-      validCodes.push(customCode);
     }
 
     const isCodeValid = secretCode && validCodes.some(c => c.toLowerCase() === secretCode.trim().toLowerCase());
@@ -46,6 +42,11 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({
         error: 'Invalid payload: missing required siteData fields (company, products).',
       });
+    }
+
+    // Ensure studioCode is never persisted into index.html
+    if (siteData.company && 'studioCode' in siteData.company) {
+      delete siteData.company.studioCode;
     }
 
     // 2. Token resolution

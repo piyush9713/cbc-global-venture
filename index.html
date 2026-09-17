@@ -37,9 +37,9 @@
   <meta name="twitter:image" content="https://www.cbcglobalventure.com/og-image.jpg">
 
   <!-- ── Favicon set ── -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" id="faviconSvg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" id="faviconIco">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" id="faviconApple">
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#14342B">
   <meta name="msapplication-TileColor" content="#14342B">
@@ -1434,13 +1434,13 @@
   <header id="navbar"
     class="sticky top-0 z-50 bg-paper/85 backdrop-blur-xl border-b border-stoneLine transition-all duration-300">
     <div class="max-w-7xl mx-auto px-5 h-[72px] flex items-center justify-between gap-4">
-      <a href="#home" class="flex items-center gap-3 group">
-        <span
-          class="w-10 h-10 rounded-xl bg-pine text-paper grid place-items-center font-display text-lg relative overflow-hidden">C<span
+      <a href="#home" class="flex items-center gap-3 group" id="navBrandLink">
+        <span id="navLogoMark"
+          class="w-10 h-10 rounded-xl bg-pine text-paper grid place-items-center font-display text-lg relative overflow-hidden shrink-0">C<span
             class="absolute -bottom-1 -right-1 w-5 h-5 bg-clay/90 rounded-tl-xl"></span></span>
-        <span class="leading-tight">
-          <span class="block font-display font-medium text-[19px] tracking-tight">CBC Global Venture</span>
-          <span class="block text-[10px] tracking-[.22em] uppercase text-muted font-medium">Import • Export •
+        <span class="leading-tight" id="navBrandTextWrap">
+          <span class="block font-display font-medium text-[19px] tracking-tight" id="navBrandName">CBC Global Venture</span>
+          <span class="block text-[10px] tracking-[.22em] uppercase text-muted font-medium" id="navBrandTagline">Import • Export •
             Sourcing</span>
         </span>
       </a>
@@ -1826,11 +1826,11 @@
 
         <!-- Brand block -->
         <div>
-          <div class="flex items-center gap-3 mb-5">
-            <span
+          <div class="flex items-center gap-3 mb-5" id="footBrandLink">
+            <span id="footLogoMark"
               class="w-11 h-11 rounded-xl bg-paper text-pine grid place-items-center font-display text-lg relative overflow-hidden shrink-0">C<span
                 class="absolute -bottom-1 -right-1 w-4 h-4 bg-clay/90 rounded-tl-xl"></span></span>
-            <div>
+            <div id="footBrandTextWrap">
               <p id="footerBrandName" class="font-display text-paper text-[18px] leading-tight"></p>
               <p id="footerBrandTagline" class="text-[10px] tracking-[.2em] uppercase opacity-50 mt-0.5"></p>
             </div>
@@ -2079,6 +2079,10 @@
     </div>
   </dialog>
 
+  <!-- HIDDEN FILE INPUTS FOR CONTENT STUDIO IMAGE UPLOADS -->
+  <input type="file" id="logoFileInput" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+  <input type="file" id="faviconFileInput" accept="image/*,.ico,.svg" class="hidden" onchange="handleFaviconUpload(event)">
+
   <!-- DATA STUDIO PANEL -->
   <div id="dataOverlay" onclick="closeDataPanel()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] hidden">
   </div>
@@ -2269,7 +2273,10 @@
   "company": {
     "name": "CBC Global Venture",
     "tagline": "Trade Beyond Borders",
-    "studioCode": "cbc2026",
+    "logoImage": "",
+    "logoText": "C",
+    "logoAlt": "CBC Global Venture",
+    "favicon": "/favicon.svg",
     "established": 2016,
     "city": "Indore, Madhya Pradesh, India",
     "address": "2nd Floor, Trade House, AB Road, Indore, MP 452001, India",
@@ -3081,6 +3088,14 @@
       setMeta('meta[name="twitter:site"]', seo.twitterHandle);
       const canon = document.querySelector('link[rel="canonical"]'); if (canon && seo.canonical) canon.href = seo.canonical;
 
+      /* ── Favicon ── */
+      const favUrl = c.favicon || (SITE_DATA.seo && SITE_DATA.seo.favicon) || '/favicon.svg';
+      if (favUrl) {
+        const fSvg = $('#faviconSvg'); if (fSvg) fSvg.href = favUrl;
+        const fIco = $('#faviconIco'); if (fIco) fIco.href = favUrl;
+        const fApp = $('#faviconApple'); if (fApp) fApp.href = favUrl;
+      }
+
       /* ── Top bar ── */
       $('#topbarText').textContent = `IEC Certified Exporter • Since ${c.established} • Serving 20+ Countries`;
       $('#topEmail').textContent = c.email; $('#topEmail').href = `mailto:${c.email}`;
@@ -3089,7 +3104,20 @@
       const one = topItems.map(t => `<span class="px-5 flex items-center gap-5 whitespace-nowrap">${esc(t)}<span class="text-clay">✦</span></span>`).join('');
       $('#topMarquee').innerHTML = one + one;
 
-      /* ── Nav ── */
+      /* ── Nav & Brand Logo ── */
+      if ($('#navBrandName')) $('#navBrandName').textContent = c.name || 'CBC Global Venture';
+      if ($('#navBrandTagline')) $('#navBrandTagline').textContent = c.tagline || 'Import • Export • Sourcing';
+      const navMark = $('#navLogoMark');
+      if (navMark) {
+        if (c.logoImage) {
+          navMark.className = 'h-10 max-w-[200px] flex items-center shrink-0';
+          navMark.innerHTML = `<img src="${esc(c.logoImage)}" alt="${esc(c.logoAlt || c.name || 'Logo')}" class="h-10 w-auto max-h-10 object-contain rounded-lg">`;
+        } else {
+          const lChar = esc(c.logoText || (c.name ? c.name[0] : 'C'));
+          navMark.className = 'w-10 h-10 rounded-xl bg-pine text-paper grid place-items-center font-display text-lg relative overflow-hidden shrink-0';
+          navMark.innerHTML = `${lChar}<span class="absolute -bottom-1 -right-1 w-5 h-5 bg-clay/90 rounded-tl-xl"></span>`;
+        }
+      }
       $('#desktopNav').innerHTML = (n.links || []).map(l =>
         `<a href="${esc(l.href)}" class="nav-link hover:text-pine" data-nav="${esc(l.id)}">${esc(l.label)}</a>`
       ).join('');
@@ -3258,6 +3286,17 @@
       $('#footerBrandName').textContent = c.name;
       $('#footerBrandTagline').textContent = c.tagline || 'Import • Export • Sourcing';
       $('#footerAbout').textContent = c.footerAbout || '';
+      const footMark = $('#footLogoMark');
+      if (footMark) {
+        if (c.logoImage) {
+          footMark.className = 'h-11 max-w-[200px] flex items-center shrink-0 p-1 bg-white/10 rounded-xl';
+          footMark.innerHTML = `<img src="${esc(c.logoImage)}" alt="${esc(c.logoAlt || c.name || 'Logo')}" class="h-9 w-auto max-h-9 object-contain">`;
+        } else {
+          const lChar = esc(c.logoText || (c.name ? c.name[0] : 'C'));
+          footMark.className = 'w-11 h-11 rounded-xl bg-paper text-pine grid place-items-center font-display text-lg relative overflow-hidden shrink-0';
+          footMark.innerHTML = `${lChar}<span class="absolute -bottom-1 -right-1 w-4 h-4 bg-clay/90 rounded-tl-xl"></span>`;
+        }
+      }
 
       /* ── Footer labels + globe chips ── */
       const sf = s.footer || {};
@@ -3808,9 +3847,172 @@
   </div>`;
     }
 
+    function handleLogoUpload(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      if (file.size > 800 * 1024) {
+        if (!confirm('This file is over 800KB. For fast loading, smaller images (<200KB) are recommended. Continue?')) {
+          e.target.value = '';
+          return;
+        }
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const dataUrl = evt.target.result;
+        if (!draft.company) draft.company = {};
+        draft.company.logoImage = dataUrl;
+        renderStudio();
+        renderAll();
+        toast('✓ Logo image loaded! Click "Publish Live" or "Save Locally" to keep.');
+        e.target.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeLogoImage() {
+      if (draft && draft.company) {
+        draft.company.logoImage = '';
+        renderStudio();
+        renderAll();
+        toast('Logo image removed. Using text monogram.');
+      }
+    }
+
+    function handleFaviconUpload(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const dataUrl = evt.target.result;
+        if (!draft.company) draft.company = {};
+        draft.company.favicon = dataUrl;
+        if (!draft.seo) draft.seo = {};
+        draft.seo.favicon = dataUrl;
+        
+        let linkSvg = document.querySelector('#faviconSvg');
+        if (linkSvg) linkSvg.href = dataUrl;
+        let linkIco = document.querySelector('#faviconIco');
+        if (linkIco) linkIco.href = dataUrl;
+        let linkApple = document.querySelector('#faviconApple');
+        if (linkApple) linkApple.href = dataUrl;
+
+        renderStudio();
+        renderAll();
+        toast('✓ Favicon loaded! Check your browser tab.');
+        e.target.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetFavicon() {
+      if (draft && draft.company) {
+        draft.company.favicon = '/favicon.svg';
+        if (draft.seo) draft.seo.favicon = '/favicon.svg';
+        let linkSvg = document.querySelector('#faviconSvg');
+        if (linkSvg) linkSvg.href = '/favicon.svg';
+        renderStudio();
+        renderAll();
+        toast('Favicon reset to default.');
+      }
+    }
+
     function renderCompanyTab() {
       const c = draft.company || {};
+      const seo = draft.seo || {};
+      const currentFavicon = c.favicon || seo.favicon || '/favicon.svg';
+
       return `<div class="space-y-3">
+    ${csSection('🎨', 'Branding, Logo & Favicon', `
+      <!-- Website Logo Block -->
+      <div class="sm:col-span-2 bg-[#FAF8F4] border border-stoneLine rounded-2xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-[12px] font-bold uppercase tracking-wider text-pine">Website Logo (Header &amp; Footer)</span>
+          <span class="cs-badge ${c.logoImage ? 'cs-badge-green' : 'cs-badge-amber'}">${c.logoImage ? '● Image Logo Active' : '● Text Monogram Active'}</span>
+        </div>
+
+        <!-- Live Logo Previews -->
+        <div class="grid sm:grid-cols-2 gap-3 pt-1">
+          <!-- Light (Header) preview -->
+          <div class="bg-white border border-stoneLine rounded-xl p-3 flex flex-col justify-between">
+            <span class="text-[10px] font-semibold text-muted uppercase tracking-wider mb-2">Navbar Preview (Light Background)</span>
+            <div class="flex items-center gap-3 p-2.5 bg-[#FAF8F4] rounded-xl min-h-[54px] border border-stoneLine/60">
+              ${c.logoImage ? 
+                `<img id="studioHeaderLogoPrev" src="${esc(c.logoImage)}" alt="Logo" class="h-9 w-auto max-h-9 object-contain rounded-md" onerror="this.src='/favicon.svg'">` : 
+                `<span class="w-9 h-9 rounded-xl bg-pine text-paper grid place-items-center font-display text-base font-bold shrink-0">${esc(c.logoText || (c.name ? c.name[0] : 'C'))}</span>`}
+              <div class="leading-tight">
+                <p class="font-display font-medium text-[14.5px] text-ink leading-tight">${esc(c.name || 'Company Name')}</p>
+                <p class="text-[9.5px] uppercase tracking-wider text-muted mt-0.5">${esc(c.tagline || 'Tagline')}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dark (Footer) preview -->
+          <div class="bg-[#0E241E] rounded-xl p-3 flex flex-col justify-between text-white">
+            <span class="text-[10px] font-semibold text-white/50 uppercase tracking-wider mb-2">Footer Preview (Dark Background)</span>
+            <div class="flex items-center gap-3 p-2.5 bg-white/5 rounded-xl min-h-[54px] border border-white/10">
+              ${c.logoImage ? 
+                `<img id="studioFooterLogoPrev" src="${esc(c.logoImage)}" alt="Logo" class="h-9 w-auto max-h-9 object-contain p-0.5 bg-white/10 rounded-md" onerror="this.src='/favicon.svg'">` : 
+                `<span class="w-9 h-9 rounded-xl bg-paper text-pine grid place-items-center font-display text-base font-bold shrink-0">${esc(c.logoText || (c.name ? c.name[0] : 'C'))}</span>`}
+              <div class="leading-tight">
+                <p class="font-display font-medium text-[14.5px] text-white leading-tight">${esc(c.name || 'Company Name')}</p>
+                <p class="text-[9.5px] uppercase tracking-wider text-white/50 mt-0.5">${esc(c.tagline || 'Tagline')}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logo Input and Upload button -->
+        <div class="space-y-2 pt-1">
+          <label class="cs-field">
+            <span>Logo Image (URL or Upload Image)</span>
+            <div class="flex gap-2">
+              <input type="text" data-path="company.logoImage" value="${esc(c.logoImage || '')}" placeholder="Enter image URL (e.g. /logo.png or https://...) or click Upload" class="cs-input flex-1 font-mono text-[12px]">
+              <button onclick="$('#logoFileInput').click()" type="button" class="bg-pine hover:bg-pineLight text-white text-[12px] font-semibold px-4 py-2 rounded-xl transition cursor-pointer shrink-0 flex items-center gap-1.5 shadow-sm">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Upload File
+              </button>
+              ${c.logoImage ? `<button onclick="removeLogoImage()" type="button" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-[12px] font-semibold px-3 py-2 rounded-xl border border-rose-200 transition cursor-pointer" title="Remove logo image and use monogram">✕ Remove</button>` : ''}
+            </div>
+            <p class="cs-hint">Supports PNG, SVG, JPG, WEBP. Uploading an image bakes it directly into your site data.</p>
+          </label>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-3 pt-1">
+          ${fld('Text Monogram (when no image)', 'company.logoText', c.logoText || 'C', 'text', { hint: 'Letter(s) e.g. "C" or "CBC"' })}
+          ${fld('Logo Alt Description', 'company.logoAlt', c.logoAlt || (c.name || 'Company Logo'), 'text')}
+        </div>
+      </div>
+
+      <!-- Favicon Block -->
+      <div class="sm:col-span-2 bg-[#FAF8F4] border border-stoneLine rounded-2xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-[12px] font-bold uppercase tracking-wider text-pine">Browser Tab Favicon</span>
+          <!-- Miniature Browser Tab Preview -->
+          <div class="inline-flex items-center gap-2 bg-white border border-stoneLine px-3 py-1.5 rounded-lg shadow-sm">
+            <img src="${esc(currentFavicon)}" alt="Favicon" class="w-4 h-4 object-contain rounded-sm" onerror="this.src='/favicon.svg'">
+            <span class="text-[11.5px] font-medium text-ink truncate max-w-[150px]">${esc((draft.seo && draft.seo.title) || c.name || 'CBC Global')}</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="cs-field">
+            <span>Favicon (URL or Upload Icon)</span>
+            <div class="flex gap-2">
+              <input type="text" data-path="company.favicon" value="${esc(currentFavicon)}" placeholder="/favicon.svg or upload file" class="cs-input flex-1 font-mono text-[12px]">
+              <button onclick="$('#faviconFileInput').click()" type="button" class="bg-pine hover:bg-pineLight text-white text-[12px] font-semibold px-4 py-2 rounded-xl transition cursor-pointer shrink-0 flex items-center gap-1.5 shadow-sm">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Upload File
+              </button>
+              <button onclick="resetFavicon()" type="button" class="bg-white hover:bg-stoneLine text-muted text-[12px] font-semibold px-3 py-2 rounded-xl border border-stoneLine transition cursor-pointer" title="Reset to default favicon">Reset</button>
+            </div>
+            <p class="cs-hint">Supports SVG, ICO, PNG. Changes will reflect in your browser tab in real time!</p>
+          </label>
+        </div>
+      </div>
+    `, true)}
     ${csSection('🏢', 'Business Info', `
       ${fld('Company Name', 'company.name', c.name, 'text', { wide: true })}
       ${fld('Founded Year', 'company.established', c.established, 'number')}
@@ -3820,8 +4022,7 @@
       ${fld('Founder Role', 'company.founderRole', c.founderRole || '')}
       ${fld('Tagline', 'company.tagline', c.tagline || '')}
       ${fld('Working Hours', 'company.hours', c.hours)}
-      ${fld('Studio Passcode (Shortcut Access)', 'company.studioCode', c.studioCode || 'cbc2026', 'text', { wide: true, hint: 'Passcode to unlock Content Studio via Ctrl + Shift + E' })}
-    `, true)}
+    `)}
     ${csSection('📞', 'Contact Details', `
       ${fld('Email', 'company.email', c.email, 'text', { wide: true })}
       ${fld('Phone', 'company.phone', c.phone)}
@@ -4216,7 +4417,7 @@
         setPublishStep(1, 'Validating data and connecting to GitHub...');
 
         const siteData = JSON.parse(JSON.stringify(draft));
-        const secretCode = $('#secretCodeInput')?.value || sessionStorage.getItem('cbc_studio_code') || 'cbc2026';
+        const secretCode = $('#secretCodeInput')?.value || sessionStorage.getItem('cbc_studio_code') || '';
         const customToken = localStorage.getItem('cbc_github_token') || '';
         const commitMsg = ($('#studioCommitMsg')?.value || '').trim() ||
           `chore(content): update website content via Content Studio [${new Date().toISOString().replace('T', ' ').slice(0, 16)} UTC]`;
@@ -4581,6 +4782,10 @@
       else if (t.type === 'number') v = t.value === '' ? 0 : +t.value;
       else v = t.value;
       setPath(draft, path, v);
+
+      if (path.startsWith('company.logo') || path === 'company.name' || path === 'company.tagline' || path === 'company.favicon') {
+        renderAll();
+      }
     });
 
     $('#studioBody').addEventListener('click', e => {
@@ -4642,28 +4847,75 @@
       }
     }
 
-    function submitSecretCode(e) {
+    async function submitSecretCode(e) {
       if (e) e.preventDefault();
       const input = $('#secretCodeInput');
       const err = $('#secretError');
       const errText = $('#secretErrorText');
+      const submitBtn = $('#secretForm button[type="submit"]');
       const val = (input?.value || '').trim();
 
-      const validCodes = ['cbc2026', 'admin', 'cbc@admin'];
-      const customCode = (SITE_DATA?.company?.studioCode || '').trim();
-      if (customCode) validCodes.push(customCode);
-
-      if (validCodes.some(c => c.toLowerCase() === val.toLowerCase())) {
-        try { sessionStorage.setItem('cbc_studio_code', val); } catch (e) { }
-        closeSecretModal();
-        openDataPanel();
-        toast('✓ Content Studio unlocked');
-      } else {
+      if (!val) {
         if (err) err.classList.remove('hidden');
-        if (errText) errText.textContent = 'Incorrect passcode. Try again.';
-        if (input) {
-          input.classList.add('!border-rose-500');
-          input.select();
+        if (errText) errText.textContent = 'Please enter a passcode.';
+        if (input) input.classList.add('!border-rose-500');
+        return;
+      }
+
+      if (err) err.classList.add('hidden');
+      if (input) input.classList.remove('!border-rose-500');
+
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+          <svg class="animate-spin -ml-1 mr-1.5 h-3.5 w-3.5 text-white inline-block" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Verifying...</span>
+        `;
+      }
+
+      try {
+        const res = await fetch('/api/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ passcode: val })
+        });
+
+        if (res.ok) {
+          try { sessionStorage.setItem('cbc_studio_code', val); } catch (e) { }
+          closeSecretModal();
+          openDataPanel();
+          toast('✓ Content Studio unlocked');
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          const msg = errData.error || (res.status === 401 ? 'Incorrect passcode. Try again.' : 'Verification failed (' + res.status + ')');
+          if (err) err.classList.remove('hidden');
+          if (errText) errText.textContent = msg;
+          if (input) {
+            input.classList.add('!border-rose-500');
+            input.select();
+          }
+        }
+      } catch (networkErr) {
+        console.warn('Backend verification network error:', networkErr);
+        const customToken = localStorage.getItem('cbc_github_token');
+        if (customToken) {
+          try { sessionStorage.setItem('cbc_studio_code', val); } catch (e) { }
+          closeSecretModal();
+          openDataPanel();
+          toast('✓ Content Studio unlocked (offline mode)');
+        } else {
+          if (err) err.classList.remove('hidden');
+          if (errText) errText.textContent = 'Server unavailable. Start Vercel or configure GitHub Token.';
+          if (input) input.classList.add('!border-rose-500');
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
         }
       }
     }
