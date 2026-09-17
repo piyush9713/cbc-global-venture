@@ -89,19 +89,39 @@ module.exports = async function handler(req, res) {
 
     const fileData = await getRes.json();
     const currentSha = fileData.sha;
-    const rawContent = Buffer.from(fileData.content, 'base64').toString('utf8');
+
+    // GitHub Contents API omits base64 content when file is > 1MB (returns encoding: 'none' and content: '').
+    // In that case, fetch the raw text content using Accept: application/vnd.github.v3.raw
+    let rawContent = '';
+    if (fileData.content && fileData.encoding === 'base64') {
+      rawContent = Buffer.from(fileData.content, 'base64').toString('utf8');
+    } else {
+      const rawRes = await fetch(fileApiUrl, {
+        headers: {
+          ...ghHeaders,
+          Accept: 'application/vnd.github.v3.raw',
+        },
+      });
+      if (!rawRes.ok) {
+        return res.status(rawRes.status).json({
+          error: `Failed to fetch raw index.html from GitHub (${rawRes.status}): ${rawRes.statusText}`,
+        });
+      }
+      rawContent = await rawRes.text();
+    }
 
     // 4. Locate and replace DEFAULT_DATA in index.html
-    const marker = 'const DEFAULT_DATA = ';
-    const start = rawContent.indexOf(marker);
-    if (start === -1) {
+    const markerMatch = rawContent.match(/(?:const|let|var)\s+DEFAULT_DATA\s*=\s*/);
+    if (!markerMatch) {
       return res.status(500).json({
         error: 'Could not locate "const DEFAULT_DATA = " block inside remote index.html.'
       });
     }
 
+    const start = markerMatch.index;
+    const markerLen = markerMatch[0].length;
     let depth = 0;
-    let i = start + marker.length;
+    let i = start + markerLen;
     let end = -1;
 
     while (i < rawContent.length) {

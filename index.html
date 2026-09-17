@@ -3863,28 +3863,48 @@
   </div>`;
     }
 
+    function resizeImage(file, maxWidth, maxHeight, callback) {
+      if (file.type === 'image/svg+xml') {
+        const reader = new FileReader();
+        reader.onload = e => callback(e.target.result);
+        reader.readAsDataURL(file);
+        return;
+      }
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = e => {
+        img.onload = () => {
+          let w = img.width;
+          let h = img.height;
+          if (w > maxWidth || h > maxHeight) {
+            const ratio = Math.min(maxWidth / w, maxHeight / h);
+            w = Math.round(w * ratio);
+            h = Math.round(h * ratio);
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          callback(canvas.toDataURL('image/png'));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
     function handleLogoUpload(e) {
       const file = e.target.files && e.target.files[0];
       if (!file) return;
 
-      if (file.size > 800 * 1024) {
-        if (!confirm('This file is over 800KB. For fast loading, smaller images (<200KB) are recommended. Continue?')) {
-          e.target.value = '';
-          return;
-        }
-      }
-
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        const dataUrl = evt.target.result;
+      resizeImage(file, 400, 200, function(dataUrl) {
         if (!draft.company) draft.company = {};
         draft.company.logoImage = dataUrl;
         renderStudio();
         renderAll();
         toast('✓ Logo image loaded! Click "Publish Live" or "Save Locally" to keep.');
         e.target.value = '';
-      };
-      reader.readAsDataURL(file);
+      });
     }
 
     function removeLogoImage() {
@@ -3900,9 +3920,7 @@
       const file = e.target.files && e.target.files[0];
       if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        const dataUrl = evt.target.result;
+      resizeImage(file, 64, 64, function(dataUrl) {
         if (!draft.company) draft.company = {};
         draft.company.favicon = dataUrl;
         if (!draft.seo) draft.seo = {};
@@ -3919,8 +3937,7 @@
         renderAll();
         toast('✓ Favicon loaded! Check your browser tab.');
         e.target.value = '';
-      };
-      reader.readAsDataURL(file);
+      });
     }
 
     function resetFavicon() {
@@ -4355,18 +4372,28 @@
       const fileData = await getRes.json();
       const sha = fileData.sha;
 
-      // UTF-8 safe decode
-      const binary = atob(fileData.content.replace(/\s/g, ''));
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-      const rawContent = new TextDecoder('utf-8').decode(bytes);
+      let rawContent = '';
+      if (fileData.content && fileData.encoding === 'base64') {
+        const binary = atob(fileData.content.replace(/\s/g, ''));
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        rawContent = new TextDecoder('utf-8').decode(bytes);
+      } else {
+        // Files > 1MB: fetch raw content directly from GitHub
+        const rawRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}?ref=${branch}`, {
+          headers: { ...headers, Accept: 'application/vnd.github.v3.raw' }
+        });
+        if (!rawRes.ok) throw new Error(`GitHub raw fetch failed (${rawRes.status})`);
+        rawContent = await rawRes.text();
+      }
 
       setPublishStep(2, 'Patching DEFAULT_DATA block...');
-      const marker = 'const DEFAULT_DATA = ';
-      const start = rawContent.indexOf(marker);
-      if (start === -1) throw new Error('Could not locate DEFAULT_DATA in remote index.html');
+      const markerMatch = rawContent.match(/(?:const|let|var)\s+DEFAULT_DATA\s*=\s*/);
+      if (!markerMatch) throw new Error('Could not locate DEFAULT_DATA in remote index.html');
+      const start = markerMatch.index;
+      const markerLen = markerMatch[0].length;
 
-      let depth = 0, i = start + marker.length, end = -1;
+      let depth = 0, i = start + markerLen, end = -1;
       while (i < rawContent.length) {
         if (rawContent[i] === '{') depth++;
         else if (rawContent[i] === '}') {
