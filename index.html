@@ -5135,7 +5135,36 @@
       const m = $('#mobileMenu'); m.classList.toggle('hidden');
       $('#menuIcon').innerHTML = m.classList.contains('hidden') ? '<path d="M4 7h16M4 12h16M4 17h16"/>' : '<path d="M6 6l12 12M18 6 6 18"/>';
     });
-    $$('#mobileMenu a').forEach(a => a.addEventListener('click', () => { $('#mobileMenu').classList.add('hidden'); }));
+    /* Smooth in-page navigation without changing URL in address bar */
+    document.addEventListener('click', e => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const href = a.getAttribute('href');
+      if (!href || href === '#') return;
+      try {
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+          const mm = $('#mobileMenu');
+          if (mm && !mm.classList.contains('hidden')) {
+            mm.classList.add('hidden');
+            const icon = $('#menuIcon');
+            if (icon) icon.innerHTML = '<path d="M4 7h16M4 12h16M4 17h16"/>';
+          }
+        }
+      } catch (err) { }
+    });
+
+    if (window.location.hash) {
+      try {
+        const target = document.querySelector(window.location.hash);
+        if (target) {
+          setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 100);
+        }
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      } catch (err) { }
+    }
 
     window.addEventListener('scroll', () => {
       const h = document.documentElement;
